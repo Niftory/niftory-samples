@@ -19,7 +19,9 @@ export type AuthState = {
   authTokenExpiration: number;
 };
 
-export function getGraphQLClient(getAuthState: () => Promise<AuthState>) {
+export function getGraphQLClient(
+  getAuthState: () => Promise<AuthState | null>
+) {
   const url = process.env.NEXT_PUBLIC_API_PATH as string;
   const apiKey = process.env.NEXT_PUBLIC_API_KEY as string;
 

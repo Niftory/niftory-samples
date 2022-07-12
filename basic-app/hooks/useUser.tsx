@@ -31,8 +31,8 @@ export function useUser() {
   const { data: session, status } = useSession();
 
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<NexusGenRootTypes["AppUser"]>();
-  const [error, setError] = useState<Error>();
+  const [user, setUser] = useState<NexusGenRootTypes["AppUser"] | null>();
+  const [error, setError] = useState<Error | null>();
   const client = useGraphQLClient();
 
   const sessionLoading = status === "loading";
@@ -72,7 +72,7 @@ export function useUser() {
       .finally(() => {
         setLoading(false);
       });
-  }, [userId, sessionLoading]);
+  }, [userId, sessionLoading, client]);
 
   return { user, session, loading: loading || sessionLoading, error };
 }

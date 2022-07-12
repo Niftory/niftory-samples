@@ -1,12 +1,11 @@
 import { useSession } from "next-auth/react";
 import { useCallback, useMemo } from "react";
-import { getGraphQLClient } from "./api-client";
+import { AuthState, getGraphQLClient } from "./api-client";
 
 export const useGraphQLClient = () => {
   const { data: session } = useSession();
-  const isSignedIn = !!session;
 
-  const getAuthState = useCallback(async () => {
+  const getAuthState = useCallback(async (): Promise<AuthState | null> => {
     if (!session) {
       return null;
     }
@@ -20,7 +19,9 @@ export const useGraphQLClient = () => {
   return useMemo(() => {
     const client = getGraphQLClient(getAuthState);
 
+    console.log(client);
+
     return client;
     // We want to recreate the client whenever the signin state changes
-  }, [isSignedIn, getAuthState]);
+  }, [getAuthState]);
 };

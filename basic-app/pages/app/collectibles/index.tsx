@@ -6,8 +6,6 @@ import { useUser } from "../../../hooks/useUser";
 const Collectibles = () => {
   const { user, session, loading, error } = useUser();
 
-  console.log(JSON.stringify(user));
-
   return (
     <AppLayout>
       <Box mx="auto" color="white" mt="5vh">
