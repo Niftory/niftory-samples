@@ -29,7 +29,7 @@ export function getGraphQLClient(
     url: url,
     fetchOptions: {
       headers: {
-        "X-Niftory-API-Key": apiKey,
+        "x-niftory-api-key": apiKey,
       },
     },
     exchanges: [
@@ -70,7 +70,7 @@ export function getGraphQLClient(
               ...fetchOptions,
               headers: {
                 ...fetchOptions.headers,
-                "X-Niftory-API-Key": apiKey,
+                "x-niftory-api-key": apiKey,
                 Authorization: `Bearer ${token}`,
               },
             },

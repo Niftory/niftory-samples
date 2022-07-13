@@ -15,13 +15,11 @@ const API_GET_APP_USER = gql`
       image
       app {
         id
-        contract {
-          id
-          blockchain
-        }
-        org {
-          id
-        }
+      }
+      wallet {
+        id
+        address
+        state
       }
     }
   }
@@ -61,9 +59,9 @@ export function useUser() {
         id: userId,
       }
     )
-      .then(({ appUser }) => {
-        console.log("Got appUser: ", JSON.stringify(appUser));
-        setUser(appUser as NexusGenRootTypes["AppUser"]);
+      .then((data) => {
+        console.log("Got appUser: ", JSON.stringify(data));
+        setUser(data?.appUser as NexusGenRootTypes["AppUser"]);
       })
       .catch((e) => {
         console.error("Error fetching user: ", e);

@@ -1,6 +1,7 @@
 import React, { Component as ReactComponent } from "react";
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
+import { Auth } from "../components/Auth";
 
 const App = ({
   Component,
@@ -9,7 +10,13 @@ const App = ({
   return (
     <SessionProvider session={session} refetchOnWindowFocus={false}>
       <ChakraProvider>
-        <Component {...pageProps} />
+        {Component.auth ? (
+          <Auth>
+            <Component {...pageProps} />
+          </Auth>
+        ) : (
+          <Component {...pageProps} />
+        )}{" "}
       </ChakraProvider>
     </SessionProvider>
   );

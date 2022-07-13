@@ -19,8 +19,6 @@ export const useGraphQLClient = () => {
   return useMemo(() => {
     const client = getGraphQLClient(getAuthState);
 
-    console.log(client);
-
     return client;
     // We want to recreate the client whenever the signin state changes
   }, [getAuthState]);
