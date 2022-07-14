@@ -11,6 +11,7 @@ const API_GET_NFT_MODEL = gql`
       description
       quantity
       status
+      rarity
       content {
         files {
           media {
@@ -24,11 +25,6 @@ const API_GET_NFT_MODEL = gql`
         }
         poster {
           url
-        }
-      }
-      rarity {
-        ... on SimpleRarity {
-          level
         }
       }
     }

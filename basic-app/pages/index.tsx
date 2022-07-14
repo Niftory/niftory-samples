@@ -12,7 +12,7 @@ const Login = () => {
   const signInOrRedirect = async () => {
     // If the user is already signed in, redirect to the signed in home page
     if (session) {
-      router.push("app/drops");
+      router.push("app/collection");
     } else {
       // Otherwise, sign in the user
       await signIn("niftory");

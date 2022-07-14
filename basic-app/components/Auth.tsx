@@ -5,6 +5,7 @@ import React, { createContext, useEffect, useContext } from "react";
 import { LoginSkeleton } from "./LoginSkeleton";
 import { useUser } from "../hooks/useUser";
 import { NexusGenRootTypes } from "../lib/api-types";
+import { signOut } from "next-auth/react";
 
 export interface IAuthContext {
   session: Session | null;
