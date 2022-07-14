@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Heading,
+  Link,
   SimpleGrid,
   Text,
   VStack,
@@ -9,25 +10,21 @@ import {
 import { signOut } from "next-auth/react";
 
 import AppLayout from "../../../components/AppLayout";
-import { useAuthContext } from "../../../hooks/useAuthContext";
+import { AppHeader } from "../../../components/AppHeader";
 import { useUserNFTs } from "../../../hooks/useUserNFTs";
 
 const Collection = () => {
-  const { user } = useAuthContext();
-  const { nfts } = useUserNFTs();
+  const { nfts, loading } = useUserNFTs();
 
   return (
     <AppLayout>
       <Box mx="auto" color="white" mt="5vh">
         <VStack>
-          <Heading>Sample App: Logged In</Heading>
-          <Text> Name: {user?.name} </Text>
-          <Text> Email: {user?.email} </Text>
-          <Button onClick={() => signOut()}>Sign Out</Button>
+          <AppHeader />
           <SimpleGrid>
             {nfts?.map((nft) => (
               <Box key={nft.id}>
-                <Text>{nft.id}</Text>
+                <Link>{nft.model?.title}</Link>
               </Box>
             ))}
           </SimpleGrid>

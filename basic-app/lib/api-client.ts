@@ -103,7 +103,7 @@ export function getGraphQLClient(
 export async function graphqlQueryAsync<
   Outputs extends Record<string, unknown>,
   Variables extends object = object
->(client: UrqlClient, query: GraphQLQuery<Outputs>, variables: Variables) {
+>(client: UrqlClient, query: GraphQLQuery<Outputs>, variables?: Variables) {
   const result = await client
     .query<GraphQLOutput<Outputs>, Variables>(query, variables)
     .toPromise();

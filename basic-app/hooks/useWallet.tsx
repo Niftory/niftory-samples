@@ -12,7 +12,7 @@ const GET_USER_WALLET = gql`
   }
 `;
 
-export function useUserCollection() {
+export function useWallet() {
   return useGraphQLQuery<{
     wallet: NexusGenRootTypes["Wallet"] | null;
   }>({

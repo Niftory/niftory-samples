@@ -7,8 +7,8 @@ import { gql } from "urql";
 import { NexusGenRootTypes } from "../lib/api-types";
 
 const API_GET_APP_USER = gql`
-  query ($id: String!) {
-    appUser(id: $id) {
+  query {
+    appUser {
       id
       name
       email
@@ -54,10 +54,7 @@ export function useUser() {
 
     graphqlQueryAsync<{ appUser: NexusGenRootTypes["AppUser"] }>(
       client,
-      API_GET_APP_USER,
-      {
-        id: userId,
-      }
+      API_GET_APP_USER
     )
       .then((data) => {
         console.log("Got appUser: ", JSON.stringify(data));

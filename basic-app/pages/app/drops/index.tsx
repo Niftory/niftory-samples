@@ -9,20 +9,24 @@ import {
 import { signOut } from "next-auth/react";
 
 import AppLayout from "../../../components/AppLayout";
-import { useAuthContext } from "../../../hooks/useAuthContext";
+import { AppHeader } from "../../../components/AppHeader";
+import { useNFTModels } from "../../../hooks/useNftModels";
 
 const Drops = () => {
-  const { user } = useAuthContext();
+  const { nftModels } = useNFTModels();
 
   return (
     <AppLayout>
       <Box mx="auto" color="white" mt="5vh">
         <VStack>
-          <Heading>Sample App: Logged In</Heading>
-          <Text> Name: {user?.name} </Text>
-          <Text> Email: {user?.email} </Text>
-          <Button onClick={() => signOut()}>Sign Out</Button>
-          <SimpleGrid></SimpleGrid>
+          <AppHeader />
+          <SimpleGrid>
+            {nftModels?.map((nftModel) => (
+              <Box key={nftModel.id}>
+                <Text>{nftModel.title}</Text>
+              </Box>
+            ))}
+          </SimpleGrid>
         </VStack>
       </Box>
     </AppLayout>

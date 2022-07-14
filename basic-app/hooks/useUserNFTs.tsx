@@ -6,6 +6,10 @@ const GET_USER_NFTs = gql`
   query {
     nfts {
       id
+      model {
+        id
+        title
+      }
     }
   }
 `;
