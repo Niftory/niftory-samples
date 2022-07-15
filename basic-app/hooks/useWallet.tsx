@@ -8,6 +8,7 @@ const GET_USER_WALLET = gql`
       id
       address
       state
+      verificationCode
     }
   }
 `;

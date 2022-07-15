@@ -125,7 +125,7 @@ export const useConnectFlowWallet = () => {
     useGraphQLMutation(VERIFY_WALLET);
 
   const verifyWallet = useCallback(async () => {
-    console.log("verifyWallet");
+    console.log("verifyWallet", wallet);
     if (!wallet?.id) {
       throw Error("Wallet not created yet");
     }
