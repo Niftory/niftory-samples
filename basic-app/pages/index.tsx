@@ -1,6 +1,6 @@
 import { Box, Button, Center, Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import AppLayout from "../components/AppLayout";
 import { LoginSkeleton } from "../components/LoginSkeleton";
@@ -33,6 +33,9 @@ const Login = () => {
             isLoading={status === "loading"}
           >
             Start Exploring!
+          </Button>
+          <Button colorScheme="blue" onClick={() => signOut()}>
+            Sign Out
           </Button>
         </VStack>
       </Box>

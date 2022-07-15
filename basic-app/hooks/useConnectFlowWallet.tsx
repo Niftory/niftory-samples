@@ -1,5 +1,13 @@
+import * as fcl from "@onflow/fcl";
 import { useCallback, useEffect, useState } from "react";
 import { gql } from "urql";
+import {
+  isInitializedScript,
+  resetAccountTx,
+  setupAccountTx,
+} from "../lib/flow-scripts";
+import { useGraphQLMutation } from "../lib/useGraphQLMutation";
+import { useFlowUser } from "./useFlowUser";
 
 import { useWallet } from "./useWallet";
 
@@ -39,8 +47,7 @@ const READY_WALLET = gql`
 `;
 //#endregion
 
-/*
-export const useFlowConnectWallet = () => {
+export const useConnectFlowWallet = () => {
   const { flowUser, loading: flowUserLoading } = useFlowUser();
 
   const {
@@ -78,7 +85,7 @@ export const useFlowConnectWallet = () => {
     [flowUser]
   );
 
-  // Create a callback used to check if the user's flow account has been initialized 
+  // Create a callback used to check if the user's flow account has been initialized
   const isFlowAccountInitialized = useCallback(async () => {
     if (!flowUser?.loggedIn) {
       return false;
@@ -170,7 +177,7 @@ export const useFlowConnectWallet = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flowUser?.loggedIn, verifyWallet, wallet?.state]);
 
-  // Create a callback that resets the current user's flow account, and logs them in if necessary 
+  /* Create a callback that resets the current user's flow account, and logs them in if necessary */
   const resetFlowAccount = useCallback(async () => {
     console.log("resetFlowAccount");
     setInitializingFlowAccount(true);
@@ -193,7 +200,7 @@ export const useFlowConnectWallet = () => {
     }
   }, [flowUser?.loggedIn]);
 
-  // Responds to updates from flow 
+  // Responds to updates from flow
   useEffect(() => {
     async function fetchData() {
       console.log("fetchData");
@@ -226,7 +233,7 @@ export const useFlowConnectWallet = () => {
     initializingFlowAccount,
   ]);
 
-  // Respond to database updates 
+  // Respond to database updates
   useEffect(() => {
     if (updatingDatabase) {
       return;
@@ -243,5 +250,3 @@ export const useFlowConnectWallet = () => {
     resetFlowAccount,
   };
 };
-
-*/
