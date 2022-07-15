@@ -20,7 +20,12 @@ const Drops = () => {
             </>
           )}
 
-          {!wallet && <Text>First, Setup Your Wallet!</Text>}
+          {!wallet && (
+            <>
+              <Text>First, Setup Your Wallet!</Text>
+              
+            </>
+          )}
         </VStack>
       </Box>
     </AppLayout>
