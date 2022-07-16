@@ -1,18 +1,12 @@
-import {
-  Box,
-  Button,
-  Heading,
-  SimpleGrid,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { signOut } from "next-auth/react";
+import { Box, Link, SimpleGrid, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
-import { useNFTModels } from "../../../hooks/useNftModels";
+import { useNFTModels } from "../../../hooks/useNFTModels";
 
 const Drops = () => {
+  const router = useRouter();
   const { nftModels } = useNFTModels();
 
   return (
@@ -23,7 +17,9 @@ const Drops = () => {
           <SimpleGrid>
             {nftModels?.map((nftModel) => (
               <Box key={nftModel.id}>
-                <Text>{nftModel.title}</Text>
+                <Link onClick={() => router.push(`/app/drops/${nftModel.id}`)}>
+                  {nftModel.title}
+                </Link>{" "}
               </Box>
             ))}
           </SimpleGrid>
