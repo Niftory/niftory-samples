@@ -25,6 +25,10 @@ export function AppHeader() {
         <Button colorScheme="blue" onClick={() => router.push("/app/wallet")}>
           Wallet
         </Button>
+        <Button colorScheme="blue" onClick={() => router.push("/app/transfer")}>
+          {" "}
+          Transfer{" "}
+        </Button>
         <Button
           colorScheme="blue"
           onClick={() => signOut().then(() => router.push("/"))}
