@@ -1,16 +1,23 @@
-import React, { Component as ReactComponent } from "react";
+import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Auth } from "../components/Auth";
-import { GraphQLProvider } from "../lib/GraphQLProvider";
+import { Provider as GraphQLClientProvider } from "urql";
+import { getGraphQLClient } from "../lib/api-client";
 
 const App = ({
   Component,
   pageProps: { session, ...pageProps },
 }): JSX.Element => {
+  const graphqlClient = getGraphQLClient(
+    process.env.NEXT_PUBLIC_API_PATH as string,
+    process.env.NEXT_PUBLIC_API_KEY as string,
+    session
+  );
+
   return (
     <SessionProvider session={session} refetchOnWindowFocus={false}>
-      <GraphQLProvider>
+      <GraphQLClientProvider value={graphqlClient}>
         <ChakraProvider>
           {Component.auth ? (
             <Auth>
@@ -20,7 +27,7 @@ const App = ({
             <Component {...pageProps} />
           )}{" "}
         </ChakraProvider>
-      </GraphQLProvider>
+      </GraphQLClientProvider>
     </SessionProvider>
   );
 };

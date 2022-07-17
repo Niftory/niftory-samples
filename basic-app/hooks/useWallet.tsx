@@ -1,6 +1,4 @@
-import { gql } from "urql";
-import { NexusGenRootTypes } from "../lib/api-types";
-import { useGraphQLQuery } from "../lib/useGraphQLQuery";
+import { gql, useQuery } from "urql";
 
 const GET_USER_WALLET = gql`
   query {
@@ -13,10 +11,7 @@ const GET_USER_WALLET = gql`
   }
 `;
 
-export function useWallet() {
-  return useGraphQLQuery<{
-    wallet: NexusGenRootTypes["Wallet"] | null;
-  }>({
+export const useWallet = () =>
+  useQuery({
     query: GET_USER_WALLET,
   });
-}

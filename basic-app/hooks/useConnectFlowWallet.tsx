@@ -1,12 +1,11 @@
 import * as fcl from "@onflow/fcl";
 import { useCallback, useEffect, useState } from "react";
-import { gql } from "urql";
+import { gql, useMutation } from "urql";
 import {
   isInitializedScript,
   resetAccountTx,
   setupAccountTx,
 } from "../lib/flow-scripts";
-import { useGraphQLMutation } from "../lib/useGraphQLMutation";
 import { useFlowUser } from "./useFlowUser";
 
 import { useWallet } from "./useWallet";
@@ -50,12 +49,10 @@ const READY_WALLET = gql`
 export const useConnectFlowWallet = () => {
   const { flowUser, loading: flowUserLoading } = useFlowUser();
 
-  const {
-    wallet,
-    fetching: fetchingWallet,
-    error: errorFetchingWallet,
+  const [
+    { data: wallet, fetching: fetchingWallet, error: errorFetchingWallet },
     reExecuteQuery,
-  } = useWallet();
+  ] = useWallet();
 
   const [initializingFlowAccount, setInitializingFlowAccount] = useState(false);
   const [updatingDatabase, setUpdatingDatabase] = useState(false);
@@ -67,8 +64,7 @@ export const useConnectFlowWallet = () => {
     initializingFlowAccount ||
     updatingDatabase;
 
-  const { executeMutation: executeCreateWalletMutation } =
-    useGraphQLMutation(REGISTER_WALLET);
+  const [, executeCreateWalletMutation] = useMutation(REGISTER_WALLET);
 
   const createWallet = useCallback(
     async () => {
@@ -121,8 +117,7 @@ export const useConnectFlowWallet = () => {
   }, [wallet?.id]);
 
   // Create a callback that verifies current wallet by signing the verification code
-  const { executeMutation: verifyWalletMutation } =
-    useGraphQLMutation(VERIFY_WALLET);
+  const [, verifyWalletMutation] = useMutation(VERIFY_WALLET);
 
   const verifyWallet = useCallback(async () => {
     console.log("verifyWallet", wallet);

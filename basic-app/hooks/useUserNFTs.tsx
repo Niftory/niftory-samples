@@ -1,6 +1,4 @@
-import { gql } from "urql";
-import { NexusGenRootTypes } from "../lib/api-types";
-import { useGraphQLQuery } from "../lib/useGraphQLQuery";
+import { gql, useQuery } from "urql";
 
 const GET_USER_NFTs = gql`
   query {
@@ -14,10 +12,4 @@ const GET_USER_NFTs = gql`
   }
 `;
 
-export function useUserNFTs() {
-  return useGraphQLQuery<{
-    nfts: NexusGenRootTypes["NFT"][];
-  }>({
-    query: GET_USER_NFTs,
-  });
-}
+export const useUserNFTs = () => useQuery({ query: GET_USER_NFTs });
