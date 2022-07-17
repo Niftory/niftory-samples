@@ -1,14 +1,11 @@
-const minterAddress = process.env.NEXT_PUBLIC_MINTER_ADDRESS;
-const fungibleTokenAddress = process.env.NEXT_PUBLIC_FUNGIBLE_TOKEN_ADDRESS;
-const nonFungibleTokenAddress =
-  process.env.NEXT_PUBLIC_NON_FUNGIBLE_TOKEN_ADDRESS;
-const flowTokenAddress = process.env.NEXT_PUBLIC_FLOW_TOKEN_ADDRESS;
 const contractName = process.env.NEXT_PUBLIC_CONTRACT_NAME;
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+const nonFungibleTokenAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS;
 
 const collectionInterfaceName = `${contractName}CollectionPublic`;
 
 export const isInitializedScript = `
-    import ${contractName} from ${minterAddress}
+    import ${contractName} from ${contractAddress}
     import NonFungibleToken from ${nonFungibleTokenAddress}
 
     pub fun main(account: Address): Bool {
@@ -20,7 +17,7 @@ export const isInitializedScript = `
     }`;
 
 export const setupAccountTx = `
-    import ${contractName} from ${minterAddress}
+    import ${contractName} from ${contractAddress}
     import NonFungibleToken from ${nonFungibleTokenAddress}
     import MetadataViews from ${nonFungibleTokenAddress}
 
@@ -54,7 +51,7 @@ export const setupAccountTx = `
     }`;
 
 export const resetAccountTx = `
-    import ${contractName} from ${minterAddress}
+    import ${contractName} from ${contractAddress}
     import NonFungibleToken from ${nonFungibleTokenAddress}
 
     transaction {
