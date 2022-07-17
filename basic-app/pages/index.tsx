@@ -1,9 +1,9 @@
 import { Box, Button, Center, Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import AppLayout from "../components/AppLayout";
-import { LoginSkeleton } from "../components/LoginSkeleton";
+import { signOutUser } from "../components/SignOutUser";
 
 const Login = () => {
   const { data: session, status } = useSession();
@@ -34,7 +34,7 @@ const Login = () => {
           >
             Start Exploring!
           </Button>
-          <Button colorScheme="blue" onClick={() => signOut()}>
+          <Button colorScheme="blue" onClick={() => signOutUser()}>
             Sign Out
           </Button>
         </VStack>

@@ -1,6 +1,7 @@
 import { VStack, Heading, Button, Text, HStack } from "@chakra-ui/react";
-import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+
+import { signOutUser } from "./SignOutUser";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 export function AppHeader() {
@@ -25,10 +26,7 @@ export function AppHeader() {
         <Button colorScheme="blue" onClick={() => router.push("/app/wallet")}>
           Wallet
         </Button>
-        <Button
-          colorScheme="blue"
-          onClick={() => signOut().then(() => router.push("/"))}
-        >
+        <Button colorScheme="blue" onClick={() => signOutUser()}>
           Sign Out
         </Button>
       </HStack>
