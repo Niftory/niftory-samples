@@ -6,8 +6,9 @@ import { AppHeader } from "../../../components/AppHeader";
 import { useNFTModel } from "../../../hooks/useNFTModel";
 import { gql, useMutation } from "urql";
 import { TransferNftToUserDocument } from "../../../generated/graphql";
+import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 
-const TRANSFER_NFT_TO_USER = gql`
+gql`
   mutation transferNFTToUser($nftModelId: ID!) {
     transfer(nftModelId: $nftModelId) {
       id
@@ -15,7 +16,7 @@ const TRANSFER_NFT_TO_USER = gql`
   }
 `;
 
-const Collection = () => {
+const Collection: ComponentWithAuth = () => {
   const router = useRouter();
   const nftModelId = router.query["nftModelId"] as string;
   const [{ data }] = useNFTModel(nftModelId);
@@ -60,5 +61,5 @@ const Collection = () => {
   );
 };
 
-Collection.auth = true;
+Collection.requireAuth = true;
 export default Collection;

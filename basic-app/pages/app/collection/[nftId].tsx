@@ -4,8 +4,9 @@ import { useRouter } from "next/router";
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
 import { useNFT } from "../../../hooks/useNFT";
+import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 
-const Collection = () => {
+const Collection: ComponentWithAuth = () => {
   const router = useRouter();
   const nftId = router.query["nftId"]?.toString();
   const [{ data }] = useNFT(nftId);
@@ -35,5 +36,5 @@ const Collection = () => {
   );
 };
 
-Collection.auth = true;
+Collection.requireAuth = true;
 export default Collection;

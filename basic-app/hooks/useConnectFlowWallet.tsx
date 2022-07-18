@@ -62,7 +62,7 @@ export const useConnectFlowWallet = () => {
 
   const [initializingFlowAccount, setInitializingFlowAccount] = useState(false);
   const [updatingDatabase, setUpdatingDatabase] = useState(false);
-  const [error, setError] = useState(errorFetchingWallet);
+  const [error, setError] = useState<Error | undefined>(errorFetchingWallet);
 
   const isLoading =
     flowUserLoading ||
@@ -76,9 +76,11 @@ export const useConnectFlowWallet = () => {
     async () => {
       console.log("registerWallet");
       try {
-        return await executeCreateWalletMutation({ address: flowUser.addr });
+        return await executeCreateWalletMutation({
+          address: flowUser?.addr as string,
+        });
       } catch (e) {
-        setError(e);
+        setError(e as Error);
         fcl.unauthenticate();
       }
     },
@@ -152,7 +154,7 @@ export const useConnectFlowWallet = () => {
     console.log("initializeFlowAccount");
     setInitializingFlowAccount(true);
     try {
-      if (!flowUser.loggedIn || !wallet) {
+      if (!flowUser?.loggedIn || !wallet) {
         fcl.logIn();
         return;
       }
@@ -182,7 +184,7 @@ export const useConnectFlowWallet = () => {
     console.log("resetFlowAccount");
     setInitializingFlowAccount(true);
     try {
-      if (!flowUser.loggedIn) {
+      if (!flowUser?.loggedIn) {
         return;
       }
 

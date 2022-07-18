@@ -1,16 +1,17 @@
 import { createClient } from "@urql/core";
+import type { Session } from "next-auth";
 
 export function getGraphQLClient(
   url: string,
   apiKey: string,
-  authToken: string
+  session: Session
 ) {
   return createClient({
     url: url,
     fetchOptions: {
       headers: {
         "X-Niftory-API-Key": apiKey,
-        Authorization: authToken ? `Bearer ${authToken}` : "",
+        Authorization: session?.authToken ? `Bearer ${session.authToken}` : "",
       },
     },
   });
