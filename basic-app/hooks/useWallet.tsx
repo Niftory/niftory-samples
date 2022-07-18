@@ -1,9 +1,8 @@
-import { gql } from "urql";
-import { NexusGenRootTypes } from "../lib/api-types";
-import { useGraphQLQuery } from "../lib/useGraphQLQuery";
+import { gql, useQuery } from "urql";
+import { GetUserWalletDocument } from "../generated/graphql";
 
-const GET_USER_WALLET = gql`
-  query {
+gql`
+  query getUserWallet {
     wallet {
       id
       address
@@ -13,10 +12,14 @@ const GET_USER_WALLET = gql`
   }
 `;
 
-export function useWallet() {
-  return useGraphQLQuery<{
-    wallet: NexusGenRootTypes["Wallet"] | null;
-  }>({
-    query: GET_USER_WALLET,
+export const useWallet = () => {
+  const [result, refetch] = useQuery({
+    query: GetUserWalletDocument,
   });
-}
+
+  return {
+    wallet: result.data?.wallet,
+    refetch,
+    ...result,
+  };
+};

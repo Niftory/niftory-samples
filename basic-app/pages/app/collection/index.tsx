@@ -4,10 +4,11 @@ import { useRouter } from "next/router";
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
 import { useUserNFTs } from "../../../hooks/useUserNFTs";
+import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 
-const Collection = () => {
+const Collection: ComponentWithAuth = () => {
   const router = useRouter();
-  const { nfts, loading } = useUserNFTs();
+  const { nfts } = useUserNFTs();
 
   return (
     <AppLayout>
@@ -15,13 +16,18 @@ const Collection = () => {
         <VStack>
           <AppHeader />
           <SimpleGrid>
-            {nfts?.map((nft) => (
-              <Box key={nft.id}>
-                <Link onClick={() => router.push(`/app/collection/${nft.id}`)}>
-                  {nft.model?.title}
-                </Link>
-              </Box>
-            ))}
+            {nfts?.map(
+              (nft) =>
+                nft && (
+                  <Box key={nft.id}>
+                    <Link
+                      onClick={() => router.push(`/app/collection/${nft.id}`)}
+                    >
+                      {nft.model?.title}
+                    </Link>
+                  </Box>
+                )
+            )}
           </SimpleGrid>
         </VStack>
       </Box>
@@ -29,5 +35,5 @@ const Collection = () => {
   );
 };
 
-Collection.auth = true;
+Collection.requireAuth = true;
 export default Collection;

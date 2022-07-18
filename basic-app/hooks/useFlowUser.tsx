@@ -5,7 +5,7 @@ import path from "path";
 import { useEffect, useState } from "react";
 
 export function useFlowUser() {
-  const [flowUser, setFlowUser] = useState<fcl.CurrentUserObject>(null);
+  const [flowUser, setFlowUser] = useState<fcl.CurrentUserObject>();
   const { data: session, status } = useSession();
   const loading = status === "loading";
 
@@ -21,7 +21,7 @@ export function useFlowUser() {
       .put("accessNode.api", accessApi) // connect to Flow
       .put("discovery.wallet", walletApi); // use Blocto wallet
 
-    fcl.currentUser().subscribe((user, ...args) => {
+    fcl.currentUser.subscribe((user, ...args) => {
       console.log("setting user", user, args);
       setFlowUser(user);
     });

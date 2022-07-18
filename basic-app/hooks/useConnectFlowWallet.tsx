@@ -1,19 +1,23 @@
 import * as fcl from "@onflow/fcl";
 import { useCallback, useEffect, useState } from "react";
-import { gql } from "urql";
+import { gql, useMutation } from "urql";
+import {
+  ReadyWalletDocument,
+  RegisterWalletDocument,
+  VerifyWalletDocument,
+} from "../generated/graphql";
 import {
   isInitializedScript,
   resetAccountTx,
   setupAccountTx,
 } from "../lib/flow-scripts";
-import { useGraphQLMutation } from "../lib/useGraphQLMutation";
 import { useFlowUser } from "./useFlowUser";
 
 import { useWallet } from "./useWallet";
 
 //#region Public APIs
-const REGISTER_WALLET = gql`
-  mutation ($address: String!) {
+gql`
+  mutation registerWallet($address: String!) {
     registerWallet(address: $address) {
       id
       address
@@ -23,8 +27,8 @@ const REGISTER_WALLET = gql`
   }
 `;
 
-const VERIFY_WALLET = gql`
-  mutation ($address: String!, $signedVerificationCode: JSON!) {
+gql`
+  mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
     verifyWallet(
       address: $address
       signedVerificationCode: $signedVerificationCode
@@ -36,8 +40,8 @@ const VERIFY_WALLET = gql`
   }
 `;
 
-const READY_WALLET = gql`
-  mutation ($address: String!) {
+gql`
+  mutation readyWallet($address: String!) {
     readyWallet(address: $address) {
       id
       address
@@ -52,14 +56,14 @@ export const useConnectFlowWallet = () => {
 
   const {
     wallet,
+    refetch: refetchWallet,
     fetching: fetchingWallet,
     error: errorFetchingWallet,
-    reExecuteQuery,
   } = useWallet();
 
   const [initializingFlowAccount, setInitializingFlowAccount] = useState(false);
   const [updatingDatabase, setUpdatingDatabase] = useState(false);
-  const [error, setError] = useState(errorFetchingWallet);
+  const [error, setError] = useState<Error | undefined>(errorFetchingWallet);
 
   const isLoading =
     flowUserLoading ||
@@ -67,16 +71,17 @@ export const useConnectFlowWallet = () => {
     initializingFlowAccount ||
     updatingDatabase;
 
-  const { executeMutation: executeCreateWalletMutation } =
-    useGraphQLMutation(REGISTER_WALLET);
+  const [, executeCreateWalletMutation] = useMutation(RegisterWalletDocument);
 
   const createWallet = useCallback(
     async () => {
       console.log("registerWallet");
       try {
-        return await executeCreateWalletMutation({ address: flowUser.addr });
+        return await executeCreateWalletMutation({
+          address: flowUser?.addr as string,
+        });
       } catch (e) {
-        setError(e);
+        setError(e as Error);
         fcl.unauthenticate();
       }
     },
@@ -106,8 +111,7 @@ export const useConnectFlowWallet = () => {
   }, [flowUser?.addr, flowUser?.loggedIn]);
 
   // Create a callback that marks the current wallet as initialized
-  const { executeMutation: markWalletInitializedMutation } =
-    useGraphQLMutation(READY_WALLET);
+  const [, markWalletInitializedMutation] = useMutation(ReadyWalletDocument);
 
   const markWalletInitialized = useCallback(async () => {
     console.log("readyWallet");
@@ -121,8 +125,7 @@ export const useConnectFlowWallet = () => {
   }, [wallet?.id]);
 
   // Create a callback that verifies current wallet by signing the verification code
-  const { executeMutation: verifyWalletMutation } =
-    useGraphQLMutation(VERIFY_WALLET);
+  const [, verifyWalletMutation] = useMutation(VerifyWalletDocument);
 
   const verifyWallet = useCallback(async () => {
     console.log("verifyWallet", wallet);
@@ -152,7 +155,7 @@ export const useConnectFlowWallet = () => {
     console.log("initializeFlowAccount");
     setInitializingFlowAccount(true);
     try {
-      if (!flowUser.loggedIn || !wallet) {
+      if (!flowUser?.loggedIn || !wallet) {
         fcl.logIn();
         return;
       }
@@ -182,7 +185,7 @@ export const useConnectFlowWallet = () => {
     console.log("resetFlowAccount");
     setInitializingFlowAccount(true);
     try {
-      if (!flowUser.loggedIn) {
+      if (!flowUser?.loggedIn) {
         return;
       }
 
@@ -239,8 +242,8 @@ export const useConnectFlowWallet = () => {
       return;
     }
 
-    reExecuteQuery({ requestPolicy: "network-only" });
-  }, [updatingDatabase, reExecuteQuery, flowUser]);
+    refetchWallet({ requestPolicy: "network-only" });
+  }, [updatingDatabase, flowUser, refetchWallet]);
 
   return {
     wallet,

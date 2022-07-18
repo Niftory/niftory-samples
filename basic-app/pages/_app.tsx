@@ -1,26 +1,28 @@
-import React, { Component as ReactComponent } from "react";
+import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Auth } from "../components/Auth";
-import { GraphQLProvider } from "../lib/GraphQLProvider";
+import { AppProps as NextAppProps } from "next/app";
+import { AuthProvider } from "../components/AuthProvider";
+import { ComponentWithAuth } from "../components/ComponentWithAuth";
+import { GraphQLClientProvider } from "../components/GraphQLClientProvider";
+
+type AppProps<P = {}> = NextAppProps<P> & {
+  Component: ComponentWithAuth;
+};
 
 const App = ({
   Component,
-  pageProps: { session, ...pageProps },
-}): JSX.Element => {
+  pageProps: { session, auth, ...pageProps },
+}: AppProps): JSX.Element => {
   return (
     <SessionProvider session={session} refetchOnWindowFocus={false}>
-      <GraphQLProvider>
+      <GraphQLClientProvider>
         <ChakraProvider>
-          {Component.auth ? (
-            <Auth>
-              <Component {...pageProps} />
-            </Auth>
-          ) : (
+          <AuthProvider requireAuth={Component.requireAuth}>
             <Component {...pageProps} />
-          )}{" "}
+          </AuthProvider>
         </ChakraProvider>
-      </GraphQLProvider>
+      </GraphQLClientProvider>
     </SessionProvider>
   );
 };

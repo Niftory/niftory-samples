@@ -1,9 +1,8 @@
-import { useGraphQLQuery } from "../lib/useGraphQLQuery";
-import { NexusGenRootTypes } from "../lib/api-types";
-import { gql } from "urql";
+import { gql, useQuery } from "urql";
+import { GetNftModelDocument } from "../generated/graphql";
 
-const GET_NFT_MODEL = gql`
-  query ($id: String!) {
+gql`
+  query getNftModel($id: String!) {
     nftModel(id: $id) {
       id
       blockchainId
@@ -31,17 +30,12 @@ const GET_NFT_MODEL = gql`
   }
 `;
 
-export function useNFTModel(nftModelId: string) {
-  const result = useGraphQLQuery<{
-    nftModel?: NexusGenRootTypes["NFTModel"];
-  }>({
-    query: GET_NFT_MODEL,
+export const useNFTModel = (nftModelId: string) => {
+  const [result, refetch] = useQuery({
+    query: GetNftModelDocument,
     variables: { id: nftModelId },
     pause: !nftModelId,
   });
 
-  return {
-    nftModel: result.nftModelId,
-    ...result,
-  };
-}
+  return { nftModel: result.data?.nftModel, refetch, ...result };
+};

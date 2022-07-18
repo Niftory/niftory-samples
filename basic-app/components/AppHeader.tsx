@@ -2,17 +2,17 @@ import { VStack, Heading, Button, Text, HStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import { signOutUser } from "./SignOutUser";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useSession } from "next-auth/react";
 
 export function AppHeader() {
-  const { user } = useAuthContext();
+  const { data: session } = useSession();
   const router = useRouter();
 
   return (
     <VStack textColor="white">
       <Heading>Sample App: Logged In</Heading>
-      <Text> Name: {user?.name} </Text>
-      <Text> Email: {user?.email} </Text>
+      <Text> Name: {session?.user?.name} </Text>
+      <Text> Email: {session?.user?.email} </Text>
       <HStack>
         <Button
           colorScheme="blue"
