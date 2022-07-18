@@ -1,7 +1,8 @@
 import { gql, useQuery } from "urql";
+import { GetNftDocument } from "../generated/graphql";
 
-const GET_NFT = gql`
-  query ($id: String!) {
+gql`
+  query getNft($id: String!) {
     nft(id: $id) {
       id
       blockchainId
@@ -34,9 +35,9 @@ const GET_NFT = gql`
   }
 `;
 
-export const useNFT = (nftId: string) =>
+export const useNFT = (nftId: string | undefined) =>
   useQuery({
-    query: GET_NFT,
-    variables: { id: nftId },
+    query: GetNftDocument,
+    variables: { id: nftId as string },
     pause: !nftId,
   });

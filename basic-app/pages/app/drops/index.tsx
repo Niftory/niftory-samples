@@ -3,11 +3,12 @@ import { useRouter } from "next/router";
 
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
-import { useNFTModels } from "../../../hooks/useNFTModels";
+import { useNFTModels } from "../../../hooks/useNftModels";
 
 const Drops = () => {
   const router = useRouter();
-  const { nftModels } = useNFTModels();
+  const [{ data }] = useNFTModels();
+  const nftModels = data?.nftModels;
 
   return (
     <AppLayout>
@@ -15,13 +16,18 @@ const Drops = () => {
         <VStack>
           <AppHeader />
           <SimpleGrid>
-            {nftModels?.map((nftModel) => (
-              <Box key={nftModel.id}>
-                <Link onClick={() => router.push(`/app/drops/${nftModel.id}`)}>
-                  {nftModel.title}
-                </Link>{" "}
-              </Box>
-            ))}
+            {nftModels?.map(
+              (nftModel) =>
+                nftModel && (
+                  <Box key={nftModel.id}>
+                    <Link
+                      onClick={() => router.push(`/app/drops/${nftModel.id}`)}
+                    >
+                      {nftModel.title}
+                    </Link>{" "}
+                  </Box>
+                )
+            )}
           </SimpleGrid>
         </VStack>
       </Box>

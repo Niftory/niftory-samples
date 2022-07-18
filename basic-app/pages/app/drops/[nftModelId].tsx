@@ -4,11 +4,11 @@ import * as React from "react";
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
 import { useNFTModel } from "../../../hooks/useNFTModel";
-import { useGraphQLMutation } from "../../../lib/useGraphQLMutation";
-import { gql } from "urql";
+import { gql, useMutation } from "urql";
+import { TransferNftToUserDocument } from "../../../generated/graphql";
 
 const TRANSFER_NFT_TO_USER = gql`
-  mutation ($nftModelId: ID!) {
+  mutation transferNFTToUser($nftModelId: ID!) {
     transfer(nftModelId: $nftModelId) {
       id
     }
@@ -18,11 +18,11 @@ const TRANSFER_NFT_TO_USER = gql`
 const Collection = () => {
   const router = useRouter();
   const nftModelId = router.query["nftModelId"] as string;
-  const { nftModel } = useNFTModel(nftModelId);
+  const [{ data }] = useNFTModel(nftModelId);
+  const nftModel = data?.nftModel;
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const { executeMutation: transferNFTMutation } =
-    useGraphQLMutation(TRANSFER_NFT_TO_USER);
+  const [, transferNFTMutation] = useMutation(TransferNftToUserDocument);
 
   const initiateTransfer = async (nftModelId: string) => {
     setIsLoading(true);

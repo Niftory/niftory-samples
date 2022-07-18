@@ -1,7 +1,8 @@
 import { gql, useQuery } from "urql";
+import { GetNftModelsDocument } from "../generated/graphql";
 
-const API_GET_NFT_MODEL = gql`
-  query {
+gql`
+  query getNftModels {
     nftModels {
       id
       blockchainId
@@ -31,5 +32,5 @@ const API_GET_NFT_MODEL = gql`
 
 export const useNFTModels = () =>
   useQuery({
-    query: API_GET_NFT_MODEL,
+    query: GetNftModelsDocument,
   });

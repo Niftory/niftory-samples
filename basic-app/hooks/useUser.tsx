@@ -1,7 +1,8 @@
 import { gql, useQuery } from "urql";
+import { GetAppUserDocument } from "../generated/graphql";
 
-const API_GET_APP_USER = gql`
-  query {
+gql`
+  query getAppUser {
     appUser {
       id
       name
@@ -21,5 +22,5 @@ const API_GET_APP_USER = gql`
 
 export const useUser = () =>
   useQuery({
-    query: API_GET_APP_USER,
+    query: GetAppUserDocument,
   });

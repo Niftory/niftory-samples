@@ -2,6 +2,11 @@ import * as fcl from "@onflow/fcl";
 import { useCallback, useEffect, useState } from "react";
 import { gql, useMutation } from "urql";
 import {
+  ReadyWalletDocument,
+  RegisterWalletDocument,
+  VerifyWalletDocument,
+} from "../generated/graphql";
+import {
   isInitializedScript,
   resetAccountTx,
   setupAccountTx,
@@ -11,8 +16,8 @@ import { useFlowUser } from "./useFlowUser";
 import { useWallet } from "./useWallet";
 
 //#region Public APIs
-const REGISTER_WALLET = gql`
-  mutation ($address: String!) {
+gql`
+  mutation registerWallet($address: String!) {
     registerWallet(address: $address) {
       id
       address
@@ -22,8 +27,8 @@ const REGISTER_WALLET = gql`
   }
 `;
 
-const VERIFY_WALLET = gql`
-  mutation ($address: String!, $signedVerificationCode: JSON!) {
+gql`
+  mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
     verifyWallet(
       address: $address
       signedVerificationCode: $signedVerificationCode
@@ -35,8 +40,8 @@ const VERIFY_WALLET = gql`
   }
 `;
 
-const READY_WALLET = gql`
-  mutation ($address: String!) {
+gql`
+  mutation readyWallet($address: String!) {
     readyWallet(address: $address) {
       id
       address
@@ -50,9 +55,10 @@ export const useConnectFlowWallet = () => {
   const { flowUser, loading: flowUserLoading } = useFlowUser();
 
   const [
-    { data: wallet, fetching: fetchingWallet, error: errorFetchingWallet },
+    { data, fetching: fetchingWallet, error: errorFetchingWallet },
     reExecuteQuery,
   ] = useWallet();
+  const wallet = data?.wallet;
 
   const [initializingFlowAccount, setInitializingFlowAccount] = useState(false);
   const [updatingDatabase, setUpdatingDatabase] = useState(false);
@@ -64,7 +70,7 @@ export const useConnectFlowWallet = () => {
     initializingFlowAccount ||
     updatingDatabase;
 
-  const [, executeCreateWalletMutation] = useMutation(REGISTER_WALLET);
+  const [, executeCreateWalletMutation] = useMutation(RegisterWalletDocument);
 
   const createWallet = useCallback(
     async () => {
@@ -102,8 +108,7 @@ export const useConnectFlowWallet = () => {
   }, [flowUser?.addr, flowUser?.loggedIn]);
 
   // Create a callback that marks the current wallet as initialized
-  const { executeMutation: markWalletInitializedMutation } =
-    useGraphQLMutation(READY_WALLET);
+  const [, markWalletInitializedMutation] = useMutation(ReadyWalletDocument);
 
   const markWalletInitialized = useCallback(async () => {
     console.log("readyWallet");
@@ -117,7 +122,7 @@ export const useConnectFlowWallet = () => {
   }, [wallet?.id]);
 
   // Create a callback that verifies current wallet by signing the verification code
-  const [, verifyWalletMutation] = useMutation(VERIFY_WALLET);
+  const [, verifyWalletMutation] = useMutation(VerifyWalletDocument);
 
   const verifyWallet = useCallback(async () => {
     console.log("verifyWallet", wallet);

@@ -7,8 +7,9 @@ import { useNFT } from "../../../hooks/useNFT";
 
 const Collection = () => {
   const router = useRouter();
-  const nftId: string = router.query["nftId"]?.toString();
-  const { nft } = useNFT(nftId);
+  const nftId = router.query["nftId"]?.toString();
+  const [{ data }] = useNFT(nftId);
+  const nft = data?.nft;
   const model = nft?.model;
 
   return (

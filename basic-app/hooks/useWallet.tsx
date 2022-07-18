@@ -1,7 +1,8 @@
 import { gql, useQuery } from "urql";
+import { GetUserWalletDocument } from "../generated/graphql";
 
-const GET_USER_WALLET = gql`
-  query {
+gql`
+  query getUserWallet {
     wallet {
       id
       address
@@ -13,5 +14,5 @@ const GET_USER_WALLET = gql`
 
 export const useWallet = () =>
   useQuery({
-    query: GET_USER_WALLET,
+    query: GetUserWalletDocument,
   });

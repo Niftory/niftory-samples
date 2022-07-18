@@ -3,7 +3,7 @@ import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Auth } from "../components/Auth";
 import { Provider as GraphQLClientProvider } from "urql";
-import { getGraphQLClient } from "../lib/api-client";
+import { getGraphQLClient } from "../lib/apiClient";
 
 const App = ({
   Component,

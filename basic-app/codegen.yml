@@ -1,0 +1,13 @@
+overwrite: true
+schema:
+  - ${NEXT_PUBLIC_API_PATH}:
+      headers:
+        X-Niftory-API-Key: ${NEXT_PUBLIC_API_KEY}
+
+documents: "*/**/*.tsx"
+generates:
+  generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node
