@@ -54,11 +54,12 @@ gql`
 export const useConnectFlowWallet = () => {
   const { flowUser, loading: flowUserLoading } = useFlowUser();
 
-  const [
-    { data, fetching: fetchingWallet, error: errorFetchingWallet },
-    reExecuteQuery,
-  ] = useWallet();
-  const wallet = data?.wallet;
+  const {
+    wallet,
+    refetch: refetchWallet,
+    fetching: fetchingWallet,
+    error: errorFetchingWallet,
+  } = useWallet();
 
   const [initializingFlowAccount, setInitializingFlowAccount] = useState(false);
   const [updatingDatabase, setUpdatingDatabase] = useState(false);
@@ -241,8 +242,8 @@ export const useConnectFlowWallet = () => {
       return;
     }
 
-    reExecuteQuery({ requestPolicy: "network-only" });
-  }, [updatingDatabase, reExecuteQuery, flowUser]);
+    refetchWallet({ requestPolicy: "network-only" });
+  }, [updatingDatabase, flowUser, refetchWallet]);
 
   return {
     wallet,

@@ -9,8 +9,7 @@ import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
   const nftId = router.query["nftId"]?.toString();
-  const [{ data }] = useNFT(nftId);
-  const nft = data?.nft;
+  const { nft } = useNFT(nftId);
   const model = nft?.model;
 
   return (

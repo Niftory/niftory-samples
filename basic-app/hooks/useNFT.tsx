@@ -35,9 +35,12 @@ gql`
   }
 `;
 
-export const useNFT = (nftId: string | undefined) =>
-  useQuery({
+export const useNFT = (nftId: string | undefined) => {
+  const [result, refetch] = useQuery({
     query: GetNftDocument,
     variables: { id: nftId as string },
     pause: !nftId,
   });
+
+  return { nft: result.data?.nft, refetch, ...result };
+};

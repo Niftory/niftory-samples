@@ -12,7 +12,14 @@ gql`
   }
 `;
 
-export const useWallet = () =>
-  useQuery({
+export const useWallet = () => {
+  const [result, refetch] = useQuery({
     query: GetUserWalletDocument,
   });
+
+  return {
+    wallet: result.data?.wallet,
+    refetch,
+    ...result,
+  };
+};

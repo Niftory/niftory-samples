@@ -19,8 +19,7 @@ gql`
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
   const nftModelId = router.query["nftModelId"] as string;
-  const [{ data }] = useNFTModel(nftModelId);
-  const nftModel = data?.nftModel;
+  const { nftModel } = useNFTModel(nftModelId);
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [, transferNFTMutation] = useMutation(TransferNftToUserDocument);

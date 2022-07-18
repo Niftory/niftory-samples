@@ -8,8 +8,7 @@ import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
-  const [{ data }] = useUserNFTs();
-  const nfts = data?.nfts;
+  const { nfts } = useUserNFTs();
 
   return (
     <AppLayout>

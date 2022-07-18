@@ -13,4 +13,8 @@ gql`
   }
 `;
 
-export const useUserNFTs = () => useQuery({ query: GetUserNftsDocument });
+export const useUserNFTs = () => {
+  const [result, refetch] = useQuery({ query: GetUserNftsDocument });
+
+  return { nfts: result.data?.nfts, refetch, ...result };
+};

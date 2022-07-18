@@ -30,7 +30,10 @@ gql`
   }
 `;
 
-export const useNFTModels = () =>
-  useQuery({
+export const useNFTModels = () => {
+  const [result, refetch] = useQuery({
     query: GetNftModelsDocument,
   });
+
+  return { nftModels: result.data?.nftModels, refetch, ...result };
+};
