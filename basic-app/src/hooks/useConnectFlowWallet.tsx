@@ -5,15 +5,15 @@ import {
   ReadyWalletDocument,
   RegisterWalletDocument,
   VerifyWalletDocument,
-} from "../generated/graphql";
+} from "generated/graphql";
 import {
   isInitializedScript,
   resetAccountTx,
   setupAccountTx,
-} from "../lib/flow-scripts";
-import { useFlowUser } from "./useFlowUser";
+} from "lib/flow-scripts";
+import { useFlowUser } from "hooks/useFlowUser";
 
-import { useWallet } from "./useWallet";
+import { useWallet } from "hooks/useWallet";
 
 //#region Public APIs
 gql`

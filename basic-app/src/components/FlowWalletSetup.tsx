@@ -2,7 +2,7 @@ import { Box, Button, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 
-import { useConnectFlowWallet } from "../hooks/useConnectFlowWallet";
+import { useConnectFlowWallet } from "hooks/useConnectFlowWallet";
 
 export function FlowWalletSetup() {
   const { wallet, isLoading, error, initializeFlowAccount, resetFlowAccount } =

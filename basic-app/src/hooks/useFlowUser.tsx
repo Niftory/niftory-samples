@@ -1,7 +1,6 @@
 import * as fcl from "@onflow/fcl";
 import { send as grpcSend } from "@onflow/transport-grpc";
 import { useSession } from "next-auth/react";
-import path from "path";
 import { useEffect, useState } from "react";
 
 export function useFlowUser() {

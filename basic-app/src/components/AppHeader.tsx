@@ -1,7 +1,7 @@
 import { VStack, Heading, Button, Text, HStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
-import { signOutUser } from "./SignOutUser";
+import { signOutUser } from "components/SignOutUser";
 import { useSession } from "next-auth/react";
 
 export function AppHeader() {

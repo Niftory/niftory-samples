@@ -1,10 +1,10 @@
 import { Box, Link, SimpleGrid, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
-import AppLayout from "../../../components/AppLayout";
-import { AppHeader } from "../../../components/AppHeader";
-import { useUserNFTs } from "../../../hooks/useUserNFTs";
-import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
+import AppLayout from "components/AppLayout";
+import { AppHeader } from "components/AppHeader";
+import { useUserNFTs } from "hooks/useUserNFTs";
+import { ComponentWithAuth } from "components/ComponentWithAuth";
 
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
