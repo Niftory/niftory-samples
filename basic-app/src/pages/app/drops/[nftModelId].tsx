@@ -1,35 +1,30 @@
 import { Box, Heading, Text, VStack, Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import * as React from "react";
 import AppLayout from "components/AppLayout";
 import { AppHeader } from "components/AppHeader";
 import { useNFTModel } from "hooks/useNFTModel";
-import { gql, useMutation } from "urql";
-import { TransferNftToUserDocument } from "generated/graphql";
 import { ComponentWithAuth } from "components/ComponentWithAuth";
-
-gql`
-  mutation transferNFTToUser($nftModelId: ID!) {
-    transfer(nftModelId: $nftModelId) {
-      id
-    }
-  }
-`;
+import { useCallback, useState } from "react";
+import { useSession } from "next-auth/react";
+import axios from "axios";
 
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
   const nftModelId = router.query["nftModelId"] as string;
   const { nftModel } = useNFTModel(nftModelId);
+  const { data: session } = useSession();
+  const userId = session?.userId;
 
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [, transferNFTMutation] = useMutation(TransferNftToUserDocument);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const initiateTransfer = async (nftModelId: string) => {
+  const initiateTransfer = useCallback(() => {
     setIsLoading(true);
-    const data = await transferNFTMutation({ nftModelId });
-    console.log(data);
-    setIsLoading(false);
-  };
+    axios
+      .post(`/api/nft/${nftModelId}/transfer?userId=${userId}`)
+      .then(({ data }) => router.push(`/app/collection/${data.nftId}`))
+      .catch((error) => console.error(error))
+      .finally(() => setIsLoading(false));
+  }, [nftModelId, router, userId]);
 
   return (
     <AppLayout>
@@ -40,17 +35,13 @@ const Collection: ComponentWithAuth = () => {
             <>
               <Heading>{nftModel.title}</Heading>
               <Text>{nftModel.description}</Text>
-              <Text>{"Blockchain: " + nftModel.blockchainId}</Text>
               <Button
                 isLoading={isLoading}
-                onClick={async () => {
-                  await initiateTransfer(nftModel.id);
-                }}
+                onClick={initiateTransfer}
                 colorScheme="blue"
                 my="auto"
               >
-                {" "}
-                Transfer to my Wallet{" "}
+                Claim
               </Button>
             </>
           )}

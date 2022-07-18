@@ -15,15 +15,18 @@
     "@chakra-ui/system": "^2.1.3",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@onflow/fcl": "^1.0.1",
-    "@onflow/transport-grpc": "^1.0.1",
+    "@onflow/fcl": "1.0.2",
+    "@onflow/transport-grpc": "1.0.1",
     "@urql/exchange-auth": "^0.1.6",
     "@urql/exchange-retry": "^0.3.3",
+    "axios": "^0.27.2",
     "framer-motion": "^6.4.3",
     "google-protobuf": "^3.14.0",
     "graphql": "^15.5.3",
+    "graphql-request": "^4.3.0",
     "next": "12.2.0",
     "next-auth": "^4.9.0",
+    "openid-client": "5.1.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "url-join": "^5.0.0",
@@ -44,7 +47,8 @@
   },
   "dependenciesComments": {
     "chakra/emotion/framer": "Replaceable with other common UI libraries",
-    "next-auth": "Replaceable with other common auth providers",
-    "urql": "Replaceable with other graphql client libraries"
+    "next-auth": "Replaceable with any auth provider that supports OAuth 2.0",
+    "urql": "Replaceable with other graphql client libraries",
+    "openid-client": "Replaceable with any OAuth 2.0 client"
   }
 }
