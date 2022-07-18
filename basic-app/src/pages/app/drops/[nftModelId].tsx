@@ -1,12 +1,12 @@
 import { Box, Heading, Text, VStack, Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import * as React from "react";
-import AppLayout from "../../../components/AppLayout";
-import { AppHeader } from "../../../components/AppHeader";
-import { useNFTModel } from "../../../hooks/useNFTModel";
+import AppLayout from "components/AppLayout";
+import { AppHeader } from "components/AppHeader";
+import { useNFTModel } from "hooks/useNFTModel";
 import { gql, useMutation } from "urql";
-import { TransferNftToUserDocument } from "../../../generated/graphql";
-import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
+import { TransferNftToUserDocument } from "generated/graphql";
+import { ComponentWithAuth } from "components/ComponentWithAuth";
 
 gql`
   mutation transferNFTToUser($nftModelId: ID!) {

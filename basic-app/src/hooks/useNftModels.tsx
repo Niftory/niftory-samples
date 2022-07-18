@@ -1,15 +1,16 @@
 import { gql, useQuery } from "urql";
-import { GetNftModelDocument } from "../generated/graphql";
+import { GetNftModelsDocument } from "generated/graphql";
 
 gql`
-  query getNftModel($id: String!) {
-    nftModel(id: $id) {
+  query getNftModels {
+    nftModels {
       id
       blockchainId
       title
       description
       quantity
       status
+      rarity
       content {
         files {
           media {
@@ -25,17 +26,14 @@ gql`
           url
         }
       }
-      rarity
     }
   }
 `;
 
-export const useNFTModel = (nftModelId: string) => {
+export const useNFTModels = () => {
   const [result, refetch] = useQuery({
-    query: GetNftModelDocument,
-    variables: { id: nftModelId },
-    pause: !nftModelId,
+    query: GetNftModelsDocument,
   });
 
-  return { nftModel: result.data?.nftModel, refetch, ...result };
+  return { nftModels: result.data?.nftModels, refetch, ...result };
 };
