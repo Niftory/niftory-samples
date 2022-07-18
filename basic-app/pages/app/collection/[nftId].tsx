@@ -1,4 +1,4 @@
-import { Box, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Heading, Text, VStack, Image, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import AppLayout from "../../../components/AppLayout";
@@ -13,11 +13,16 @@ const Collection = () => {
 
   return (
     <AppLayout>
-      <Box mx="auto" color="white" mt="5vh">
+      <Box mx="auto" color="white">
         <VStack>
           <AppHeader />
-          {model && (
+          {model ? (
             <>
+              <Image
+                alt={nft.model?.title}
+                src={nft.model?.content?.poster?.url}
+                boxSize="20vh"
+              ></Image>
               <Heading>{model.title}</Heading>
               <Text>{model.description}</Text>
               <Text>
@@ -27,6 +32,8 @@ const Collection = () => {
                   nft.serialNumber}{" "}
               </Text>
             </>
+          ) : (
+            <Spinner size="lg"></Spinner>
           )}
         </VStack>
       </Box>

@@ -9,7 +9,7 @@ import { FlowWalletSetup } from "../../components/FlowWalletSetup";
 const Drops = () => {
   return (
     <AppLayout>
-      <Box mx="auto" color="white" mt="5vh">
+      <Box mx="auto" color="white" >
         <VStack>
           <AppHeader />
           <FlowWalletSetup />

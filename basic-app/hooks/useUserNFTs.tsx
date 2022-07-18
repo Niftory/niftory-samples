@@ -7,6 +7,11 @@ const GET_USER_NFTs = gql`
     nfts {
       id
       model {
+        content {
+          poster {
+            url
+          }
+        }
         id
         title
       }

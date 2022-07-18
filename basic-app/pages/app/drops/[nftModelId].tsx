@@ -1,4 +1,12 @@
-import { Box, Heading, Text, VStack, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  VStack,
+  Button,
+  Spinner,
+  Image,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import * as React from "react";
 import AppLayout from "../../../components/AppLayout";
@@ -27,21 +35,26 @@ const Collection = () => {
   const initiateTransfer = async (nftModelId: string) => {
     setIsLoading(true);
     const data = await transferNFTMutation({ nftModelId });
-    console.log(data);
     setIsLoading(false);
   };
 
   return (
     <AppLayout>
-      <Box mx="auto" color="white" mt="5vh">
+      <Box mx="auto" color="white">
         <VStack>
           <AppHeader />
-          {nftModel && (
+          {nftModel ? (
             <>
+              <Image
+                alt={nftModel.title}
+                boxSize="30vh"
+                src={nftModel.content?.poster?.url}
+              ></Image>
               <Heading>{nftModel.title}</Heading>
               <Text>{nftModel.description}</Text>
               <Text>{"Blockchain: " + nftModel.blockchainId}</Text>
               <Button
+                isDisabled={nftModel && !nftModel.blockchainId}
                 isLoading={isLoading}
                 onClick={async () => {
                   await initiateTransfer(nftModel.id);
@@ -53,6 +66,8 @@ const Collection = () => {
                 Transfer to my Wallet{" "}
               </Button>
             </>
+          ) : (
+            <Spinner size="lg"></Spinner>
           )}
         </VStack>
       </Box>
