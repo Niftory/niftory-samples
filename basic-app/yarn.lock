@@ -2056,13 +2056,6 @@
     "@graphql-typed-document-node/core" "^3.1.1"
     wonka "^4.0.14"
 
-"@urql/devtools@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@urql/devtools/-/devtools-2.0.3.tgz#780998c37386c72af9402a8f88c1b388e62f28cd"
-  integrity sha512-TktPLiBS9LcBPHD6qcnb8wqOVcg3Bx0iCtvQ80uPpfofwwBGJmqnQTjUdEFU6kwaLOFZULQ9+Uo4831G823mQw==
-  dependencies:
-    wonka ">= 4.0.9"
-
 "@urql/exchange-auth@^0.1.6":
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/@urql/exchange-auth/-/exchange-auth-0.1.7.tgz#fc2536bed9978076f6233ed219bc13ff38b2553f"
@@ -2708,7 +2701,7 @@ cross-fetch@^3.1.5:
   dependencies:
     node-fetch "2.6.7"
 
-cross-spawn@^7.0.2:
+cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
   integrity sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==
@@ -2861,6 +2854,21 @@ dot-case@^3.0.4:
   dependencies:
     no-case "^3.0.4"
     tslib "^2.0.3"
+
+dotenv-cli@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv-cli/-/dotenv-cli-6.0.0.tgz#8a30cbc59d0a8aaa166b2fee0a9a55e23a1223ab"
+  integrity sha512-qXlCOi3UMDhCWFKe0yq5sg3X+pJAz+RQDiFN38AMSbUrnY3uZshSfDJUAge951OS7J9gwLZGfsBlWRSOYz/TRg==
+  dependencies:
+    cross-spawn "^7.0.3"
+    dotenv "^16.0.0"
+    dotenv-expand "^8.0.1"
+    minimist "^1.2.5"
+
+dotenv-expand@^8.0.1:
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/dotenv-expand/-/dotenv-expand-8.0.3.tgz#29016757455bcc748469c83a19b36aaf2b83dd6e"
+  integrity sha512-SErOMvge0ZUyWd5B0NXMQlDkN+8r+HhVUsxgOO7IoPDOdDRD2JjExpN6y3KnFR66jsJMwSn1pqIivhU5rcJiNg==
 
 dotenv@^16.0.0:
   version "16.0.1"
@@ -4262,7 +4270,7 @@ minimatch@^3.0.4, minimatch@^3.1.1, minimatch@^3.1.2:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimist@^1.2.0, minimist@^1.2.6:
+minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
   integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
@@ -5551,7 +5559,7 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
-"wonka@>= 4.0.9", wonka@^4.0.14:
+wonka@^4.0.14:
   version "4.0.15"
   resolved "https://registry.yarnpkg.com/wonka/-/wonka-4.0.15.tgz#9aa42046efa424565ab8f8f451fcca955bf80b89"
   integrity sha512-U0IUQHKXXn6PFo9nqsHphVCE5m3IntqZNB9Jjn7EB1lrR7YTDY3YWgFvEvwniTzXSvOH/XMzAZaIfJF/LvHYXg==

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-graphql-types": "graphql-codegen --config codegen.yml"
+    "generate-graphql-types": "dotenv graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.2.1",
@@ -16,7 +16,6 @@
     "@emotion/styled": "^11",
     "@onflow/fcl": "^1.0.1",
     "@onflow/transport-grpc": "^1.0.1",
-    "@urql/devtools": "^2.0.3",
     "@urql/exchange-auth": "^0.1.6",
     "@urql/exchange-retry": "^0.3.3",
     "framer-motion": "^6.4.3",
@@ -36,6 +35,7 @@
     "@types/node": "18.0.1",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
+    "dotenv-cli": "^6.0.0",
     "eslint": "8.19.0",
     "eslint-config-next": "12.2.0",
     "nexus": "1.3.0",
