@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { getClientCredentialsToken } from "lib/oauth";
+import { getClientCredentialsToken } from "../../../../lib/oauth";
 import { request, gql } from "graphql-request";
 import { getToken } from "next-auth/jwt";
 

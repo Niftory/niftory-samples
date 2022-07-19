@@ -2,9 +2,9 @@ import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AppProps as NextAppProps } from "next/app";
-import { AuthProvider } from "components/AuthProvider";
-import { ComponentWithAuth } from "components/ComponentWithAuth";
-import { GraphQLClientProvider } from "components/GraphQLClientProvider";
+import { AuthProvider } from "../components/AuthProvider";
+import { ComponentWithAuth } from "../components/ComponentWithAuth";
+import { GraphQLClientProvider } from "../components/GraphQLClientProvider";
 
 type AppProps<P = {}> = NextAppProps<P> & {
   Component: ComponentWithAuth;

@@ -1,5 +1,5 @@
 import { gql, useQuery } from "urql";
-import { GetNftDocument } from "generated/graphql";
+import { GetNftDocument } from "../generated/graphql";
 
 gql`
   query getNft($id: String!) {
