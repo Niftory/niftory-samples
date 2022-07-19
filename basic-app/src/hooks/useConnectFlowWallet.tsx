@@ -52,7 +52,7 @@ gql`
 //#endregion
 
 export const useConnectFlowWallet = () => {
-  const { flowUser, loading: flowUserLoading } = useFlowUser();
+  const flowUser = useFlowUser();
 
   const {
     wallet,
@@ -66,10 +66,7 @@ export const useConnectFlowWallet = () => {
   const [error, setError] = useState<Error | undefined>(errorFetchingWallet);
 
   const isLoading =
-    flowUserLoading ||
-    fetchingWallet ||
-    initializingFlowAccount ||
-    updatingDatabase;
+    fetchingWallet || initializingFlowAccount || updatingDatabase;
 
   const [, executeCreateWalletMutation] = useMutation(RegisterWalletDocument);
 

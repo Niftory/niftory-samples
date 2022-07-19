@@ -7,7 +7,7 @@ const NIFTORY_AUTH_PROVIDER: Provider = {
   name: "Niftory",
   type: "oauth",
   wellKnown: urljoin(
-    process.env.NIFTORY_AUTH_SERVICE as string,
+    process.env.NIFTORY_AUTH_ISSUER as string,
     "/.well-known/openid-configuration"
   ),
   authorization: { params: { scope: "openid email profile" } },
