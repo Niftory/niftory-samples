@@ -20,6 +20,7 @@
     "@urql/exchange-auth": "^0.1.6",
     "@urql/exchange-retry": "^0.3.3",
     "axios": "^0.27.2",
+    "buffer": "6.0.3",
     "framer-motion": "^6.4.3",
     "google-protobuf": "^3.14.0",
     "graphql": "^15.5.3",
