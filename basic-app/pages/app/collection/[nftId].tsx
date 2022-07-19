@@ -1,10 +1,10 @@
 import { Box, Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
-import AppLayout from "components/AppLayout";
-import { AppHeader } from "components/AppHeader";
-import { useNFT } from "hooks/useNFT";
-import { ComponentWithAuth } from "components/ComponentWithAuth";
+import AppLayout from "../../../components/AppLayout";
+import { AppHeader } from "../../../components/AppHeader";
+import { useNFT } from "../../../hooks/useNFT";
+import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();

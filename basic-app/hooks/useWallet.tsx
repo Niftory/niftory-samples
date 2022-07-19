@@ -1,5 +1,5 @@
 import { gql, useQuery } from "urql";
-import { GetUserWalletDocument } from "generated/graphql";
+import { GetUserWalletDocument } from "../generated/graphql";
 
 gql`
   query getUserWallet {

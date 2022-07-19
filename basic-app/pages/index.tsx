@@ -1,9 +1,9 @@
-import { Box, Button, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Center, Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { signIn, useSession } from "next-auth/react";
 
-import AppLayout from "components/AppLayout";
-import { signOutUser } from "components/SignOutUser";
+import AppLayout from "../components/AppLayout";
+import { signOutUser } from "../components/SignOutUser";
 
 const Login = () => {
   const { data: session, status } = useSession();

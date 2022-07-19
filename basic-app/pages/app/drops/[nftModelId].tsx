@@ -1,12 +1,12 @@
 import { Box, Heading, Text, VStack, Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import AppLayout from "components/AppLayout";
-import { AppHeader } from "components/AppHeader";
-import { useNFTModel } from "hooks/useNFTModel";
-import { ComponentWithAuth } from "components/ComponentWithAuth";
-import { useCallback, useState } from "react";
-import { useSession } from "next-auth/react";
+import * as React from "react";
+import AppLayout from "../../../components/AppLayout";
+import { AppHeader } from "../../../components/AppHeader";
+import { useNFTModel } from "../../../hooks/useNFTModel";
+import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
@@ -15,9 +15,9 @@ const Collection: ComponentWithAuth = () => {
   const { data: session } = useSession();
   const userId = session?.userId;
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const initiateTransfer = useCallback(() => {
+  const initiateTransfer = React.useCallback(() => {
     setIsLoading(true);
     axios
       .post(`/api/nft/${nftModelId}/transfer?userId=${userId}`)

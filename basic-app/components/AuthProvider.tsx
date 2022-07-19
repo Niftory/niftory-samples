@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
 
-import { LoginSkeleton } from "components/LoginSkeleton";
+import { LoginSkeleton } from "./LoginSkeleton";
 import { useSession } from "next-auth/react";
 
 type AuthComponentProps = {
