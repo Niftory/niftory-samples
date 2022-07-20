@@ -1,9 +1,10 @@
 import { NextApiHandler } from "next";
-import { getClientCredentialsToken } from "../../../../lib/oauth";
-import { request, gql } from "graphql-request";
+import { gql } from "graphql-request";
 import { getToken } from "next-auth/jwt";
+import { getBackendGraphQLClient } from "../../../../lib/graphql/backendClient";
+import { getSdk } from "../../../../generated/graphql";
 
-const transferNFTToUser = gql`
+gql`
   mutation transferNFTToUser($nftModelId: ID!, $userId: ID!) {
     transfer(nftModelId: $nftModelId, userId: $userId) {
       id
@@ -29,20 +30,13 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const token = await getClientCredentialsToken();
+  const client = await getBackendGraphQLClient();
+  const sdk = getSdk(client);
 
-  const data = await request(
-    process.env.NEXT_PUBLIC_API_PATH as string,
-    transferNFTToUser,
-    {
-      nftModelId,
-      userId,
-    },
-    {
-      Authorization: `Bearer ${token}`,
-      "X-Niftory-API-Key": process.env.NEXT_PUBLIC_API_KEY as string,
-    }
-  );
+  const data = await sdk.transferNFTToUser({
+    nftModelId: nftModelId as string,
+    userId: userId as string,
+  });
 
   res.status(200).json(data);
 };

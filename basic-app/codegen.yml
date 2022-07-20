@@ -4,7 +4,7 @@ schema:
       headers:
         X-Niftory-API-Key: ${NEXT_PUBLIC_API_KEY}
 
-documents: "./**/*.tsx"
+documents: "./**/*.{ts,tsx}"
 generates:
   generated/graphql.ts:
     plugins:

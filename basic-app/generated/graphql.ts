@@ -726,6 +726,14 @@ export type ReadyWalletMutationVariables = Exact<{
 
 export type ReadyWalletMutation = { __typename?: 'Mutation', readyWallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState } | null };
 
+export type TransferNftToUserMutationVariables = Exact<{
+  nftModelId: Scalars['ID'];
+  userId: Scalars['ID'];
+}>;
+
+
+export type TransferNftToUserMutation = { __typename?: 'Mutation', transfer?: { __typename?: 'NFT', id: string } | null };
+
 export type NftQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -840,6 +848,26 @@ export const useReadyWalletMutation = <
     useMutation<ReadyWalletMutation, TError, ReadyWalletMutationVariables, TContext>(
       ['readyWallet'],
       (variables?: ReadyWalletMutationVariables) => fetcher<ReadyWalletMutation, ReadyWalletMutationVariables>(client, ReadyWalletDocument, variables, headers)(),
+      options
+    );
+export const TransferNftToUserDocument = `
+    mutation transferNFTToUser($nftModelId: ID!, $userId: ID!) {
+  transfer(nftModelId: $nftModelId, userId: $userId) {
+    id
+  }
+}
+    `;
+export const useTransferNftToUserMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<TransferNftToUserMutation, TError, TransferNftToUserMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<TransferNftToUserMutation, TError, TransferNftToUserMutationVariables, TContext>(
+      ['transferNFTToUser'],
+      (variables?: TransferNftToUserMutationVariables) => fetcher<TransferNftToUserMutation, TransferNftToUserMutationVariables>(client, TransferNftToUserDocument, variables, headers)(),
       options
     );
 export const NftDocument = `
@@ -1037,6 +1065,13 @@ export const ReadyWalletDocument = gql`
   }
 }
     `;
+export const TransferNftToUserDocument = gql`
+    mutation transferNFTToUser($nftModelId: ID!, $userId: ID!) {
+  transfer(nftModelId: $nftModelId, userId: $userId) {
+    id
+  }
+}
+    `;
 export const NftDocument = gql`
     query nft($id: String!) {
   nft(id: $id) {
@@ -1156,6 +1191,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     readyWallet(variables: ReadyWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ReadyWalletMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<ReadyWalletMutation>(ReadyWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'readyWallet', 'mutation');
+    },
+    transferNFTToUser(variables: TransferNftToUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<TransferNftToUserMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<TransferNftToUserMutation>(TransferNftToUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'transferNFTToUser', 'mutation');
     },
     nft(variables: NftQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<NftQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<NftQuery>(NftDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'nft', 'query');

@@ -8,7 +8,7 @@ import { Session } from "next-auth";
  * @param session The user session
  * @returns The graphQL client
  */
-export function getGraphQLClient(
+export function getFrontendGraphQLClient(
   url: string,
   apiKey: string,
   session: Session | null
