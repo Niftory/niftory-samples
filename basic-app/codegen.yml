@@ -13,7 +13,7 @@ generates:
             - "// @ts-nocheck"
       - typescript
       - typescript-operations
-      - typescript-react-query
+      - typescript-react-query:
+          documentVariablePrefix: ReactQuery_
+          fetcher: graphql-request
       - typescript-graphql-request
-    config:
-      fetcher: graphql-request

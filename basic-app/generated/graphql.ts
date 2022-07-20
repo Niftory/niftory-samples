@@ -759,7 +759,7 @@ export type NftModelsQueryVariables = Exact<{ [key: string]: never; }>;
 export type NftModelsQuery = { __typename?: 'Query', nftModels?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null };
 
 
-export const UserWalletDocument = `
+export const ReactQuery_UserWalletDocument = `
     query userWallet {
   wallet {
     id
@@ -780,10 +780,10 @@ export const useUserWalletQuery = <
     ) =>
     useQuery<UserWalletQuery, TError, TData>(
       variables === undefined ? ['userWallet'] : ['userWallet', variables],
-      fetcher<UserWalletQuery, UserWalletQueryVariables>(client, UserWalletDocument, variables, headers),
+      fetcher<UserWalletQuery, UserWalletQueryVariables>(client, ReactQuery_UserWalletDocument, variables, headers),
       options
     );
-export const RegisterWalletDocument = `
+export const ReactQuery_RegisterWalletDocument = `
     mutation registerWallet($address: String!) {
   registerWallet(address: $address) {
     id
@@ -803,10 +803,10 @@ export const useRegisterWalletMutation = <
     ) =>
     useMutation<RegisterWalletMutation, TError, RegisterWalletMutationVariables, TContext>(
       ['registerWallet'],
-      (variables?: RegisterWalletMutationVariables) => fetcher<RegisterWalletMutation, RegisterWalletMutationVariables>(client, RegisterWalletDocument, variables, headers)(),
+      (variables?: RegisterWalletMutationVariables) => fetcher<RegisterWalletMutation, RegisterWalletMutationVariables>(client, ReactQuery_RegisterWalletDocument, variables, headers)(),
       options
     );
-export const VerifyWalletDocument = `
+export const ReactQuery_VerifyWalletDocument = `
     mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
   verifyWallet(address: $address, signedVerificationCode: $signedVerificationCode) {
     id
@@ -825,10 +825,10 @@ export const useVerifyWalletMutation = <
     ) =>
     useMutation<VerifyWalletMutation, TError, VerifyWalletMutationVariables, TContext>(
       ['verifyWallet'],
-      (variables?: VerifyWalletMutationVariables) => fetcher<VerifyWalletMutation, VerifyWalletMutationVariables>(client, VerifyWalletDocument, variables, headers)(),
+      (variables?: VerifyWalletMutationVariables) => fetcher<VerifyWalletMutation, VerifyWalletMutationVariables>(client, ReactQuery_VerifyWalletDocument, variables, headers)(),
       options
     );
-export const ReadyWalletDocument = `
+export const ReactQuery_ReadyWalletDocument = `
     mutation readyWallet($address: String!) {
   readyWallet(address: $address) {
     id
@@ -847,10 +847,10 @@ export const useReadyWalletMutation = <
     ) =>
     useMutation<ReadyWalletMutation, TError, ReadyWalletMutationVariables, TContext>(
       ['readyWallet'],
-      (variables?: ReadyWalletMutationVariables) => fetcher<ReadyWalletMutation, ReadyWalletMutationVariables>(client, ReadyWalletDocument, variables, headers)(),
+      (variables?: ReadyWalletMutationVariables) => fetcher<ReadyWalletMutation, ReadyWalletMutationVariables>(client, ReactQuery_ReadyWalletDocument, variables, headers)(),
       options
     );
-export const TransferNftToUserDocument = `
+export const ReactQuery_TransferNftToUserDocument = `
     mutation transferNFTToUser($nftModelId: ID!, $userId: ID!) {
   transfer(nftModelId: $nftModelId, userId: $userId) {
     id
@@ -867,10 +867,10 @@ export const useTransferNftToUserMutation = <
     ) =>
     useMutation<TransferNftToUserMutation, TError, TransferNftToUserMutationVariables, TContext>(
       ['transferNFTToUser'],
-      (variables?: TransferNftToUserMutationVariables) => fetcher<TransferNftToUserMutation, TransferNftToUserMutationVariables>(client, TransferNftToUserDocument, variables, headers)(),
+      (variables?: TransferNftToUserMutationVariables) => fetcher<TransferNftToUserMutation, TransferNftToUserMutationVariables>(client, ReactQuery_TransferNftToUserDocument, variables, headers)(),
       options
     );
-export const NftDocument = `
+export const ReactQuery_NftDocument = `
     query nft($id: String!) {
   nft(id: $id) {
     id
@@ -914,10 +914,10 @@ export const useNftQuery = <
     ) =>
     useQuery<NftQuery, TError, TData>(
       ['nft', variables],
-      fetcher<NftQuery, NftQueryVariables>(client, NftDocument, variables, headers),
+      fetcher<NftQuery, NftQueryVariables>(client, ReactQuery_NftDocument, variables, headers),
       options
     );
-export const UserNftsDocument = `
+export const ReactQuery_UserNftsDocument = `
     query userNfts {
   nfts {
     id
@@ -939,10 +939,10 @@ export const useUserNftsQuery = <
     ) =>
     useQuery<UserNftsQuery, TError, TData>(
       variables === undefined ? ['userNfts'] : ['userNfts', variables],
-      fetcher<UserNftsQuery, UserNftsQueryVariables>(client, UserNftsDocument, variables, headers),
+      fetcher<UserNftsQuery, UserNftsQueryVariables>(client, ReactQuery_UserNftsDocument, variables, headers),
       options
     );
-export const NftModelDocument = `
+export const ReactQuery_NftModelDocument = `
     query nftModel($id: String!) {
   nftModel(id: $id) {
     id
@@ -981,10 +981,10 @@ export const useNftModelQuery = <
     ) =>
     useQuery<NftModelQuery, TError, TData>(
       ['nftModel', variables],
-      fetcher<NftModelQuery, NftModelQueryVariables>(client, NftModelDocument, variables, headers),
+      fetcher<NftModelQuery, NftModelQueryVariables>(client, ReactQuery_NftModelDocument, variables, headers),
       options
     );
-export const NftModelsDocument = `
+export const ReactQuery_NftModelsDocument = `
     query nftModels {
   nftModels {
     id
@@ -1023,7 +1023,7 @@ export const useNftModelsQuery = <
     ) =>
     useQuery<NftModelsQuery, TError, TData>(
       variables === undefined ? ['nftModels'] : ['nftModels', variables],
-      fetcher<NftModelsQuery, NftModelsQueryVariables>(client, NftModelsDocument, variables, headers),
+      fetcher<NftModelsQuery, NftModelsQueryVariables>(client, ReactQuery_NftModelsDocument, variables, headers),
       options
     );
 
