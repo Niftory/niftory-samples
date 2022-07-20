@@ -5,6 +5,17 @@ import { useGraphQLClient } from "../../hooks/useGraphQLClient";
 import { useFlowUser } from "../../hooks/useFlowUser";
 import { useFlowAccountConfiguration as useFlowAccountConfiguration } from "../../hooks/useFlowAccountConfiguration";
 import { WalletSetupStepProps } from "./WalletSetup";
+import { gql } from "graphql-request";
+
+gql`
+  mutation readyWallet($address: String!) {
+    readyWallet(address: $address) {
+      id
+      address
+      state
+    }
+  }
+`;
 
 export function ConfigureWallet({
   setIsLoading,

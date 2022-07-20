@@ -5,6 +5,18 @@ import { useFlowUser } from "../../hooks/useFlowUser";
 import { useGraphQLClient } from "../../hooks/useGraphQLClient";
 import * as fcl from "@onflow/fcl";
 import { WalletSetupStepProps } from "./WalletSetup";
+import { gql } from "graphql-request";
+
+gql`
+  mutation registerWallet($address: String!) {
+    registerWallet(address: $address) {
+      id
+      address
+      verificationCode
+      state
+    }
+  }
+`;
 
 export function RegisterWallet({
   setIsLoading,

@@ -7,6 +7,20 @@ import {
 import { useGraphQLClient } from "../../hooks/useGraphQLClient";
 import * as fcl from "@onflow/fcl";
 import { WalletSetupStepProps } from "./WalletSetup";
+import { gql } from "graphql-request";
+
+gql`
+  mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
+    verifyWallet(
+      address: $address
+      signedVerificationCode: $signedVerificationCode
+    ) {
+      id
+      address
+      state
+    }
+  }
+`;
 
 export function VerifyWallet({ setIsLoading, setError }: WalletSetupStepProps) {
   const client = useGraphQLClient();

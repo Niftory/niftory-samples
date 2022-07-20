@@ -2,7 +2,7 @@ import { Box, VStack } from "@chakra-ui/react";
 
 import AppLayout from "../../components/AppLayout";
 import { AppHeader } from "../../components/AppHeader";
-import { WalletSetupWrapper } from "../../components/wallet/WalletSetup";
+import { WalletSetup } from "../../components/wallet/WalletSetup";
 import { ComponentWithAuth } from "../../components/ComponentWithAuth";
 
 const Drops: ComponentWithAuth = () => (
@@ -10,7 +10,7 @@ const Drops: ComponentWithAuth = () => (
     <Box mx="auto" color="white" mt="5vh">
       <VStack>
         <AppHeader />
-        <WalletSetupWrapper />
+        <WalletSetup />
       </VStack>
     </Box>
   </AppLayout>

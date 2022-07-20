@@ -11,6 +11,7 @@ import { ConfigureWallet } from "./ConfigureWallet";
 import { RegisterWallet } from "./RegisterWallet";
 import { VerifyWallet } from "./VerifyWallet";
 import * as fcl from "@onflow/fcl";
+import { gql } from "graphql-request";
 
 export type WalletSetupStepProps = {
   setIsLoading: (isLoading: boolean) => void;
@@ -23,7 +24,18 @@ export type WalletSetupProps = WalletSetupStepProps & {
   error: Error;
 };
 
-export function WalletSetupWrapper() {
+gql`
+  query userWallet {
+    wallet {
+      id
+      address
+      state
+      verificationCode
+    }
+  }
+`;
+
+export function WalletSetup() {
   const flowUser = useFlowUser();
 
   const client = useGraphQLClient();
@@ -54,18 +66,18 @@ export function WalletSetupWrapper() {
 
   return (
     <Skeleton isLoaded={!walletLoading && !isLoading}>
-      <WalletSetup
+      <WalletSetupBody
         error={error}
         flowUser={flowUser}
         wallet={wallet}
         setError={setError}
         setIsLoading={setIsLoading}
-      ></WalletSetup>
+      ></WalletSetupBody>
     </Skeleton>
   );
 }
 
-function WalletSetup({
+function WalletSetupBody({
   error,
   flowUser,
   wallet,
