@@ -4,6 +4,7 @@ import { gql, useMutation } from "urql";
 import {
   ReadyWalletDocument,
   RegisterWalletDocument,
+  useUserWalletQuery,
   VerifyWalletDocument,
 } from "../generated/graphql";
 import {
@@ -12,8 +13,18 @@ import {
   setupAccountTx,
 } from "../lib/flow-scripts";
 import { useFlowUser } from "./useFlowUser";
+import { useGraphQLClient } from "./useGraphQLClient";
 
-import { useWallet } from "./useWallet";
+gql`
+  query userWallet {
+    wallet {
+      id
+      address
+      state
+      verificationCode
+    }
+  }
+`;
 
 //#region Public APIs
 gql`
@@ -54,16 +65,19 @@ gql`
 export const useConnectFlowWallet = () => {
   const flowUser = useFlowUser();
 
+  const client = useGraphQLClient();
+
   const {
-    wallet,
+    data,
     refetch: refetchWallet,
-    fetching: fetchingWallet,
+    isFetching: fetchingWallet,
     error: errorFetchingWallet,
-  } = useWallet();
+  } = useUserWalletQuery(client);
+  const wallet = data?.wallet;
 
   const [initializingFlowAccount, setInitializingFlowAccount] = useState(false);
   const [updatingDatabase, setUpdatingDatabase] = useState(false);
-  const [error, setError] = useState<Error | undefined>(errorFetchingWallet);
+  const [error, setError] = useState<Error>(errorFetchingWallet as Error);
 
   const isLoading =
     fetchingWallet || initializingFlowAccount || updatingDatabase;
@@ -239,7 +253,7 @@ export const useConnectFlowWallet = () => {
       return;
     }
 
-    refetchWallet({ requestPolicy: "network-only" });
+    refetchWallet();
   }, [updatingDatabase, flowUser, refetchWallet]);
 
   return {

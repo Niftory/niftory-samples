@@ -1,9 +1,16 @@
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+// @ts-nocheck
+import { GraphQLClient } from 'graphql-request';
+import { RequestInit } from 'graphql-request/dist/types.dom';
+import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+
+function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
+  return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -116,6 +123,8 @@ export type Contract = Identifiable & {
   blockchain?: Maybe<Blockchain>;
   /** A unique identifier for this object in the Niftory API. */
   id: Scalars['ID'];
+  /** The name of this contract. */
+  name?: Maybe<Scalars['String']>;
 };
 
 /** The input to create a [listing]({{Types.Listing}}). */
@@ -1008,6 +1017,11 @@ export enum WalletState {
   Verified = 'VERIFIED'
 }
 
+export type UserWalletQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState, verificationCode?: string | null } | null };
+
 export type RegisterWalletMutationVariables = Exact<{
   address: Scalars['String'];
 }>;
@@ -1030,41 +1044,275 @@ export type ReadyWalletMutationVariables = Exact<{
 
 export type ReadyWalletMutation = { __typename?: 'Mutation', readyWallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState } | null };
 
-export type GetNftQueryVariables = Exact<{
+export type NftQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type GetNftQuery = { __typename?: 'Query', nft?: { __typename?: 'NFT', id: string, blockchainId?: string | null, serialNumber?: number | null, model?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, rarity?: SimpleRarityLevel | null, quantity?: any | null, metadata?: any | null, content?: { __typename?: 'NFTContent', poster?: { __typename?: 'NFTFile', url: any } | null, files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null } | null } | null } | null };
+export type NftQuery = { __typename?: 'Query', nft?: { __typename?: 'NFT', id: string, blockchainId?: string | null, serialNumber?: number | null, model?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, rarity?: SimpleRarityLevel | null, quantity?: any | null, metadata?: any | null, content?: { __typename?: 'NFTContent', poster?: { __typename?: 'NFTFile', url: any } | null, files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null } | null } | null } | null };
 
-export type GetNftModelQueryVariables = Exact<{
+export type UserNftsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserNftsQuery = { __typename?: 'Query', nfts?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null };
+
+export type NftModelQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type GetNftModelQuery = { __typename?: 'Query', nftModel?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null };
+export type NftModelQuery = { __typename?: 'Query', nftModel?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null };
 
-export type GetNftModelsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetNftModelsQuery = { __typename?: 'Query', nftModels?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null };
-
-export type GetUserNftsQueryVariables = Exact<{ [key: string]: never; }>;
+export type NftModelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserNftsQuery = { __typename?: 'Query', nfts?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null };
-
-export type GetUserWalletQueryVariables = Exact<{ [key: string]: never; }>;
+export type NftModelsQuery = { __typename?: 'Query', nftModels?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null };
 
 
-export type GetUserWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState, verificationCode?: string | null } | null };
-
-
-export const RegisterWalletDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"registerWallet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"registerWallet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"address"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"verificationCode"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}}]}}]} as unknown as DocumentNode<RegisterWalletMutation, RegisterWalletMutationVariables>;
-export const VerifyWalletDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"verifyWallet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"signedVerificationCode"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JSON"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyWallet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"address"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}},{"kind":"Argument","name":{"kind":"Name","value":"signedVerificationCode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"signedVerificationCode"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}}]}}]} as unknown as DocumentNode<VerifyWalletMutation, VerifyWalletMutationVariables>;
-export const ReadyWalletDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"readyWallet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"readyWallet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"address"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}}]}}]} as unknown as DocumentNode<ReadyWalletMutation, ReadyWalletMutationVariables>;
-export const GetNftDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getNft"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nft"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"blockchainId"}},{"kind":"Field","name":{"kind":"Name","value":"serialNumber"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"blockchainId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"poster"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetNftQuery, GetNftQueryVariables>;
-export const GetNftModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getNftModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nftModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"blockchainId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"poster"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}}]}}]}}]} as unknown as DocumentNode<GetNftModelQuery, GetNftModelQueryVariables>;
-export const GetNftModelsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getNftModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nftModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"blockchainId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"poster"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetNftModelsQuery, GetNftModelsQueryVariables>;
-export const GetUserNftsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUserNfts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nfts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]}}]} as unknown as DocumentNode<GetUserNftsQuery, GetUserNftsQueryVariables>;
-export const GetUserWalletDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUserWallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"verificationCode"}}]}}]}}]} as unknown as DocumentNode<GetUserWalletQuery, GetUserWalletQueryVariables>;
+export const UserWalletDocument = `
+    query userWallet {
+  wallet {
+    id
+    address
+    state
+    verificationCode
+  }
+}
+    `;
+export const useUserWalletQuery = <
+      TData = UserWalletQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: UserWalletQueryVariables,
+      options?: UseQueryOptions<UserWalletQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<UserWalletQuery, TError, TData>(
+      variables === undefined ? ['userWallet'] : ['userWallet', variables],
+      fetcher<UserWalletQuery, UserWalletQueryVariables>(client, UserWalletDocument, variables, headers),
+      options
+    );
+export const RegisterWalletDocument = `
+    mutation registerWallet($address: String!) {
+  registerWallet(address: $address) {
+    id
+    address
+    verificationCode
+    state
+  }
+}
+    `;
+export const useRegisterWalletMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<RegisterWalletMutation, TError, RegisterWalletMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<RegisterWalletMutation, TError, RegisterWalletMutationVariables, TContext>(
+      ['registerWallet'],
+      (variables?: RegisterWalletMutationVariables) => fetcher<RegisterWalletMutation, RegisterWalletMutationVariables>(client, RegisterWalletDocument, variables, headers)(),
+      options
+    );
+export const VerifyWalletDocument = `
+    mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
+  verifyWallet(address: $address, signedVerificationCode: $signedVerificationCode) {
+    id
+    address
+    state
+  }
+}
+    `;
+export const useVerifyWalletMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<VerifyWalletMutation, TError, VerifyWalletMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<VerifyWalletMutation, TError, VerifyWalletMutationVariables, TContext>(
+      ['verifyWallet'],
+      (variables?: VerifyWalletMutationVariables) => fetcher<VerifyWalletMutation, VerifyWalletMutationVariables>(client, VerifyWalletDocument, variables, headers)(),
+      options
+    );
+export const ReadyWalletDocument = `
+    mutation readyWallet($address: String!) {
+  readyWallet(address: $address) {
+    id
+    address
+    state
+  }
+}
+    `;
+export const useReadyWalletMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<ReadyWalletMutation, TError, ReadyWalletMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<ReadyWalletMutation, TError, ReadyWalletMutationVariables, TContext>(
+      ['readyWallet'],
+      (variables?: ReadyWalletMutationVariables) => fetcher<ReadyWalletMutation, ReadyWalletMutationVariables>(client, ReadyWalletDocument, variables, headers)(),
+      options
+    );
+export const NftDocument = `
+    query nft($id: String!) {
+  nft(id: $id) {
+    id
+    blockchainId
+    serialNumber
+    model {
+      id
+      blockchainId
+      title
+      description
+      rarity
+      quantity
+      metadata
+      content {
+        poster {
+          url
+        }
+        files {
+          media {
+            url
+            contentType
+          }
+          thumbnail {
+            url
+            contentType
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const useNftQuery = <
+      TData = NftQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: NftQueryVariables,
+      options?: UseQueryOptions<NftQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<NftQuery, TError, TData>(
+      ['nft', variables],
+      fetcher<NftQuery, NftQueryVariables>(client, NftDocument, variables, headers),
+      options
+    );
+export const UserNftsDocument = `
+    query userNfts {
+  nfts {
+    id
+    model {
+      id
+      title
+    }
+  }
+}
+    `;
+export const useUserNftsQuery = <
+      TData = UserNftsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: UserNftsQueryVariables,
+      options?: UseQueryOptions<UserNftsQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<UserNftsQuery, TError, TData>(
+      variables === undefined ? ['userNfts'] : ['userNfts', variables],
+      fetcher<UserNftsQuery, UserNftsQueryVariables>(client, UserNftsDocument, variables, headers),
+      options
+    );
+export const NftModelDocument = `
+    query nftModel($id: String!) {
+  nftModel(id: $id) {
+    id
+    blockchainId
+    title
+    description
+    quantity
+    status
+    content {
+      files {
+        media {
+          url
+          contentType
+        }
+        thumbnail {
+          url
+          contentType
+        }
+      }
+      poster {
+        url
+      }
+    }
+    rarity
+  }
+}
+    `;
+export const useNftModelQuery = <
+      TData = NftModelQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: NftModelQueryVariables,
+      options?: UseQueryOptions<NftModelQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<NftModelQuery, TError, TData>(
+      ['nftModel', variables],
+      fetcher<NftModelQuery, NftModelQueryVariables>(client, NftModelDocument, variables, headers),
+      options
+    );
+export const NftModelsDocument = `
+    query nftModels {
+  nftModels {
+    id
+    blockchainId
+    title
+    description
+    quantity
+    status
+    rarity
+    content {
+      files {
+        media {
+          url
+          contentType
+        }
+        thumbnail {
+          url
+          contentType
+        }
+      }
+      poster {
+        url
+      }
+    }
+  }
+}
+    `;
+export const useNftModelsQuery = <
+      TData = NftModelsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: NftModelsQueryVariables,
+      options?: UseQueryOptions<NftModelsQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<NftModelsQuery, TError, TData>(
+      variables === undefined ? ['nftModels'] : ['nftModels', variables],
+      fetcher<NftModelsQuery, NftModelsQueryVariables>(client, NftModelsDocument, variables, headers),
+      options
+    );

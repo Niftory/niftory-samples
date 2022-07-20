@@ -1,23 +1,59 @@
 import { Box, Heading, Text, VStack, Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import * as React from "react";
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
-import { useNFTModel } from "../../../hooks/useNFTModel";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useNftModelQuery } from "../../../generated/graphql";
+import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
+import { useCallback, useState } from "react";
+
+import { gql } from "graphql-tag";
+
+gql`
+  query nftModel($id: String!) {
+    nftModel(id: $id) {
+      id
+      blockchainId
+      title
+      description
+      quantity
+      status
+      content {
+        files {
+          media {
+            url
+            contentType
+          }
+          thumbnail {
+            url
+            contentType
+          }
+        }
+        poster {
+          url
+        }
+      }
+      rarity
+    }
+  }
+`;
 
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
   const nftModelId = router.query["nftModelId"] as string;
-  const { nftModel } = useNFTModel(nftModelId);
+
+  const client = useGraphQLClient();
+  const { data } = useNftModelQuery(client, { id: nftModelId });
+  const nftModel = data?.nftModel;
+
   const { data: session } = useSession();
   const userId = session?.userId;
 
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const initiateTransfer = React.useCallback(() => {
+  const initiateTransfer = useCallback(() => {
     setIsLoading(true);
     axios
       .post(`/api/nft/${nftModelId}/transfer?userId=${userId}`)

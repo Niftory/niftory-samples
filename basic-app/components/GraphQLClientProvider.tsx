@@ -1,30 +1,11 @@
+import { GraphQLClient } from "graphql-request";
 import { useSession } from "next-auth/react";
-import { createClient } from "@urql/core";
-import type { Session } from "next-auth";
-import { Provider } from "urql";
-import React from "react";
+import { createContext } from "react";
+import { getGraphQLClient } from "../lib/graphql/frontendClient";
 
-export function getGraphQLClient(
-  url: string,
-  apiKey: string,
-  session: Session | null
-) {
-  return createClient({
-    url: url,
-    fetchOptions: {
-      headers: {
-        "X-Niftory-API-Key": apiKey,
-        Authorization: session?.authToken ? `Bearer ${session.authToken}` : "",
-      },
-    },
-  });
-}
+export const GraphQLClientContext = createContext<GraphQLClient>(null);
 
-export const GraphQLClientProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const GraphQLClientProvider = ({ children }) => {
   const { data: session } = useSession();
 
   const graphqlClient = getGraphQLClient(
@@ -33,5 +14,9 @@ export const GraphQLClientProvider = ({
     session
   );
 
-  return <Provider value={graphqlClient}>{children}</Provider>;
+  return (
+    <GraphQLClientContext.Provider value={graphqlClient}>
+      {children}
+    </GraphQLClientContext.Provider>
+  );
 };

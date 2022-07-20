@@ -4,10 +4,15 @@ schema:
       headers:
         X-Niftory-API-Key: ${NEXT_PUBLIC_API_KEY}
 
-documents: "*/**/*.tsx"
+documents: "./**/*.tsx"
 generates:
-  src/generated/graphql.ts:
+  generated/graphql.ts:
     plugins:
+      - add:
+          content:
+            - "// @ts-nocheck"
       - typescript
       - typescript-operations
-      - typed-document-node
+      - typescript-react-query
+    config:
+      fetcher: graphql-request
