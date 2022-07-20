@@ -4,7 +4,7 @@ const nonFungibleTokenAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS;
 
 const collectionInterfaceName = `${contractName}CollectionPublic`;
 
-export const isInitializedScript = `
+export const isConfiguredScript = `
     import ${contractName} from ${contractAddress}
     import NonFungibleToken from ${nonFungibleTokenAddress}
 
@@ -16,7 +16,7 @@ export const isInitializedScript = `
     
     }`;
 
-export const setupAccountTx = `
+export const configureAccountTransaction = `
     import ${contractName} from ${contractAddress}
     import NonFungibleToken from ${nonFungibleTokenAddress}
     import MetadataViews from ${nonFungibleTokenAddress}
@@ -47,37 +47,5 @@ export const setupAccountTx = `
                 NonFungibleToken.CollectionPublic,
                 MetadataViews.ResolverCollection
             }>(${contractName}.CollectionPublicPath, target: ${contractName}.CollectionStoragePath)
-        }
-    }`;
-
-export const resetAccountTx = `
-    import ${contractName} from ${contractAddress}
-    import NonFungibleToken from ${nonFungibleTokenAddress}
-
-    transaction {
-        prepare(acct: AuthAccount) {
-            acct.unlink(${contractName}.CollectionPublicPath)
-            let collection <- acct.load<@NonFungibleToken.Collection>(from: ${contractName}.CollectionStoragePath)
-                destroy collection
-        }
-    }`;
-
-export const findNFTsInWalletScript = `
-    import 0xCONTRACT_NAME from 0xCONTRACT_ADDRESS
-
-    pub fun main(account: Address): [UInt64] {
-
-        let acct = getAccount(account)
-
-        if acct.getCapability<&{0xCONTRACT_NAME.0xCOLLECTION_INTERFACE_NAME}>(0xCONTRACT_NAME.CollectionPublicPath)!.check() {
-            let collectionRef = acct.getCapability(0xCONTRACT_NAME.CollectionPublicPath)
-                                    .borrow<&{0xCONTRACT_NAME.0xCOLLECTION_INTERFACE_NAME}>()!
-
-            log(collectionRef.getIDs())
-    
-            return collectionRef.getIDs()
-        }
-        else {
-            return []
         }
     }`;
