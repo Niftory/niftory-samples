@@ -1,9 +1,18 @@
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+// @ts-nocheck
+import { GraphQLClient } from 'graphql-request';
+import { RequestInit } from 'graphql-request/dist/types.dom';
+import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from 'react-query';
+import * as Dom from 'graphql-request/dist/types.dom';
+import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+
+function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
+  return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -56,8 +65,6 @@ export type App = Identifiable & {
   contract?: Maybe<Contract>;
   /** A unique identifier for this object in the Niftory API. */
   id: Scalars['ID'];
-  /** The org this app belongs to. */
-  org?: Maybe<Org>;
 };
 
 /** Current Prisma Mapping: User (with role = COLLECTOR). Represents an individual user within a particular Niftory app. */
@@ -116,14 +123,8 @@ export type Contract = Identifiable & {
   blockchain?: Maybe<Blockchain>;
   /** A unique identifier for this object in the Niftory API. */
   id: Scalars['ID'];
-};
-
-/** The input to create a [listing]({{Types.Listing}}). */
-export type CreateListingInput = {
-  /** The Ids of the packages to include in the [listing]({{Types.Listing}}). */
-  packages: Array<InputMaybe<Scalars['ID']>>;
-  /** The price in USD of the packages in the [listing]({{Types.Listing}}). */
-  price: Scalars['PositiveFloat'];
+  /** The name of this contract. */
+  name?: Maybe<Scalars['String']>;
 };
 
 /** A currency that can be accepted for payment. */
@@ -182,97 +183,14 @@ export enum ListingState {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  /** Sets an inactive [listing]({{Types.Listing}}) to active, meaning that it's available for sale. */
-  activateListing?: Maybe<Listing>;
-  /** Initiates checkout for a reserved package. */
-  checkout?: Maybe<InitiateCheckoutResponse>;
-  /** Creates a new [listing]({{Types.Listing}}). */
-  createListing?: Maybe<Listing>;
-  /** Creates a new [NFT model]({{Types.NFTModel}}). */
-  createModel?: Maybe<NftModel>;
-  /** Creates a new [packaging model]({{Types.PackagingModel}}). */
-  createPackagingModel?: Maybe<PackagingModel>;
-  /** Creates a new [NFTSet]({{Types.NFTSet}}). */
-  createSet?: Maybe<NftSet>;
-  /** Sets an active [listing]({{Types.Listing}}) to inactive, meaning that it's not available for sale. */
-  deactivateListing?: Maybe<Listing>;
-  /** Initiates minting for a given [NFT model]({{Types.NFTmodel}}). */
-  mintModel?: Maybe<NftModel>;
-  /** Initiates minting for a given [NFT]({{Types.NFT}}). */
-  mintNFT?: Maybe<Nft>;
-  /** Packages NFTs from an existing [packaging model]({{Types.PackagingModel}}). */
-  package?: Maybe<PackagingModel>;
   /** Marks a wallet as ready for the given contract, indicating that the wallet is ready to receive NFTs from the current app. The wallet must be verified before this succeeds. */
   readyWallet?: Maybe<Wallet>;
   /** Registers a wallet to the signed in user. */
   registerWallet?: Maybe<Wallet>;
-  /** Reserves a package from a [listing]({{Types.Listing}}) for purchase. */
-  reserve?: Maybe<Package>;
   /** Initiates the transfer of an [NFT]({{Types.NFT}}) to the currently-logged in [AppUser]({{Types.AppUser}}). The NFT is reserved for the user in database, and you can use the NFT.status field to check on the transfer progress. */
   transfer?: Maybe<Nft>;
-  /** Updates an existing [listing]({{Types.Listing}}). */
-  updateListing?: Maybe<Listing>;
-  /** Updates an existing [NFT model]({{Types.NFTModel}}). */
-  updateModel?: Maybe<NftModel>;
-  /** Creates a new [packaging model]({{Types.PackagingModel}}). */
-  updatePackagingModel?: Maybe<PackagingModel>;
-  /** Updates an existing [NFTSet]({{Types.NFTSet}}). */
-  updateSet?: Maybe<NftSet>;
   /** Verifies a wallet to the signed in user. If the verification code fails verification against the wallet's verification code and its public key, the request will fail. */
   verifyWallet?: Maybe<Wallet>;
-};
-
-
-export type MutationActivateListingArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationCheckoutArgs = {
-  failureRedirectUrl: Scalars['String'];
-  packageId: Scalars['ID'];
-  successRedirectUrl: Scalars['String'];
-};
-
-
-export type MutationCreateListingArgs = {
-  data: CreateListingInput;
-};
-
-
-export type MutationCreateModelArgs = {
-  data: NftModelCreateInput;
-};
-
-
-export type MutationCreatePackagingModelArgs = {
-  data: PackagingModelCreateInput;
-};
-
-
-export type MutationCreateSetArgs = {
-  data: NftSetCreateInput;
-};
-
-
-export type MutationDeactivateListingArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationMintModelArgs = {
-  modelId: Scalars['ID'];
-  quantity?: InputMaybe<Scalars['PositiveInt']>;
-};
-
-
-export type MutationMintNftArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationPackageArgs = {
-  packagingModelId: Scalars['ID'];
 };
 
 
@@ -286,37 +204,10 @@ export type MutationRegisterWalletArgs = {
 };
 
 
-export type MutationReserveArgs = {
-  listingId: Scalars['ID'];
-};
-
-
 export type MutationTransferArgs = {
   id?: InputMaybe<Scalars['ID']>;
   nftModelId?: InputMaybe<Scalars['ID']>;
   userId: Scalars['ID'];
-};
-
-
-export type MutationUpdateListingArgs = {
-  data: UpdateListingInput;
-};
-
-
-export type MutationUpdateModelArgs = {
-  data: NftModelUpdateInput;
-  id: Scalars['ID'];
-};
-
-
-export type MutationUpdatePackagingModelArgs = {
-  data: PackagingModelCreateInput;
-};
-
-
-export type MutationUpdateSetArgs = {
-  data: NftSetCreateInput;
-  id: Scalars['ID'];
 };
 
 
@@ -351,14 +242,6 @@ export type NftContent = {
   files?: Maybe<Array<Maybe<NftMedia>>>;
   /** The poster file for this NFT's content */
   poster?: Maybe<NftFile>;
-};
-
-/** The input to create or update NFT content. */
-export type NftContentInput = {
-  /** Additional files for this NFT content */
-  files?: InputMaybe<Array<InputMaybe<Scalars['Upload']>>>;
-  /** The poster for this content. */
-  poster?: InputMaybe<Scalars['Upload']>;
 };
 
 /** Current Prisma Mapping: File (with ipfsContentUrl and ipfsMetadataUrl). A file to be included in an NFT. Extends [File]({{Types.File}}) to includes the IPFS addresses for the content and metadata. */
@@ -454,28 +337,6 @@ export type NftModel = BlockchainEntity & BlockchainResource & Identifiable & Re
   title: Scalars['String'];
 };
 
-/** The input to create an NFT model. */
-export type NftModelCreateInput = {
-  /** The user-friendly description for this model. */
-  description: Scalars['String'];
-  /** The content for this model. */
-  nftContent?: InputMaybe<NftContentInput>;
-  /** The total quantity of NFTs that will be available for this model. */
-  quantity: Scalars['PositiveInt'];
-  /** The rarity level of this model. */
-  rarity: SimpleRarityLevel;
-  /** The ID of the NFT set that this model belongs to. */
-  setId: Scalars['ID'];
-  /** The status of the NFT model. */
-  status?: InputMaybe<Status>;
-  /** The user-friendly subtitle for this model. */
-  subtitle?: InputMaybe<Scalars['String']>;
-  /** A mapping of tags for this resource. These will be stored in the Niftory API but will not be added to the blockchain. */
-  tags?: InputMaybe<Scalars['JSON']>;
-  /** The user-friendly title for this model. */
-  title: Scalars['String'];
-};
-
 /** Properties to filter NFTModel's when querying them. */
 export type NftModelFilterInput = {
   /** Blockchain IDs of the [NFTModel]({{Types.NFTModel}})'s to find. */
@@ -486,26 +347,6 @@ export type NftModelFilterInput = {
   setIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Filter by [NFTModel]({{Types.NFTModel}}) status. */
   status?: InputMaybe<Status>;
-};
-
-/** The input to update an NFT model. */
-export type NftModelUpdateInput = {
-  /** The user-friendly description for this model. */
-  description?: InputMaybe<Scalars['String']>;
-  /** The content for this model. */
-  nftContent?: InputMaybe<NftContentInput>;
-  /** The total quantity of NFTs that will be available for this model. */
-  quantity?: InputMaybe<Scalars['Int']>;
-  /** The rarity level of this model. */
-  rarity?: InputMaybe<SimpleRarityLevel>;
-  /** The status of the NFT model. */
-  status?: InputMaybe<Status>;
-  /** The user-friendly subtitle for this model. */
-  subtitle?: InputMaybe<Scalars['String']>;
-  /** A mapping of tags for this resource. These will be stored in the Niftory API but will not be added to the blockchain. */
-  tags?: InputMaybe<Scalars['JSON']>;
-  /** The user-friendly title for this model. */
-  title?: InputMaybe<Scalars['String']>;
 };
 
 /** Current Prisma Mapping: Set. A set of NFT models. */
@@ -531,36 +372,12 @@ export type NftSet = BlockchainEntity & BlockchainResource & Identifiable & Reso
   title: Scalars['String'];
 };
 
-/** The input to create an NFT set. */
-export type NftSetCreateInput = {
-  /** The display image for this set */
-  image?: InputMaybe<Scalars['Upload']>;
-  /** The status of the NFT model. */
-  status?: InputMaybe<Status>;
-  /** A mapping of tags for this resource. These will be stored in the Niftory API but will not be added to the blockchain. */
-  tags?: InputMaybe<Scalars['JSON']>;
-  /** The user-friendly title for this model. */
-  title: Scalars['String'];
-};
-
 export type NftSetFilterInput = {
   /** Blockchain IDs of the [NFTSet]({{Types.NFTSet}})'s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Database IDs of the [NFTSet]({{Types.NFTSet}})'s to find. */
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** The title of the [NFTSet]({{Types.NFTSet}}) to find. */
-  title?: InputMaybe<Scalars['String']>;
-};
-
-/** The input to update an NFT model. */
-export type NftSetUpdateInput = {
-  /** The display image for this set */
-  image?: InputMaybe<Scalars['Upload']>;
-  /** The status of the NFT model. */
-  status?: InputMaybe<Status>;
-  /** A mapping of tags for this resource. These will be stored in the Niftory API but will not be added to the blockchain. */
-  tags?: InputMaybe<Scalars['JSON']>;
-  /** The user-friendly title for this model. */
   title?: InputMaybe<Scalars['String']>;
 };
 
@@ -627,24 +444,6 @@ export type PackagingModelCondition = {
   rarity: SimpleRarityLevel;
 };
 
-/** The input to create a [packaging model condition]({{Types.PackagingModelCondition}}). */
-export type PackagingModelConditionInput = {
-  /** The rarity level of the NFT. */
-  rarity: SimpleRarityLevel;
-};
-
-/** The input to create a [packaging model]({{Types.PackagingModel}}). */
-export type PackagingModelCreateInput = {
-  /** The number of NFTs to include in each pack. */
-  nftsPerPack: Scalars['PositiveInt'];
-  /** The number of packs to create. */
-  numberOfPacks: Scalars['PositiveInt'];
-  /** The packaging strategy for this model. Used to specify the distribution of NFTs in each package. */
-  packaging?: InputMaybe<PackagingModelPackagingInput>;
-  /** The selection strategy for this model. Used to specify the overall distribution of all NFTs that will be packaged. */
-  selection: PackagingModelSelectionInput;
-};
-
 /** Current Prisma Mapping: PackListing.files, PackListing.packShape. Specifies the distribution of NFTs in each package created in a [PackagingModel]({{Types.PackagingModel}}). */
 export type PackagingModelPackaging = {
   __typename?: 'PackagingModelPackaging';
@@ -654,27 +453,11 @@ export type PackagingModelPackaging = {
   rules?: Maybe<Array<Maybe<PackagingModelRule>>>;
 };
 
-/** The input to create a [packaging model packaging]({{Types.PackagingModelPackaging}}). */
-export type PackagingModelPackagingInput = {
-  /** The image to use for this packaging. */
-  image?: InputMaybe<Scalars['Upload']>;
-  /** The rules to apply when building each package in this model. */
-  rules?: InputMaybe<Array<InputMaybe<PackagingModelRuleInput>>>;
-};
-
 /** Current Prisma Mapping: PackListing.packShape. Specifies a group of NFTs that match one or more conditions */
 export type PackagingModelRule = {
   __typename?: 'PackagingModelRule';
   /** Conditions to use to match NFTs for this rule. An NFT can be used by this rule if any of the conditions are satisfied. */
   conditions: Array<Maybe<PackagingModelCondition>>;
-  /** The number of NFTs to select as part of this rule. */
-  number: Scalars['PositiveInt'];
-};
-
-/** The input to create a [packaging model rule]({{Types.PackagingModelRule}}). */
-export type PackagingModelRuleInput = {
-  /** Conditions to use to match NFTs for this rule. */
-  conditions: Array<InputMaybe<PackagingModelConditionInput>>;
   /** The number of NFTs to select as part of this rule. */
   number: Scalars['PositiveInt'];
 };
@@ -695,39 +478,11 @@ export type PackagingModelSelectionFilter = {
   setId: Scalars['String'];
 };
 
-/** The input to create a [packaging model selection filter]({{Types.PackagingModelSelectionFilter}}). */
-export type PackagingModelSelectionFilterInput = {
-  /** The set ID to filter by. An NFT will match this filter if it is in the [NFTSet]({{Types.NFTSet}}) with this ID. */
-  setId: Scalars['String'];
-};
-
-/** The input to select a packaging model selection spec. */
-export type PackagingModelSelectionInput = {
-  /** The filters to apply to the packaging models. */
-  filters: Array<InputMaybe<PackagingModelSelectionFilterInput>>;
-  /** The rules to apply when selecting NFTs. */
-  rules?: InputMaybe<Array<InputMaybe<PackagingModelRuleInput>>>;
-};
-
-/** The input to update a [packaging model]({{Types.PackagingModel}}). */
-export type PackagingModelUpdateInput = {
-  /** The number of NFTs to include in each pack. */
-  nftsPerPack?: InputMaybe<Scalars['PositiveInt']>;
-  /** The number of packs to create. */
-  numberOfPacks?: InputMaybe<Scalars['PositiveInt']>;
-  /** The packaging strategy for this model. Used to specify the distribution of NFTs in each package. */
-  packaging?: InputMaybe<PackagingModelPackagingInput>;
-  /** The selection strategy for this model. Used to specify the overall distribution of all NFTs that will be packaged. */
-  selection?: InputMaybe<PackagingModelSelectionInput>;
-};
-
 /** The pricing for a particular listing */
 export type Pricing = SimplePricing;
 
 export type Query = {
   __typename?: 'Query';
-  /** Gets an [AdminUser]({{Types.AdminUser}}) by ID. */
-  adminUser?: Maybe<AdminUser>;
   /** Gets the [App]({{Types.App}}) for the current application context. */
   app?: Maybe<App>;
   /** Gets an [App]({{Types.App}}) by ID. */
@@ -736,30 +491,14 @@ export type Query = {
   appUser?: Maybe<AppUser>;
   /** Gets an [AppUser]({{Types.AppUser}}) by ID. */
   appUserById?: Maybe<AppUser>;
-  /** Gets a [Contract]({{Types.Contract}}) by its database ID. */
-  contract?: Maybe<Contract>;
-  /** Gets an [Listing]({{Types.Listing}}) by ID. */
-  listing?: Maybe<Listing>;
   /** Gets an [NFT]({{Types.NFT}}) by database ID. */
   nft?: Maybe<Nft>;
-  /** Gets an [NFTListing]({{Types.NFTListing}}) by ID. */
-  nftListing?: Maybe<NftListing>;
-  /** Gets a list of [NFTListings]({{Types.NFTListing}}) by IDs. */
-  nftListings?: Maybe<Array<Maybe<NftListing>>>;
   /** Gets an [NFTModel]({{Types.NFTModel}}) by database ID. */
   nftModel?: Maybe<NftModel>;
   /** Gets [NFTModel]({{Types.NFTModel}})'s for the current [App]({{Types.App}}) context. */
   nftModels?: Maybe<Array<Maybe<NftModel>>>;
   /** Gets all [NFT]({{Types.NFT}})'s belonging to the current [AppUser]({{Types.AppUser}}) context. */
   nfts?: Maybe<Array<Maybe<Nft>>>;
-  /** Gets the [Org]({{Types.Org}}) corresponding to the current [App]({{Types.App}}) context. */
-  org?: Maybe<Org>;
-  /** Gets an [Org]({{Types.Org}}) by ID. */
-  orgById?: Maybe<Org>;
-  /** Gets a [PackagingModel]({{Types.PackagingModel}}) by ID. */
-  packagingModel?: Maybe<PackagingModel>;
-  /** Previews packages that could be created by a [packaging model]({{Types.PackagingModel}}). */
-  previewPackages?: Maybe<Array<Maybe<Package>>>;
   /** Gets an [NFTSet]({{Types.NFTSet}}) by database ID. */
   set?: Maybe<NftSet>;
   /** Gets [NFTSet]({{Types.NFTSet}})'s for the current [App]({{Types.App}}) context. */
@@ -775,11 +514,6 @@ export type Query = {
 };
 
 
-export type QueryAdminUserArgs = {
-  id: Scalars['String'];
-};
-
-
 export type QueryAppByIdArgs = {
   id?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -791,28 +525,8 @@ export type QueryAppUserByIdArgs = {
 };
 
 
-export type QueryContractArgs = {
-  id?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryListingArgs = {
-  id: Scalars['String'];
-};
-
-
 export type QueryNftArgs = {
   id: Scalars['String'];
-};
-
-
-export type QueryNftListingArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryNftListingsArgs = {
-  filter?: InputMaybe<NftListingFilterInput>;
 };
 
 
@@ -828,21 +542,6 @@ export type QueryNftModelsArgs = {
 
 export type QueryNftsArgs = {
   filter?: InputMaybe<NftFilterInput>;
-};
-
-
-export type QueryOrgByIdArgs = {
-  id?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryPackagingModelArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryPreviewPackagesArgs = {
-  id: Scalars['ID'];
 };
 
 
@@ -950,14 +649,6 @@ export enum Status {
   ToDo = 'TO_DO'
 }
 
-/** The input to update a [listing]({{Types.Listing}}). */
-export type UpdateListingInput = {
-  /** The Ids of the packages to include in the [listing]({{Types.Listing}}). */
-  packages?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** The price in USD of the packages in the [listing]({{Types.Listing}}). */
-  price?: InputMaybe<Scalars['PositiveFloat']>;
-};
-
 /** An interface containing common data about users. */
 export type UserData = {
   /** This user's email. */
@@ -1008,6 +699,11 @@ export enum WalletState {
   Verified = 'VERIFIED'
 }
 
+export type UserWalletQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState, verificationCode?: string | null } | null };
+
 export type RegisterWalletMutationVariables = Exact<{
   address: Scalars['String'];
 }>;
@@ -1030,41 +726,487 @@ export type ReadyWalletMutationVariables = Exact<{
 
 export type ReadyWalletMutation = { __typename?: 'Mutation', readyWallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState } | null };
 
-export type GetNftQueryVariables = Exact<{
+export type TransferNftToUserMutationVariables = Exact<{
+  nftModelId: Scalars['ID'];
+  userId: Scalars['ID'];
+}>;
+
+
+export type TransferNftToUserMutation = { __typename?: 'Mutation', transfer?: { __typename?: 'NFT', id: string } | null };
+
+export type NftQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type GetNftQuery = { __typename?: 'Query', nft?: { __typename?: 'NFT', id: string, blockchainId?: string | null, serialNumber?: number | null, model?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, rarity?: SimpleRarityLevel | null, quantity?: any | null, metadata?: any | null, content?: { __typename?: 'NFTContent', poster?: { __typename?: 'NFTFile', url: any } | null, files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null } | null } | null } | null };
+export type NftQuery = { __typename?: 'Query', nft?: { __typename?: 'NFT', id: string, blockchainId?: string | null, serialNumber?: number | null, model?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, rarity?: SimpleRarityLevel | null, quantity?: any | null, metadata?: any | null, content?: { __typename?: 'NFTContent', poster?: { __typename?: 'NFTFile', url: any } | null, files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null } | null } | null } | null };
 
-export type GetNftModelQueryVariables = Exact<{
+export type UserNftsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserNftsQuery = { __typename?: 'Query', nfts?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null };
+
+export type NftModelQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type GetNftModelQuery = { __typename?: 'Query', nftModel?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null };
+export type NftModelQuery = { __typename?: 'Query', nftModel?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null };
 
-export type GetNftModelsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetNftModelsQuery = { __typename?: 'Query', nftModels?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null };
-
-export type GetUserNftsQueryVariables = Exact<{ [key: string]: never; }>;
+export type NftModelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserNftsQuery = { __typename?: 'Query', nfts?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null };
-
-export type GetUserWalletQueryVariables = Exact<{ [key: string]: never; }>;
+export type NftModelsQuery = { __typename?: 'Query', nftModels?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null };
 
 
-export type GetUserWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState, verificationCode?: string | null } | null };
+export const ReactQuery_UserWalletDocument = `
+    query userWallet {
+  wallet {
+    id
+    address
+    state
+    verificationCode
+  }
+}
+    `;
+export const useUserWalletQuery = <
+      TData = UserWalletQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: UserWalletQueryVariables,
+      options?: UseQueryOptions<UserWalletQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<UserWalletQuery, TError, TData>(
+      variables === undefined ? ['userWallet'] : ['userWallet', variables],
+      fetcher<UserWalletQuery, UserWalletQueryVariables>(client, ReactQuery_UserWalletDocument, variables, headers),
+      options
+    );
+export const ReactQuery_RegisterWalletDocument = `
+    mutation registerWallet($address: String!) {
+  registerWallet(address: $address) {
+    id
+    address
+    verificationCode
+    state
+  }
+}
+    `;
+export const useRegisterWalletMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<RegisterWalletMutation, TError, RegisterWalletMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<RegisterWalletMutation, TError, RegisterWalletMutationVariables, TContext>(
+      ['registerWallet'],
+      (variables?: RegisterWalletMutationVariables) => fetcher<RegisterWalletMutation, RegisterWalletMutationVariables>(client, ReactQuery_RegisterWalletDocument, variables, headers)(),
+      options
+    );
+export const ReactQuery_VerifyWalletDocument = `
+    mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
+  verifyWallet(address: $address, signedVerificationCode: $signedVerificationCode) {
+    id
+    address
+    state
+  }
+}
+    `;
+export const useVerifyWalletMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<VerifyWalletMutation, TError, VerifyWalletMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<VerifyWalletMutation, TError, VerifyWalletMutationVariables, TContext>(
+      ['verifyWallet'],
+      (variables?: VerifyWalletMutationVariables) => fetcher<VerifyWalletMutation, VerifyWalletMutationVariables>(client, ReactQuery_VerifyWalletDocument, variables, headers)(),
+      options
+    );
+export const ReactQuery_ReadyWalletDocument = `
+    mutation readyWallet($address: String!) {
+  readyWallet(address: $address) {
+    id
+    address
+    state
+  }
+}
+    `;
+export const useReadyWalletMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<ReadyWalletMutation, TError, ReadyWalletMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<ReadyWalletMutation, TError, ReadyWalletMutationVariables, TContext>(
+      ['readyWallet'],
+      (variables?: ReadyWalletMutationVariables) => fetcher<ReadyWalletMutation, ReadyWalletMutationVariables>(client, ReactQuery_ReadyWalletDocument, variables, headers)(),
+      options
+    );
+export const ReactQuery_TransferNftToUserDocument = `
+    mutation transferNFTToUser($nftModelId: ID!, $userId: ID!) {
+  transfer(nftModelId: $nftModelId, userId: $userId) {
+    id
+  }
+}
+    `;
+export const useTransferNftToUserMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<TransferNftToUserMutation, TError, TransferNftToUserMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<TransferNftToUserMutation, TError, TransferNftToUserMutationVariables, TContext>(
+      ['transferNFTToUser'],
+      (variables?: TransferNftToUserMutationVariables) => fetcher<TransferNftToUserMutation, TransferNftToUserMutationVariables>(client, ReactQuery_TransferNftToUserDocument, variables, headers)(),
+      options
+    );
+export const ReactQuery_NftDocument = `
+    query nft($id: String!) {
+  nft(id: $id) {
+    id
+    blockchainId
+    serialNumber
+    model {
+      id
+      blockchainId
+      title
+      description
+      rarity
+      quantity
+      metadata
+      content {
+        poster {
+          url
+        }
+        files {
+          media {
+            url
+            contentType
+          }
+          thumbnail {
+            url
+            contentType
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const useNftQuery = <
+      TData = NftQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: NftQueryVariables,
+      options?: UseQueryOptions<NftQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<NftQuery, TError, TData>(
+      ['nft', variables],
+      fetcher<NftQuery, NftQueryVariables>(client, ReactQuery_NftDocument, variables, headers),
+      options
+    );
+export const ReactQuery_UserNftsDocument = `
+    query userNfts {
+  nfts {
+    id
+    model {
+      id
+      title
+    }
+  }
+}
+    `;
+export const useUserNftsQuery = <
+      TData = UserNftsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: UserNftsQueryVariables,
+      options?: UseQueryOptions<UserNftsQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<UserNftsQuery, TError, TData>(
+      variables === undefined ? ['userNfts'] : ['userNfts', variables],
+      fetcher<UserNftsQuery, UserNftsQueryVariables>(client, ReactQuery_UserNftsDocument, variables, headers),
+      options
+    );
+export const ReactQuery_NftModelDocument = `
+    query nftModel($id: String!) {
+  nftModel(id: $id) {
+    id
+    blockchainId
+    title
+    description
+    quantity
+    status
+    content {
+      files {
+        media {
+          url
+          contentType
+        }
+        thumbnail {
+          url
+          contentType
+        }
+      }
+      poster {
+        url
+      }
+    }
+    rarity
+  }
+}
+    `;
+export const useNftModelQuery = <
+      TData = NftModelQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: NftModelQueryVariables,
+      options?: UseQueryOptions<NftModelQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<NftModelQuery, TError, TData>(
+      ['nftModel', variables],
+      fetcher<NftModelQuery, NftModelQueryVariables>(client, ReactQuery_NftModelDocument, variables, headers),
+      options
+    );
+export const ReactQuery_NftModelsDocument = `
+    query nftModels {
+  nftModels {
+    id
+    blockchainId
+    title
+    description
+    quantity
+    status
+    rarity
+    content {
+      files {
+        media {
+          url
+          contentType
+        }
+        thumbnail {
+          url
+          contentType
+        }
+      }
+      poster {
+        url
+      }
+    }
+  }
+}
+    `;
+export const useNftModelsQuery = <
+      TData = NftModelsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: NftModelsQueryVariables,
+      options?: UseQueryOptions<NftModelsQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<NftModelsQuery, TError, TData>(
+      variables === undefined ? ['nftModels'] : ['nftModels', variables],
+      fetcher<NftModelsQuery, NftModelsQueryVariables>(client, ReactQuery_NftModelsDocument, variables, headers),
+      options
+    );
+
+export const UserWalletDocument = gql`
+    query userWallet {
+  wallet {
+    id
+    address
+    state
+    verificationCode
+  }
+}
+    `;
+export const RegisterWalletDocument = gql`
+    mutation registerWallet($address: String!) {
+  registerWallet(address: $address) {
+    id
+    address
+    verificationCode
+    state
+  }
+}
+    `;
+export const VerifyWalletDocument = gql`
+    mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
+  verifyWallet(address: $address, signedVerificationCode: $signedVerificationCode) {
+    id
+    address
+    state
+  }
+}
+    `;
+export const ReadyWalletDocument = gql`
+    mutation readyWallet($address: String!) {
+  readyWallet(address: $address) {
+    id
+    address
+    state
+  }
+}
+    `;
+export const TransferNftToUserDocument = gql`
+    mutation transferNFTToUser($nftModelId: ID!, $userId: ID!) {
+  transfer(nftModelId: $nftModelId, userId: $userId) {
+    id
+  }
+}
+    `;
+export const NftDocument = gql`
+    query nft($id: String!) {
+  nft(id: $id) {
+    id
+    blockchainId
+    serialNumber
+    model {
+      id
+      blockchainId
+      title
+      description
+      rarity
+      quantity
+      metadata
+      content {
+        poster {
+          url
+        }
+        files {
+          media {
+            url
+            contentType
+          }
+          thumbnail {
+            url
+            contentType
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const UserNftsDocument = gql`
+    query userNfts {
+  nfts {
+    id
+    model {
+      id
+      title
+    }
+  }
+}
+    `;
+export const NftModelDocument = gql`
+    query nftModel($id: String!) {
+  nftModel(id: $id) {
+    id
+    blockchainId
+    title
+    description
+    quantity
+    status
+    content {
+      files {
+        media {
+          url
+          contentType
+        }
+        thumbnail {
+          url
+          contentType
+        }
+      }
+      poster {
+        url
+      }
+    }
+    rarity
+  }
+}
+    `;
+export const NftModelsDocument = gql`
+    query nftModels {
+  nftModels {
+    id
+    blockchainId
+    title
+    description
+    quantity
+    status
+    rarity
+    content {
+      files {
+        media {
+          url
+          contentType
+        }
+        thumbnail {
+          url
+          contentType
+        }
+      }
+      poster {
+        url
+      }
+    }
+  }
+}
+    `;
+
+export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
 
-export const RegisterWalletDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"registerWallet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"registerWallet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"address"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"verificationCode"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}}]}}]} as unknown as DocumentNode<RegisterWalletMutation, RegisterWalletMutationVariables>;
-export const VerifyWalletDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"verifyWallet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"signedVerificationCode"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JSON"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyWallet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"address"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}},{"kind":"Argument","name":{"kind":"Name","value":"signedVerificationCode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"signedVerificationCode"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}}]}}]} as unknown as DocumentNode<VerifyWalletMutation, VerifyWalletMutationVariables>;
-export const ReadyWalletDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"readyWallet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"readyWallet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"address"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}}]}}]} as unknown as DocumentNode<ReadyWalletMutation, ReadyWalletMutationVariables>;
-export const GetNftDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getNft"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nft"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"blockchainId"}},{"kind":"Field","name":{"kind":"Name","value":"serialNumber"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"blockchainId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"poster"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetNftQuery, GetNftQueryVariables>;
-export const GetNftModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getNftModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nftModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"blockchainId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"poster"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}}]}}]}}]} as unknown as DocumentNode<GetNftModelQuery, GetNftModelQueryVariables>;
-export const GetNftModelsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getNftModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nftModels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"blockchainId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"poster"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetNftModelsQuery, GetNftModelsQueryVariables>;
-export const GetUserNftsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUserNfts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nfts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]}}]} as unknown as DocumentNode<GetUserNftsQuery, GetUserNftsQueryVariables>;
-export const GetUserWalletDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUserWallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wallet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"verificationCode"}}]}}]}}]} as unknown as DocumentNode<GetUserWalletQuery, GetUserWalletQueryVariables>;
+const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
+
+export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
+  return {
+    userWallet(variables?: UserWalletQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserWalletQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UserWalletQuery>(UserWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'userWallet', 'query');
+    },
+    registerWallet(variables: RegisterWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RegisterWalletMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<RegisterWalletMutation>(RegisterWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'registerWallet', 'mutation');
+    },
+    verifyWallet(variables: VerifyWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<VerifyWalletMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<VerifyWalletMutation>(VerifyWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'verifyWallet', 'mutation');
+    },
+    readyWallet(variables: ReadyWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ReadyWalletMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ReadyWalletMutation>(ReadyWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'readyWallet', 'mutation');
+    },
+    transferNFTToUser(variables: TransferNftToUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<TransferNftToUserMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<TransferNftToUserMutation>(TransferNftToUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'transferNFTToUser', 'mutation');
+    },
+    nft(variables: NftQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<NftQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<NftQuery>(NftDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'nft', 'query');
+    },
+    userNfts(variables?: UserNftsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserNftsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UserNftsQuery>(UserNftsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'userNfts', 'query');
+    },
+    nftModel(variables: NftModelQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<NftModelQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<NftModelQuery>(NftModelDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'nftModel', 'query');
+    },
+    nftModels(variables?: NftModelsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<NftModelsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<NftModelsQuery>(NftModelsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'nftModels', 'query');
+    }
+  };
+}
+export type Sdk = ReturnType<typeof getSdk>;

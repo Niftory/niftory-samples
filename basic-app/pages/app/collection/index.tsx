@@ -3,12 +3,29 @@ import { useRouter } from "next/router";
 
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
-import { useUserNFTs } from "../../../hooks/useUserNFTs";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
+import { gql } from "graphql-request";
+import { useUserNftsQuery } from "../../../generated/graphql";
+import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
+
+gql`
+  query userNfts {
+    nfts {
+      id
+      model {
+        id
+        title
+      }
+    }
+  }
+`;
 
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
-  const { nfts } = useUserNFTs();
+
+  const client = useGraphQLClient();
+  const { data } = useUserNftsQuery(client);
+  const nfts = data?.nfts;
 
   return (
     <AppLayout>

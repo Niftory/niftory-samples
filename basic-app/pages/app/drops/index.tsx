@@ -3,12 +3,45 @@ import { useRouter } from "next/router";
 
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
-import { useNFTModels } from "../../../hooks/useNftModels";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
+import { gql } from "graphql-request";
+import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
+import { useNftModelsQuery } from "../../../generated/graphql";
+
+gql`
+  query nftModels {
+    nftModels {
+      id
+      blockchainId
+      title
+      description
+      quantity
+      status
+      rarity
+      content {
+        files {
+          media {
+            url
+            contentType
+          }
+          thumbnail {
+            url
+            contentType
+          }
+        }
+        poster {
+          url
+        }
+      }
+    }
+  }
+`;
 
 const Drops: ComponentWithAuth = () => {
   const router = useRouter();
-  const { nftModels } = useNFTModels();
+  const client = useGraphQLClient();
+  const { data } = useNftModelsQuery(client);
+  const nftModels = data?.nftModels;
 
   return (
     <AppLayout>

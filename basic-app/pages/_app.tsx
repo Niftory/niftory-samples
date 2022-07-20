@@ -5,6 +5,7 @@ import { AppProps as NextAppProps } from "next/app";
 import { AuthProvider } from "../components/AuthProvider";
 import { ComponentWithAuth } from "../components/ComponentWithAuth";
 import { GraphQLClientProvider } from "../components/GraphQLClientProvider";
+import { ReactQueryClientProvider } from "../components/ReactQueryClientProvider";
 
 type AppProps<P = {}> = NextAppProps<P> & {
   Component: ComponentWithAuth;
@@ -16,13 +17,15 @@ const App = ({
 }: AppProps): JSX.Element => {
   return (
     <SessionProvider session={session} refetchOnWindowFocus={false}>
-      <GraphQLClientProvider>
-        <ChakraProvider>
-          <AuthProvider requireAuth={Component.requireAuth}>
-            <Component {...pageProps} />
-          </AuthProvider>
-        </ChakraProvider>
-      </GraphQLClientProvider>
+      <ReactQueryClientProvider>
+        <GraphQLClientProvider>
+          <ChakraProvider>
+            <AuthProvider requireAuth={Component.requireAuth}>
+              <Component {...pageProps} />
+            </AuthProvider>
+          </ChakraProvider>
+        </GraphQLClientProvider>
+      </ReactQueryClientProvider>
     </SessionProvider>
   );
 };

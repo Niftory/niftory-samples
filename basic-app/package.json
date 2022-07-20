@@ -25,19 +25,22 @@
     "google-protobuf": "^3.14.0",
     "graphql": "^15.5.3",
     "graphql-request": "^4.3.0",
+    "graphql-tag": "^2.12.6",
     "next": "12.2.0",
     "next-auth": "^4.9.0",
     "openid-client": "5.1.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "url-join": "^5.0.0",
-    "urql": "^2.2.2"
+    "react-query": "npm:@tanstack/react-query@4.0.0",
+    "url-join": "^5.0.0"
   },
   "devDependencies": {
+    "@graphql-codegen/add": "^3.2.0",
     "@graphql-codegen/cli": "2.8.1",
-    "@graphql-codegen/typed-document-node": "^2.3.1",
-    "@graphql-codegen/typescript": "^2.7.1",
-    "@graphql-codegen/typescript-operations": "^2.5.1",
+    "@graphql-codegen/typescript": "^2.7.2",
+    "@graphql-codegen/typescript-graphql-request": "^4.5.2",
+    "@graphql-codegen/typescript-operations": "^2.5.2",
+    "@graphql-codegen/typescript-react-query": "^3.6.2",
     "@types/node": "18.0.1",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
@@ -49,7 +52,7 @@
   "dependenciesComments": {
     "chakra/emotion/framer": "Replaceable with other common UI libraries",
     "next-auth": "Replaceable with any auth provider that supports OAuth 2.0",
-    "urql": "Replaceable with other graphql client libraries",
+    "graphql-request": "Replaceable with other graphql client libraries",
     "openid-client": "Replaceable with any OAuth 2.0 client"
   }
 }
