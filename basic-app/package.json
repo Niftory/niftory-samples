@@ -32,13 +32,13 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-query": "npm:@tanstack/react-query@4.0.0",
-    "url-join": "^5.0.0",
-    "urql": "^2.2.2"
+    "url-join": "^5.0.0"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^3.2.0",
     "@graphql-codegen/cli": "2.8.1",
     "@graphql-codegen/typescript": "^2.7.2",
+    "@graphql-codegen/typescript-graphql-request": "^4.5.2",
     "@graphql-codegen/typescript-operations": "^2.5.2",
     "@graphql-codegen/typescript-react-query": "^3.6.2",
     "@types/node": "18.0.1",

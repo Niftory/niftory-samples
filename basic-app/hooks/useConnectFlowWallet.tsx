@@ -1,12 +1,7 @@
 import * as fcl from "@onflow/fcl";
+import { gql } from "graphql-request";
 import { useCallback, useEffect, useState } from "react";
-import { gql, useMutation } from "urql";
-import {
-  ReadyWalletDocument,
-  RegisterWalletDocument,
-  useUserWalletQuery,
-  VerifyWalletDocument,
-} from "../generated/graphql";
+import { getSdk, useUserWalletQuery } from "../generated/graphql";
 import {
   isInitializedScript,
   resetAccountTx,
@@ -75,6 +70,8 @@ export const useConnectFlowWallet = () => {
   } = useUserWalletQuery(client);
   const wallet = data?.wallet;
 
+  const sdk = getSdk(client);
+
   const [initializingFlowAccount, setInitializingFlowAccount] = useState(false);
   const [updatingDatabase, setUpdatingDatabase] = useState(false);
   const [error, setError] = useState<Error>(errorFetchingWallet as Error);
@@ -82,13 +79,11 @@ export const useConnectFlowWallet = () => {
   const isLoading =
     fetchingWallet || initializingFlowAccount || updatingDatabase;
 
-  const [, executeCreateWalletMutation] = useMutation(RegisterWalletDocument);
-
   const createWallet = useCallback(
     async () => {
       console.log("registerWallet");
       try {
-        return await executeCreateWalletMutation({
+        return await sdk.registerWallet({
           address: flowUser?.addr as string,
         });
       } catch (e) {
@@ -122,22 +117,18 @@ export const useConnectFlowWallet = () => {
   }, [flowUser?.addr, flowUser?.loggedIn]);
 
   // Create a callback that marks the current wallet as initialized
-  const [, markWalletInitializedMutation] = useMutation(ReadyWalletDocument);
-
   const markWalletInitialized = useCallback(async () => {
     console.log("readyWallet");
     if (!wallet?.id) {
       throw Error("Wallet not created yet");
     }
 
-    return await markWalletInitializedMutation({ address: wallet.address });
+    return await sdk.readyWallet({ address: wallet.address });
     // Don't add markWalletInitializedMutation here, it refreshes super often. Yes, it's fine.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet?.id]);
 
   // Create a callback that verifies current wallet by signing the verification code
-  const [, verifyWalletMutation] = useMutation(VerifyWalletDocument);
-
   const verifyWallet = useCallback(async () => {
     console.log("verifyWallet", wallet);
     if (!wallet?.id) {
@@ -153,7 +144,7 @@ export const useConnectFlowWallet = () => {
     );
     console.log(signature);
 
-    return await verifyWalletMutation({
+    return await sdk.verifyWallet({
       address: wallet.address,
       signedVerificationCode: signature,
     });

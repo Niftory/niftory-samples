@@ -9,7 +9,7 @@ import { useNftModelQuery } from "../../../generated/graphql";
 import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
 import { useCallback, useState } from "react";
 
-import { gql } from "graphql-tag";
+import { gql } from "graphql-request";
 
 gql`
   query nftModel($id: String!) {

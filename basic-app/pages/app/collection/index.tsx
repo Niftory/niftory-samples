@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
-import { gql } from "graphql-tag";
+import { gql } from "graphql-request";
 import { useUserNftsQuery } from "../../../generated/graphql";
 import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
 

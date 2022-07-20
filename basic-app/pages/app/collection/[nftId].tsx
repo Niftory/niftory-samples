@@ -7,7 +7,7 @@ import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 import { useNftQuery } from "../../../generated/graphql";
 import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
 
-import { gql } from "graphql-tag";
+import { gql } from "graphql-request";
 
 gql`
   query nft($id: String!) {

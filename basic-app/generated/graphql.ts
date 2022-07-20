@@ -2,6 +2,8 @@
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from 'react-query';
+import * as Dom from 'graphql-request/dist/types.dom';
+import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -63,8 +65,6 @@ export type App = Identifiable & {
   contract?: Maybe<Contract>;
   /** A unique identifier for this object in the Niftory API. */
   id: Scalars['ID'];
-  /** The org this app belongs to. */
-  org?: Maybe<Org>;
 };
 
 /** Current Prisma Mapping: User (with role = COLLECTOR). Represents an individual user within a particular Niftory app. */
@@ -127,14 +127,6 @@ export type Contract = Identifiable & {
   name?: Maybe<Scalars['String']>;
 };
 
-/** The input to create a [listing]({{Types.Listing}}). */
-export type CreateListingInput = {
-  /** The Ids of the packages to include in the [listing]({{Types.Listing}}). */
-  packages: Array<InputMaybe<Scalars['ID']>>;
-  /** The price in USD of the packages in the [listing]({{Types.Listing}}). */
-  price: Scalars['PositiveFloat'];
-};
-
 /** A currency that can be accepted for payment. */
 export enum Currency {
   /** The United States dollar. */
@@ -191,97 +183,14 @@ export enum ListingState {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  /** Sets an inactive [listing]({{Types.Listing}}) to active, meaning that it's available for sale. */
-  activateListing?: Maybe<Listing>;
-  /** Initiates checkout for a reserved package. */
-  checkout?: Maybe<InitiateCheckoutResponse>;
-  /** Creates a new [listing]({{Types.Listing}}). */
-  createListing?: Maybe<Listing>;
-  /** Creates a new [NFT model]({{Types.NFTModel}}). */
-  createModel?: Maybe<NftModel>;
-  /** Creates a new [packaging model]({{Types.PackagingModel}}). */
-  createPackagingModel?: Maybe<PackagingModel>;
-  /** Creates a new [NFTSet]({{Types.NFTSet}}). */
-  createSet?: Maybe<NftSet>;
-  /** Sets an active [listing]({{Types.Listing}}) to inactive, meaning that it's not available for sale. */
-  deactivateListing?: Maybe<Listing>;
-  /** Initiates minting for a given [NFT model]({{Types.NFTmodel}}). */
-  mintModel?: Maybe<NftModel>;
-  /** Initiates minting for a given [NFT]({{Types.NFT}}). */
-  mintNFT?: Maybe<Nft>;
-  /** Packages NFTs from an existing [packaging model]({{Types.PackagingModel}}). */
-  package?: Maybe<PackagingModel>;
   /** Marks a wallet as ready for the given contract, indicating that the wallet is ready to receive NFTs from the current app. The wallet must be verified before this succeeds. */
   readyWallet?: Maybe<Wallet>;
   /** Registers a wallet to the signed in user. */
   registerWallet?: Maybe<Wallet>;
-  /** Reserves a package from a [listing]({{Types.Listing}}) for purchase. */
-  reserve?: Maybe<Package>;
   /** Initiates the transfer of an [NFT]({{Types.NFT}}) to the currently-logged in [AppUser]({{Types.AppUser}}). The NFT is reserved for the user in database, and you can use the NFT.status field to check on the transfer progress. */
   transfer?: Maybe<Nft>;
-  /** Updates an existing [listing]({{Types.Listing}}). */
-  updateListing?: Maybe<Listing>;
-  /** Updates an existing [NFT model]({{Types.NFTModel}}). */
-  updateModel?: Maybe<NftModel>;
-  /** Creates a new [packaging model]({{Types.PackagingModel}}). */
-  updatePackagingModel?: Maybe<PackagingModel>;
-  /** Updates an existing [NFTSet]({{Types.NFTSet}}). */
-  updateSet?: Maybe<NftSet>;
   /** Verifies a wallet to the signed in user. If the verification code fails verification against the wallet's verification code and its public key, the request will fail. */
   verifyWallet?: Maybe<Wallet>;
-};
-
-
-export type MutationActivateListingArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationCheckoutArgs = {
-  failureRedirectUrl: Scalars['String'];
-  packageId: Scalars['ID'];
-  successRedirectUrl: Scalars['String'];
-};
-
-
-export type MutationCreateListingArgs = {
-  data: CreateListingInput;
-};
-
-
-export type MutationCreateModelArgs = {
-  data: NftModelCreateInput;
-};
-
-
-export type MutationCreatePackagingModelArgs = {
-  data: PackagingModelCreateInput;
-};
-
-
-export type MutationCreateSetArgs = {
-  data: NftSetCreateInput;
-};
-
-
-export type MutationDeactivateListingArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationMintModelArgs = {
-  modelId: Scalars['ID'];
-  quantity?: InputMaybe<Scalars['PositiveInt']>;
-};
-
-
-export type MutationMintNftArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationPackageArgs = {
-  packagingModelId: Scalars['ID'];
 };
 
 
@@ -295,37 +204,10 @@ export type MutationRegisterWalletArgs = {
 };
 
 
-export type MutationReserveArgs = {
-  listingId: Scalars['ID'];
-};
-
-
 export type MutationTransferArgs = {
   id?: InputMaybe<Scalars['ID']>;
   nftModelId?: InputMaybe<Scalars['ID']>;
   userId: Scalars['ID'];
-};
-
-
-export type MutationUpdateListingArgs = {
-  data: UpdateListingInput;
-};
-
-
-export type MutationUpdateModelArgs = {
-  data: NftModelUpdateInput;
-  id: Scalars['ID'];
-};
-
-
-export type MutationUpdatePackagingModelArgs = {
-  data: PackagingModelCreateInput;
-};
-
-
-export type MutationUpdateSetArgs = {
-  data: NftSetCreateInput;
-  id: Scalars['ID'];
 };
 
 
@@ -360,14 +242,6 @@ export type NftContent = {
   files?: Maybe<Array<Maybe<NftMedia>>>;
   /** The poster file for this NFT's content */
   poster?: Maybe<NftFile>;
-};
-
-/** The input to create or update NFT content. */
-export type NftContentInput = {
-  /** Additional files for this NFT content */
-  files?: InputMaybe<Array<InputMaybe<Scalars['Upload']>>>;
-  /** The poster for this content. */
-  poster?: InputMaybe<Scalars['Upload']>;
 };
 
 /** Current Prisma Mapping: File (with ipfsContentUrl and ipfsMetadataUrl). A file to be included in an NFT. Extends [File]({{Types.File}}) to includes the IPFS addresses for the content and metadata. */
@@ -463,28 +337,6 @@ export type NftModel = BlockchainEntity & BlockchainResource & Identifiable & Re
   title: Scalars['String'];
 };
 
-/** The input to create an NFT model. */
-export type NftModelCreateInput = {
-  /** The user-friendly description for this model. */
-  description: Scalars['String'];
-  /** The content for this model. */
-  nftContent?: InputMaybe<NftContentInput>;
-  /** The total quantity of NFTs that will be available for this model. */
-  quantity: Scalars['PositiveInt'];
-  /** The rarity level of this model. */
-  rarity: SimpleRarityLevel;
-  /** The ID of the NFT set that this model belongs to. */
-  setId: Scalars['ID'];
-  /** The status of the NFT model. */
-  status?: InputMaybe<Status>;
-  /** The user-friendly subtitle for this model. */
-  subtitle?: InputMaybe<Scalars['String']>;
-  /** A mapping of tags for this resource. These will be stored in the Niftory API but will not be added to the blockchain. */
-  tags?: InputMaybe<Scalars['JSON']>;
-  /** The user-friendly title for this model. */
-  title: Scalars['String'];
-};
-
 /** Properties to filter NFTModel's when querying them. */
 export type NftModelFilterInput = {
   /** Blockchain IDs of the [NFTModel]({{Types.NFTModel}})'s to find. */
@@ -495,26 +347,6 @@ export type NftModelFilterInput = {
   setIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Filter by [NFTModel]({{Types.NFTModel}}) status. */
   status?: InputMaybe<Status>;
-};
-
-/** The input to update an NFT model. */
-export type NftModelUpdateInput = {
-  /** The user-friendly description for this model. */
-  description?: InputMaybe<Scalars['String']>;
-  /** The content for this model. */
-  nftContent?: InputMaybe<NftContentInput>;
-  /** The total quantity of NFTs that will be available for this model. */
-  quantity?: InputMaybe<Scalars['Int']>;
-  /** The rarity level of this model. */
-  rarity?: InputMaybe<SimpleRarityLevel>;
-  /** The status of the NFT model. */
-  status?: InputMaybe<Status>;
-  /** The user-friendly subtitle for this model. */
-  subtitle?: InputMaybe<Scalars['String']>;
-  /** A mapping of tags for this resource. These will be stored in the Niftory API but will not be added to the blockchain. */
-  tags?: InputMaybe<Scalars['JSON']>;
-  /** The user-friendly title for this model. */
-  title?: InputMaybe<Scalars['String']>;
 };
 
 /** Current Prisma Mapping: Set. A set of NFT models. */
@@ -540,36 +372,12 @@ export type NftSet = BlockchainEntity & BlockchainResource & Identifiable & Reso
   title: Scalars['String'];
 };
 
-/** The input to create an NFT set. */
-export type NftSetCreateInput = {
-  /** The display image for this set */
-  image?: InputMaybe<Scalars['Upload']>;
-  /** The status of the NFT model. */
-  status?: InputMaybe<Status>;
-  /** A mapping of tags for this resource. These will be stored in the Niftory API but will not be added to the blockchain. */
-  tags?: InputMaybe<Scalars['JSON']>;
-  /** The user-friendly title for this model. */
-  title: Scalars['String'];
-};
-
 export type NftSetFilterInput = {
   /** Blockchain IDs of the [NFTSet]({{Types.NFTSet}})'s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Database IDs of the [NFTSet]({{Types.NFTSet}})'s to find. */
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** The title of the [NFTSet]({{Types.NFTSet}}) to find. */
-  title?: InputMaybe<Scalars['String']>;
-};
-
-/** The input to update an NFT model. */
-export type NftSetUpdateInput = {
-  /** The display image for this set */
-  image?: InputMaybe<Scalars['Upload']>;
-  /** The status of the NFT model. */
-  status?: InputMaybe<Status>;
-  /** A mapping of tags for this resource. These will be stored in the Niftory API but will not be added to the blockchain. */
-  tags?: InputMaybe<Scalars['JSON']>;
-  /** The user-friendly title for this model. */
   title?: InputMaybe<Scalars['String']>;
 };
 
@@ -636,24 +444,6 @@ export type PackagingModelCondition = {
   rarity: SimpleRarityLevel;
 };
 
-/** The input to create a [packaging model condition]({{Types.PackagingModelCondition}}). */
-export type PackagingModelConditionInput = {
-  /** The rarity level of the NFT. */
-  rarity: SimpleRarityLevel;
-};
-
-/** The input to create a [packaging model]({{Types.PackagingModel}}). */
-export type PackagingModelCreateInput = {
-  /** The number of NFTs to include in each pack. */
-  nftsPerPack: Scalars['PositiveInt'];
-  /** The number of packs to create. */
-  numberOfPacks: Scalars['PositiveInt'];
-  /** The packaging strategy for this model. Used to specify the distribution of NFTs in each package. */
-  packaging?: InputMaybe<PackagingModelPackagingInput>;
-  /** The selection strategy for this model. Used to specify the overall distribution of all NFTs that will be packaged. */
-  selection: PackagingModelSelectionInput;
-};
-
 /** Current Prisma Mapping: PackListing.files, PackListing.packShape. Specifies the distribution of NFTs in each package created in a [PackagingModel]({{Types.PackagingModel}}). */
 export type PackagingModelPackaging = {
   __typename?: 'PackagingModelPackaging';
@@ -663,27 +453,11 @@ export type PackagingModelPackaging = {
   rules?: Maybe<Array<Maybe<PackagingModelRule>>>;
 };
 
-/** The input to create a [packaging model packaging]({{Types.PackagingModelPackaging}}). */
-export type PackagingModelPackagingInput = {
-  /** The image to use for this packaging. */
-  image?: InputMaybe<Scalars['Upload']>;
-  /** The rules to apply when building each package in this model. */
-  rules?: InputMaybe<Array<InputMaybe<PackagingModelRuleInput>>>;
-};
-
 /** Current Prisma Mapping: PackListing.packShape. Specifies a group of NFTs that match one or more conditions */
 export type PackagingModelRule = {
   __typename?: 'PackagingModelRule';
   /** Conditions to use to match NFTs for this rule. An NFT can be used by this rule if any of the conditions are satisfied. */
   conditions: Array<Maybe<PackagingModelCondition>>;
-  /** The number of NFTs to select as part of this rule. */
-  number: Scalars['PositiveInt'];
-};
-
-/** The input to create a [packaging model rule]({{Types.PackagingModelRule}}). */
-export type PackagingModelRuleInput = {
-  /** Conditions to use to match NFTs for this rule. */
-  conditions: Array<InputMaybe<PackagingModelConditionInput>>;
   /** The number of NFTs to select as part of this rule. */
   number: Scalars['PositiveInt'];
 };
@@ -704,39 +478,11 @@ export type PackagingModelSelectionFilter = {
   setId: Scalars['String'];
 };
 
-/** The input to create a [packaging model selection filter]({{Types.PackagingModelSelectionFilter}}). */
-export type PackagingModelSelectionFilterInput = {
-  /** The set ID to filter by. An NFT will match this filter if it is in the [NFTSet]({{Types.NFTSet}}) with this ID. */
-  setId: Scalars['String'];
-};
-
-/** The input to select a packaging model selection spec. */
-export type PackagingModelSelectionInput = {
-  /** The filters to apply to the packaging models. */
-  filters: Array<InputMaybe<PackagingModelSelectionFilterInput>>;
-  /** The rules to apply when selecting NFTs. */
-  rules?: InputMaybe<Array<InputMaybe<PackagingModelRuleInput>>>;
-};
-
-/** The input to update a [packaging model]({{Types.PackagingModel}}). */
-export type PackagingModelUpdateInput = {
-  /** The number of NFTs to include in each pack. */
-  nftsPerPack?: InputMaybe<Scalars['PositiveInt']>;
-  /** The number of packs to create. */
-  numberOfPacks?: InputMaybe<Scalars['PositiveInt']>;
-  /** The packaging strategy for this model. Used to specify the distribution of NFTs in each package. */
-  packaging?: InputMaybe<PackagingModelPackagingInput>;
-  /** The selection strategy for this model. Used to specify the overall distribution of all NFTs that will be packaged. */
-  selection?: InputMaybe<PackagingModelSelectionInput>;
-};
-
 /** The pricing for a particular listing */
 export type Pricing = SimplePricing;
 
 export type Query = {
   __typename?: 'Query';
-  /** Gets an [AdminUser]({{Types.AdminUser}}) by ID. */
-  adminUser?: Maybe<AdminUser>;
   /** Gets the [App]({{Types.App}}) for the current application context. */
   app?: Maybe<App>;
   /** Gets an [App]({{Types.App}}) by ID. */
@@ -745,30 +491,14 @@ export type Query = {
   appUser?: Maybe<AppUser>;
   /** Gets an [AppUser]({{Types.AppUser}}) by ID. */
   appUserById?: Maybe<AppUser>;
-  /** Gets a [Contract]({{Types.Contract}}) by its database ID. */
-  contract?: Maybe<Contract>;
-  /** Gets an [Listing]({{Types.Listing}}) by ID. */
-  listing?: Maybe<Listing>;
   /** Gets an [NFT]({{Types.NFT}}) by database ID. */
   nft?: Maybe<Nft>;
-  /** Gets an [NFTListing]({{Types.NFTListing}}) by ID. */
-  nftListing?: Maybe<NftListing>;
-  /** Gets a list of [NFTListings]({{Types.NFTListing}}) by IDs. */
-  nftListings?: Maybe<Array<Maybe<NftListing>>>;
   /** Gets an [NFTModel]({{Types.NFTModel}}) by database ID. */
   nftModel?: Maybe<NftModel>;
   /** Gets [NFTModel]({{Types.NFTModel}})'s for the current [App]({{Types.App}}) context. */
   nftModels?: Maybe<Array<Maybe<NftModel>>>;
   /** Gets all [NFT]({{Types.NFT}})'s belonging to the current [AppUser]({{Types.AppUser}}) context. */
   nfts?: Maybe<Array<Maybe<Nft>>>;
-  /** Gets the [Org]({{Types.Org}}) corresponding to the current [App]({{Types.App}}) context. */
-  org?: Maybe<Org>;
-  /** Gets an [Org]({{Types.Org}}) by ID. */
-  orgById?: Maybe<Org>;
-  /** Gets a [PackagingModel]({{Types.PackagingModel}}) by ID. */
-  packagingModel?: Maybe<PackagingModel>;
-  /** Previews packages that could be created by a [packaging model]({{Types.PackagingModel}}). */
-  previewPackages?: Maybe<Array<Maybe<Package>>>;
   /** Gets an [NFTSet]({{Types.NFTSet}}) by database ID. */
   set?: Maybe<NftSet>;
   /** Gets [NFTSet]({{Types.NFTSet}})'s for the current [App]({{Types.App}}) context. */
@@ -784,11 +514,6 @@ export type Query = {
 };
 
 
-export type QueryAdminUserArgs = {
-  id: Scalars['String'];
-};
-
-
 export type QueryAppByIdArgs = {
   id?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -800,28 +525,8 @@ export type QueryAppUserByIdArgs = {
 };
 
 
-export type QueryContractArgs = {
-  id?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryListingArgs = {
-  id: Scalars['String'];
-};
-
-
 export type QueryNftArgs = {
   id: Scalars['String'];
-};
-
-
-export type QueryNftListingArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryNftListingsArgs = {
-  filter?: InputMaybe<NftListingFilterInput>;
 };
 
 
@@ -837,21 +542,6 @@ export type QueryNftModelsArgs = {
 
 export type QueryNftsArgs = {
   filter?: InputMaybe<NftFilterInput>;
-};
-
-
-export type QueryOrgByIdArgs = {
-  id?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryPackagingModelArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryPreviewPackagesArgs = {
-  id: Scalars['ID'];
 };
 
 
@@ -958,14 +648,6 @@ export enum Status {
   /** "I'll get to it eventually..." */
   ToDo = 'TO_DO'
 }
-
-/** The input to update a [listing]({{Types.Listing}}). */
-export type UpdateListingInput = {
-  /** The Ids of the packages to include in the [listing]({{Types.Listing}}). */
-  packages?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** The price in USD of the packages in the [listing]({{Types.Listing}}). */
-  price?: InputMaybe<Scalars['PositiveFloat']>;
-};
 
 /** An interface containing common data about users. */
 export type UserData = {
@@ -1316,3 +998,177 @@ export const useNftModelsQuery = <
       fetcher<NftModelsQuery, NftModelsQueryVariables>(client, NftModelsDocument, variables, headers),
       options
     );
+
+export const UserWalletDocument = gql`
+    query userWallet {
+  wallet {
+    id
+    address
+    state
+    verificationCode
+  }
+}
+    `;
+export const RegisterWalletDocument = gql`
+    mutation registerWallet($address: String!) {
+  registerWallet(address: $address) {
+    id
+    address
+    verificationCode
+    state
+  }
+}
+    `;
+export const VerifyWalletDocument = gql`
+    mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
+  verifyWallet(address: $address, signedVerificationCode: $signedVerificationCode) {
+    id
+    address
+    state
+  }
+}
+    `;
+export const ReadyWalletDocument = gql`
+    mutation readyWallet($address: String!) {
+  readyWallet(address: $address) {
+    id
+    address
+    state
+  }
+}
+    `;
+export const NftDocument = gql`
+    query nft($id: String!) {
+  nft(id: $id) {
+    id
+    blockchainId
+    serialNumber
+    model {
+      id
+      blockchainId
+      title
+      description
+      rarity
+      quantity
+      metadata
+      content {
+        poster {
+          url
+        }
+        files {
+          media {
+            url
+            contentType
+          }
+          thumbnail {
+            url
+            contentType
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const UserNftsDocument = gql`
+    query userNfts {
+  nfts {
+    id
+    model {
+      id
+      title
+    }
+  }
+}
+    `;
+export const NftModelDocument = gql`
+    query nftModel($id: String!) {
+  nftModel(id: $id) {
+    id
+    blockchainId
+    title
+    description
+    quantity
+    status
+    content {
+      files {
+        media {
+          url
+          contentType
+        }
+        thumbnail {
+          url
+          contentType
+        }
+      }
+      poster {
+        url
+      }
+    }
+    rarity
+  }
+}
+    `;
+export const NftModelsDocument = gql`
+    query nftModels {
+  nftModels {
+    id
+    blockchainId
+    title
+    description
+    quantity
+    status
+    rarity
+    content {
+      files {
+        media {
+          url
+          contentType
+        }
+        thumbnail {
+          url
+          contentType
+        }
+      }
+      poster {
+        url
+      }
+    }
+  }
+}
+    `;
+
+export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
+
+
+const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
+
+export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
+  return {
+    userWallet(variables?: UserWalletQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserWalletQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UserWalletQuery>(UserWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'userWallet', 'query');
+    },
+    registerWallet(variables: RegisterWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RegisterWalletMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<RegisterWalletMutation>(RegisterWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'registerWallet', 'mutation');
+    },
+    verifyWallet(variables: VerifyWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<VerifyWalletMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<VerifyWalletMutation>(VerifyWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'verifyWallet', 'mutation');
+    },
+    readyWallet(variables: ReadyWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ReadyWalletMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ReadyWalletMutation>(ReadyWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'readyWallet', 'mutation');
+    },
+    nft(variables: NftQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<NftQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<NftQuery>(NftDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'nft', 'query');
+    },
+    userNfts(variables?: UserNftsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserNftsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UserNftsQuery>(UserNftsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'userNfts', 'query');
+    },
+    nftModel(variables: NftModelQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<NftModelQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<NftModelQuery>(NftModelDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'nftModel', 'query');
+    },
+    nftModels(variables?: NftModelsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<NftModelsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<NftModelsQuery>(NftModelsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'nftModels', 'query');
+    }
+  };
+}
+export type Sdk = ReturnType<typeof getSdk>;

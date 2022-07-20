@@ -14,5 +14,6 @@ generates:
       - typescript
       - typescript-operations
       - typescript-react-query
+      - typescript-graphql-request
     config:
       fetcher: graphql-request
