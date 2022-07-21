@@ -1,12 +1,11 @@
-import { Box, Button } from "@chakra-ui/react";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useReadyWalletMutation } from "../../generated/graphql";
 import { useGraphQLClient } from "../../hooks/useGraphQLClient";
 import { useFlowUser } from "../../hooks/useFlowUser";
 import { useFlowAccountConfiguration as useFlowAccountConfiguration } from "../../hooks/useFlowAccountConfiguration";
-import { WalletSetupStepProps } from "./WalletSetup";
 import { gql } from "graphql-request";
 import { useQueryClient } from "react-query";
+import { WalletSetupBox } from "./WalletSetupBox";
 
 gql`
   mutation readyWallet($address: String!) {
@@ -18,32 +17,24 @@ gql`
   }
 `;
 
-export function ConfigureWallet({
-  setIsLoading,
-  setError,
-}: WalletSetupStepProps) {
+export function ConfigureWallet() {
   const flowUser = useFlowUser();
 
   const reactQueryClient = useQueryClient();
   const graphqlClient = useGraphQLClient();
-  const { mutate: readyWallet } = useReadyWalletMutation(graphqlClient, {
+  const {
+    mutate: readyWallet,
+    isLoading: isReadyWalletLoading,
+    error,
+  } = useReadyWalletMutation(graphqlClient, {
     onSuccess: () => reactQueryClient.invalidateQueries(["userWallet"]),
-
-    onError: (error) => setError(error as Error),
-    onMutate: () => setIsLoading(true),
-    onSettled: () => setIsLoading(false),
   });
 
-  const { configured, configure, isLoading } = useFlowAccountConfiguration();
-
-  // On click, prompt the user to run the configuration transaction
-  const onClick = useCallback(async () => {
-    try {
-      await configure();
-    } catch (e) {
-      setError(e);
-    }
-  }, [configure, setError]);
+  const {
+    configured,
+    configure,
+    isLoading: isFlowAccountConfigurationLoading,
+  } = useFlowAccountConfiguration();
 
   // Once the wallet is configured, call the ready mutation to tell Niftory it's ready to receive NFTs
   useEffect(() => {
@@ -54,15 +45,17 @@ export function ConfigureWallet({
     readyWallet({ address: flowUser?.addr });
   }, [flowUser?.addr, configured, readyWallet]);
 
+  const isLoading = isFlowAccountConfigurationLoading || isReadyWalletLoading;
+
   return (
-    <>
-      <Box maxW="xl">
-        You{"'"}re almost there. Now we need to configure your wallet to receive
-        NFTs. This is the last step!
-      </Box>
-      <Button colorScheme="blue" isLoading={isLoading} onClick={onClick}>
-        Configure wallet
-      </Button>
-    </>
+    <WalletSetupBox
+      text={
+        "You're almost there. Now we need to configure your wallet to receive NFTs. This is the last step!"
+      }
+      buttonText="Configure wallet"
+      onClick={configure}
+      isLoading={isLoading}
+      error={error as Error}
+    />
   );
 }

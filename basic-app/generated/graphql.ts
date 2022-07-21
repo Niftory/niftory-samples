@@ -230,7 +230,7 @@ export type Nft = BlockchainEntity & Identifiable & {
   /** The serial number for this NFT within its model. */
   serialNumber?: Maybe<Scalars['Int']>;
   /** The status of this NFT (e.g. if it is available or being transferred to a user */
-  status?: Maybe<SaleProcessingState>;
+  status?: Maybe<TransferState>;
   /** The wallet containing this NFT, if it is owned by a user. */
   wallet?: Maybe<Wallet>;
 };
@@ -262,16 +262,16 @@ export type NftFilterInput = {
   /** Blockchain IDs of the [NFT]({{Types.NFT}})'s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Database IDs of the [NFT]({{Types.NFT}})'s to find. */
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** The IDs of the [NFTModel]({{Types.NFTModel}}) that the NFT should belong to. */
-  nftModelIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  nftModelIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 /** Current Prisma Mapping: CollectibleListing. A listing of NFTs for sale. */
 export type NftListing = Identifiable & {
   __typename?: 'NFTListing';
   /** The appId of the app that created this listing */
-  appId: Scalars['String'];
+  appId: Scalars['ID'];
   /** The metadata for this NFTlisting.These will be stored in the Niftory API but will not be added to the blockchain.  */
   attributes?: Maybe<Scalars['JSON']>;
   /** A unique identifier for this object in the Niftory API. */
@@ -292,7 +292,7 @@ export type NftListing = Identifiable & {
 
 export type NftListingFilterInput = {
   /** The IDs of the NFTListing. */
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** The ID of the NFTModel that the NFTListing should belong to. */
   state?: InputMaybe<ListingState>;
   /** The title of the NFTListing. */
@@ -342,9 +342,9 @@ export type NftModelFilterInput = {
   /** Blockchain IDs of the [NFTModel]({{Types.NFTModel}})'s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Database IDs of the [NFTModel]({{Types.NFTModel}})'s to find. */
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** The IDs of the [NFTSet]({{Types.NFTSet}})'s that the [NFTModel]({{Types.NFTModel}}) should belong to. */
-  setIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  setIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** Filter by [NFTModel]({{Types.NFTModel}}) status. */
   status?: InputMaybe<Status>;
 };
@@ -376,7 +376,7 @@ export type NftSetFilterInput = {
   /** Blockchain IDs of the [NFTSet]({{Types.NFTSet}})'s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Database IDs of the [NFTSet]({{Types.NFTSet}})'s to find. */
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** The title of the [NFTSet]({{Types.NFTSet}}) to find. */
   title?: InputMaybe<Scalars['String']>;
 };
@@ -475,7 +475,7 @@ export type PackagingModelSelection = {
 export type PackagingModelSelectionFilter = {
   __typename?: 'PackagingModelSelectionFilter';
   /** The set ID to filter by. An NFT will match this filter if it is in the [NFTSet]({{Types.NFTSet}}) with this ID. */
-  setId: Scalars['String'];
+  setId: Scalars['ID'];
 };
 
 /** The pricing for a particular listing */
@@ -491,7 +491,7 @@ export type Query = {
   appUser?: Maybe<AppUser>;
   /** Gets an [AppUser]({{Types.AppUser}}) by ID. */
   appUserById?: Maybe<AppUser>;
-  /** Gets the [Contract]({{Types.Contract}}) by its database ID. */
+  /** Gets the [Contract]({{Types.Contract}}) from the currently authenticated app. */
   contract?: Maybe<Contract>;
   /** Gets an [NFT]({{Types.NFT}}) by database ID. */
   nft?: Maybe<Nft>;
@@ -544,6 +544,7 @@ export type QueryNftModelsArgs = {
 
 export type QueryNftsArgs = {
   filter?: InputMaybe<NftFilterInput>;
+  userId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -651,6 +652,20 @@ export enum Status {
   ToDo = 'TO_DO'
 }
 
+/** The state of an item being transferred. */
+export enum TransferState {
+  /** The item has been created, but not transferred. */
+  Available = 'AVAILABLE',
+  /** The item failed to transfer. */
+  Error = 'ERROR',
+  /** The item is being transferred. */
+  InProgress = 'IN_PROGRESS',
+  /** The item is reserved for a future transfer. */
+  Reserved = 'RESERVED',
+  /** The item has been transferred. */
+  Success = 'SUCCESS'
+}
+
 /** An interface containing common data about users. */
 export type UserData = {
   /** This user's email. */
@@ -669,7 +684,7 @@ export type UserRoleMapping = {
   /** The AdminUser's role in this org. */
   role?: Maybe<Role>;
   /** The ID of the AdminUser this mapping refers to. */
-  userId: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 /** Current Prisma Mapping: Wallet. Represents a single wallet on the blockchain scoped to a particular app and user. */
@@ -677,10 +692,6 @@ export type Wallet = Identifiable & {
   __typename?: 'Wallet';
   /** This wallet's address on the blockchain. */
   address: Scalars['String'];
-  /** Wallet data as a JSON blob. */
-  blob?: Maybe<Scalars['JSON']>;
-  /** This wallet's cid. */
-  cid?: Maybe<Scalars['String']>;
   /** A unique identifier for this object in the Niftory API. */
   id: Scalars['ID'];
   /** The NFTs from the current app that are in this wallet. */
@@ -732,6 +743,14 @@ export type ContractQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ContractQuery = { __typename?: 'Query', contract?: { __typename?: 'Contract', name?: string | null, address?: string | null } | null };
+
+export type UserNftsByUserQueryVariables = Exact<{
+  userId: Scalars['ID'];
+  nftModelId: Scalars['ID'];
+}>;
+
+
+export type UserNftsByUserQuery = { __typename?: 'Query', nfts?: Array<{ __typename?: 'NFT', id: string } | null> | null };
 
 export type TransferNftToUserMutationVariables = Exact<{
   nftModelId: Scalars['ID'];
@@ -877,6 +896,27 @@ export const useContractQuery = <
     useQuery<ContractQuery, TError, TData>(
       variables === undefined ? ['contract'] : ['contract', variables],
       fetcher<ContractQuery, ContractQueryVariables>(client, ReactQuery_ContractDocument, variables, headers),
+      options
+    );
+export const ReactQuery_UserNftsByUserDocument = `
+    query userNftsByUser($userId: ID!, $nftModelId: ID!) {
+  nfts(userId: $userId, filter: {nftModelIds: [$nftModelId]}) {
+    id
+  }
+}
+    `;
+export const useUserNftsByUserQuery = <
+      TData = UserNftsByUserQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: UserNftsByUserQueryVariables,
+      options?: UseQueryOptions<UserNftsByUserQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<UserNftsByUserQuery, TError, TData>(
+      ['userNftsByUser', variables],
+      fetcher<UserNftsByUserQuery, UserNftsByUserQueryVariables>(client, ReactQuery_UserNftsByUserDocument, variables, headers),
       options
     );
 export const ReactQuery_TransferNftToUserDocument = `
@@ -1102,6 +1142,13 @@ export const ContractDocument = gql`
   }
 }
     `;
+export const UserNftsByUserDocument = gql`
+    query userNftsByUser($userId: ID!, $nftModelId: ID!) {
+  nfts(userId: $userId, filter: {nftModelIds: [$nftModelId]}) {
+    id
+  }
+}
+    `;
 export const TransferNftToUserDocument = gql`
     mutation transferNFTToUser($nftModelId: ID!, $userId: ID!) {
   transfer(nftModelId: $nftModelId, userId: $userId) {
@@ -1231,6 +1278,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     contract(variables?: ContractQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ContractQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ContractQuery>(ContractDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'contract', 'query');
+    },
+    userNftsByUser(variables: UserNftsByUserQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserNftsByUserQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UserNftsByUserQuery>(UserNftsByUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'userNftsByUser', 'query');
     },
     transferNFTToUser(variables: TransferNftToUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<TransferNftToUserMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<TransferNftToUserMutation>(TransferNftToUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'transferNFTToUser', 'mutation');

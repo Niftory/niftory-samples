@@ -1,5 +1,3 @@
-import { Box, Button, Skeleton, Spinner } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
 import {
   useUserWalletQuery,
   Wallet,
@@ -12,7 +10,8 @@ import { RegisterWallet } from "./RegisterWallet";
 import { VerifyWallet } from "./VerifyWallet";
 import * as fcl from "@onflow/fcl";
 import { gql } from "graphql-request";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
+import { WalletSetupBox } from "./WalletSetupBox";
 
 export type WalletSetupStepProps = {
   setIsLoading: (isLoading: boolean) => void;
@@ -37,69 +36,40 @@ gql`
 `;
 
 export function WalletSetup() {
-  const flowUser = useFlowUser();
-
   const client = useGraphQLClient();
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error>(null);
-
-  const { data, isFetching: walletLoading } = useUserWalletQuery(client, {});
+  const {
+    data,
+    isFetching: walletLoading,
+    error,
+  } = useUserWalletQuery(client, {});
   const wallet = data?.wallet;
 
+  if (!error && !walletLoading) {
+    // User doesn't have a wallet yet
+    if (!wallet?.address) {
+      return <RegisterWallet />;
+    }
+
+    switch (wallet.state) {
+      case WalletState.Unverified:
+        // User has a wallet but it's not verified yet
+        return <VerifyWallet />;
+
+      case WalletState.Verified:
+        // The user has verified their wallet, but hasn't configured it yet
+        return <ConfigureWallet />;
+    }
+  }
+
   return (
-    <Skeleton isLoaded={!walletLoading && !isLoading}>
-      <WalletSetupBody
-        error={error}
-        flowUser={flowUser}
-        wallet={wallet}
-        setError={setError}
-        setIsLoading={setIsLoading}
-      ></WalletSetupBody>
-    </Skeleton>
+    <WalletSetupBox
+      text={`You}re all set up! Your wallet address is ${wallet?.address}`}
+      buttonText="Go to Drops"
+      error={error as Error}
+      isLoading={walletLoading}
+      onClick={() => router.push("/app/drops")}
+    />
   );
-}
-
-function WalletSetupBody({
-  error,
-  flowUser,
-  wallet,
-  setIsLoading,
-  setError,
-}: WalletSetupProps) {
-  if (error) {
-    console.error(error);
-    return <Box>Something went wrong. Please try again later!</Box>;
-  }
-
-  // User doesn't have a wallet yet
-  if (!flowUser?.loggedIn || !wallet?.address) {
-    return <RegisterWallet setIsLoading={setIsLoading} setError={setError} />;
-  }
-
-  switch (wallet.state) {
-    case WalletState.Unverified:
-      // User has a wallet but it's not verified yet
-      return <VerifyWallet setIsLoading={setIsLoading} setError={setError} />;
-
-    case WalletState.Verified:
-      // The user has verified their wallet, but hasn't configured it yet
-      return (
-        <ConfigureWallet setIsLoading={setIsLoading} setError={setError} />
-      );
-
-    case WalletState.Ready:
-      return (
-        <>
-          <Box maxW="xl">
-            You{"'"}re all set up! Your wallet address is ${wallet.address}
-          </Box>
-          <Button onClick={() => router.push("/app/drops")} colorScheme="blue">
-            Go to Drops
-          </Button>
-        </>
-      );
-      break;
-  }
 }
