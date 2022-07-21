@@ -1,4 +1,4 @@
-import { Box, Skeleton, Spinner } from "@chakra-ui/react";
+import { Box, Button, Skeleton, Spinner } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import {
   useUserWalletQuery,
@@ -12,6 +12,7 @@ import { RegisterWallet } from "./RegisterWallet";
 import { VerifyWallet } from "./VerifyWallet";
 import * as fcl from "@onflow/fcl";
 import { gql } from "graphql-request";
+import router, { useRouter } from "next/router";
 
 export type WalletSetupStepProps = {
   setIsLoading: (isLoading: boolean) => void;
@@ -39,6 +40,7 @@ export function WalletSetup() {
   const flowUser = useFlowUser();
 
   const client = useGraphQLClient();
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error>(null);
@@ -88,6 +90,16 @@ function WalletSetupBody({
       );
 
     case WalletState.Ready:
+      return (
+        <>
+          <Box maxW="xl">
+            You{"'"}re all set up! Your wallet address is ${wallet.address}
+          </Box>
+          <Button onClick={() => router.push("/app/drops")} colorScheme="blue">
+            Go to Drops
+          </Button>
+        </>
+      );
       break;
   }
 }

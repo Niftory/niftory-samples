@@ -25,7 +25,7 @@ export function useFlowAccountConfiguration(): FlowAccountConfiguration {
   const [configuring, setConfiguring] = useState(false);
 
   // A callback that runs a transaction against the user account to initialize it
-  const initialize = useCallback(async () => {
+  const configure = useCallback(async () => {
     try {
       setConfiguring(true);
       const txId = await fcl.mutate({
@@ -42,7 +42,7 @@ export function useFlowAccountConfiguration(): FlowAccountConfiguration {
   // When configuration script completes, check if the account is initialized
   useEffect(() => {
     (async function () {
-      if (configuring) {
+      if (configuring || !flowUser?.addr) {
         return;
       }
 
@@ -56,7 +56,7 @@ export function useFlowAccountConfiguration(): FlowAccountConfiguration {
   }, [flowUser?.addr, configuring]);
 
   return {
-    configured: configured,
-    configure: initialize,
+    configured,
+    configure,
   };
 }

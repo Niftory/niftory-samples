@@ -51,12 +51,8 @@ export function ConfigureWallet({
       return;
     }
 
-    try {
-      readyWallet({ address: flowUser?.addr });
-    } catch (e) {
-      setError(e);
-    }
-  }, [flowUser?.addr, configured, readyWallet, setError]);
+    readyWallet({ address: flowUser?.addr });
+  }, [flowUser?.addr, configured, readyWallet]);
 
   return (
     <>
