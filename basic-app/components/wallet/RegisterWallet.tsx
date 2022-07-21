@@ -1,12 +1,11 @@
-import { Box, Button } from "@chakra-ui/react";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useRegisterWalletMutation } from "../../generated/graphql";
 import { useFlowUser } from "../../hooks/useFlowUser";
 import { useGraphQLClient } from "../../hooks/useGraphQLClient";
 import * as fcl from "@onflow/fcl";
-import { WalletSetupStepProps } from "./WalletSetup";
 import { gql } from "graphql-request";
 import { useQueryClient } from "react-query";
+import { WalletSetupBox } from "./WalletSetupBox";
 
 gql`
   mutation registerWallet($address: String!) {
@@ -19,32 +18,20 @@ gql`
   }
 `;
 
-export function RegisterWallet({
-  setIsLoading,
-  setError,
-}: WalletSetupStepProps) {
+export function RegisterWallet() {
   const flowUser = useFlowUser();
 
   const reactQueryClient = useQueryClient();
   const graphqlClient = useGraphQLClient();
 
-  const { mutate: registerWallet } = useRegisterWalletMutation(graphqlClient, {
+  const {
+    mutate: registerWallet,
+    error,
+    isLoading,
+  } = useRegisterWalletMutation(graphqlClient, {
     // Ensure the user wallet query is invalidated and refetched on success
     onSuccess: () => reactQueryClient.invalidateQueries(["userWallet"]),
-
-    onMutate: () => setIsLoading(true),
-    onSettled: () => setIsLoading(false),
-    onError: (error) => setError(error as Error),
   });
-
-  // On click, log the user into their flow account
-  const onClick = useCallback(() => {
-    try {
-      fcl.logIn();
-    } catch (e) {
-      setError(e);
-    }
-  }, [setError]);
 
   // When the user logs in, register their wallet
   useEffect(() => {
@@ -53,17 +40,17 @@ export function RegisterWallet({
     }
 
     registerWallet({ address: flowUser.addr });
-  }, [flowUser?.addr, flowUser?.loggedIn, registerWallet, setIsLoading]);
+  }, [flowUser?.addr, flowUser?.loggedIn, registerWallet]);
 
   return (
-    <>
-      <Box maxW="xl">
-        First, we need to create or connect to a Flow wallet. Hit the button
-        below and follow the prompts.
-      </Box>
-      <Button colorScheme="blue" onClick={onClick}>
-        Link or create your wallet.
-      </Button>
-    </>
+    <WalletSetupBox
+      text={
+        "First, we need to create or connect to a Flow wallet. Hit the button below and follow the prompts."
+      }
+      buttonText="Link or create your wallet"
+      onClick={fcl.logIn}
+      isLoading={isLoading}
+      error={error as Error}
+    />
   );
 }
