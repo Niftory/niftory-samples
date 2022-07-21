@@ -1,11 +1,11 @@
-import { Box, Heading, Text, VStack, Button } from "@chakra-ui/react";
+import { Box, Heading, Text, VStack, Button, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useNftModelQuery } from "../../../generated/graphql";
+import { useNftModelQuery, useUserNftsQuery } from "../../../generated/graphql";
 import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
 import { useCallback, useState } from "react";
 
@@ -45,21 +45,27 @@ const Collection: ComponentWithAuth = () => {
   const nftModelId = router.query["nftModelId"] as string;
 
   const client = useGraphQLClient();
-  const { data } = useNftModelQuery(client, { id: nftModelId });
-  const nftModel = data?.nftModel;
+  const { data: nftModelData } = useNftModelQuery(client, {
+    id: nftModelId,
+  });
+  const nftModel = nftModelData?.nftModel;
+
+  const { data: userNftsData, isFetching: isFetchingUserNfts } =
+    useUserNftsQuery(client, {});
+  const alreadyClaimed = userNftsData?.nfts && userNftsData.nfts.length > 1;
 
   const { data: session } = useSession();
   const userId = session?.userId;
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isTransferring, setIsTransferring] = useState(false);
 
   const initiateTransfer = useCallback(() => {
-    setIsLoading(true);
+    setIsTransferring(true);
     axios
       .post(`/api/nft/${nftModelId}/transfer?userId=${userId}`)
       .then(({ data }) => router.push(`/app/collection/${data.nftId}`))
       .catch((error) => console.error(error))
-      .finally(() => setIsLoading(false));
+      .finally(() => setIsTransferring(false));
   }, [nftModelId, router, userId]);
 
   return (
@@ -67,12 +73,15 @@ const Collection: ComponentWithAuth = () => {
       <Box mx="auto" color="white" mt="5vh">
         <VStack>
           <AppHeader />
-          {nftModel && (
+          {nftModel ? (
+            <Spinner />
+          ) : (
             <>
               <Heading>{nftModel.title}</Heading>
               <Text>{nftModel.description}</Text>
               <Button
-                isLoading={isLoading}
+                isLoading={isTransferring || isFetchingUserNfts}
+                isDisabled={alreadyClaimed}
                 onClick={initiateTransfer}
                 colorScheme="blue"
                 my="auto"
