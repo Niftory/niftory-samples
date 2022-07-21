@@ -34,7 +34,7 @@ export function ConfigureWallet({
     onSettled: () => setIsLoading(false),
   });
 
-  const { configured, configure } = useFlowAccountConfiguration();
+  const { configured, configure, isLoading } = useFlowAccountConfiguration();
 
   // On click, prompt the user to run the configuration transaction
   const onClick = useCallback(async () => {
@@ -60,7 +60,7 @@ export function ConfigureWallet({
         You{"'"}re almost there. Now we need to configure your wallet to receive
         NFTs. This is the last step!
       </Box>
-      <Button colorScheme="blue" onClick={onClick}>
+      <Button colorScheme="blue" isLoading={isLoading} onClick={onClick}>
         Configure wallet
       </Button>
     </>
