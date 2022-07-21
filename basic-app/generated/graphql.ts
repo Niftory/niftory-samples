@@ -491,6 +491,8 @@ export type Query = {
   appUser?: Maybe<AppUser>;
   /** Gets an [AppUser]({{Types.AppUser}}) by ID. */
   appUserById?: Maybe<AppUser>;
+  /** Gets the [Contract]({{Types.Contract}}) by its database ID. */
+  contract?: Maybe<Contract>;
   /** Gets an [NFT]({{Types.NFT}}) by database ID. */
   nft?: Maybe<Nft>;
   /** Gets an [NFTModel]({{Types.NFTModel}}) by database ID. */
@@ -726,6 +728,11 @@ export type UserWalletQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type UserWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState, verificationCode?: string | null } | null };
 
+export type ContractQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ContractQuery = { __typename?: 'Query', contract?: { __typename?: 'Contract', name?: string | null, address?: string | null } | null };
+
 export type TransferNftToUserMutationVariables = Exact<{
   nftModelId: Scalars['ID'];
   userId: Scalars['ID'];
@@ -848,6 +855,28 @@ export const useUserWalletQuery = <
     useQuery<UserWalletQuery, TError, TData>(
       variables === undefined ? ['userWallet'] : ['userWallet', variables],
       fetcher<UserWalletQuery, UserWalletQueryVariables>(client, ReactQuery_UserWalletDocument, variables, headers),
+      options
+    );
+export const ReactQuery_ContractDocument = `
+    query contract {
+  contract {
+    name
+    address
+  }
+}
+    `;
+export const useContractQuery = <
+      TData = ContractQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: ContractQueryVariables,
+      options?: UseQueryOptions<ContractQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<ContractQuery, TError, TData>(
+      variables === undefined ? ['contract'] : ['contract', variables],
+      fetcher<ContractQuery, ContractQueryVariables>(client, ReactQuery_ContractDocument, variables, headers),
       options
     );
 export const ReactQuery_TransferNftToUserDocument = `
@@ -1065,6 +1094,14 @@ export const UserWalletDocument = gql`
   }
 }
     `;
+export const ContractDocument = gql`
+    query contract {
+  contract {
+    name
+    address
+  }
+}
+    `;
 export const TransferNftToUserDocument = gql`
     mutation transferNFTToUser($nftModelId: ID!, $userId: ID!) {
   transfer(nftModelId: $nftModelId, userId: $userId) {
@@ -1191,6 +1228,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     userWallet(variables?: UserWalletQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserWalletQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<UserWalletQuery>(UserWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'userWallet', 'query');
+    },
+    contract(variables?: ContractQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ContractQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ContractQuery>(ContractDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'contract', 'query');
     },
     transferNFTToUser(variables: TransferNftToUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<TransferNftToUserMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<TransferNftToUserMutation>(TransferNftToUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'transferNFTToUser', 'mutation');

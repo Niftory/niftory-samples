@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useFlowUser } from "./useFlowUser";
 import * as fcl from "@onflow/fcl";
-import {
-  isConfiguredScript,
-  configureAccountTransaction,
-} from "../lib/flow-scripts";
+import { useContractCadence } from "./useContractCadence";
 
 type FlowAccountConfiguration = {
   /**
@@ -16,6 +13,11 @@ type FlowAccountConfiguration = {
    * A function to initialize the Flow account.
    */
   configure: () => Promise<void>;
+
+  /**
+   * True if the contract data is still loading.
+   */
+  isLoading: boolean;
 };
 
 export function useFlowAccountConfiguration(): FlowAccountConfiguration {
@@ -24,12 +26,18 @@ export function useFlowAccountConfiguration(): FlowAccountConfiguration {
   const [configured, setConfigured] = useState(false);
   const [configuring, setConfiguring] = useState(false);
 
+  const {
+    isAccountConfigured_script,
+    configureAccount_transaction,
+    isLoading,
+  } = useContractCadence();
+
   // A callback that runs a transaction against the user account to initialize it
   const configure = useCallback(async () => {
     try {
       setConfiguring(true);
       const txId = await fcl.mutate({
-        cadence: configureAccountTransaction,
+        cadence: configureAccount_transaction,
         limit: 9999,
       });
 
@@ -37,26 +45,27 @@ export function useFlowAccountConfiguration(): FlowAccountConfiguration {
     } finally {
       setConfiguring(false);
     }
-  }, [setConfiguring]);
+  }, [configureAccount_transaction]);
 
-  // When configuration script completes, check if the account is initialized
+  // When configuration transaction completes, check if the account is configured
   useEffect(() => {
     (async function () {
-      if (configuring || !flowUser?.addr) {
+      if (configuring || !flowUser?.addr || !isAccountConfigured_script) {
         return;
       }
 
       const result = await fcl.query({
-        cadence: isConfiguredScript,
-        args: (arg, t) => [arg(flowUser?.addr, t.Address)],
+        cadence: isAccountConfigured_script,
+        args: (arg, t) => [arg(flowUser.addr, t.Address)],
       });
 
       setConfigured(result);
     })();
-  }, [flowUser?.addr, configuring]);
+  }, [flowUser?.addr, configuring, isAccountConfigured_script]);
 
   return {
     configured,
     configure,
+    isLoading,
   };
 }
