@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
-import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from 'react-query';
+import { useMutation, useQuery, UseMutationOptions, UseQueryOptions } from 'react-query';
 import * as Dom from 'graphql-request/dist/types.dom';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
@@ -699,10 +699,12 @@ export enum WalletState {
   Verified = 'VERIFIED'
 }
 
-export type UserWalletQueryVariables = Exact<{ [key: string]: never; }>;
+export type ReadyWalletMutationVariables = Exact<{
+  address: Scalars['String'];
+}>;
 
 
-export type UserWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState, verificationCode?: string | null } | null };
+export type ReadyWalletMutation = { __typename?: 'Mutation', readyWallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState } | null };
 
 export type RegisterWalletMutationVariables = Exact<{
   address: Scalars['String'];
@@ -719,12 +721,10 @@ export type VerifyWalletMutationVariables = Exact<{
 
 export type VerifyWalletMutation = { __typename?: 'Mutation', verifyWallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState } | null };
 
-export type ReadyWalletMutationVariables = Exact<{
-  address: Scalars['String'];
-}>;
+export type UserWalletQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ReadyWalletMutation = { __typename?: 'Mutation', readyWallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState } | null };
+export type UserWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'Wallet', id: string, address: string, state: WalletState, verificationCode?: string | null } | null };
 
 export type TransferNftToUserMutationVariables = Exact<{
   nftModelId: Scalars['ID'];
@@ -759,28 +759,26 @@ export type NftModelsQueryVariables = Exact<{ [key: string]: never; }>;
 export type NftModelsQuery = { __typename?: 'Query', nftModels?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null };
 
 
-export const ReactQuery_UserWalletDocument = `
-    query userWallet {
-  wallet {
+export const ReactQuery_ReadyWalletDocument = `
+    mutation readyWallet($address: String!) {
+  readyWallet(address: $address) {
     id
     address
     state
-    verificationCode
   }
 }
     `;
-export const useUserWalletQuery = <
-      TData = UserWalletQuery,
-      TError = unknown
+export const useReadyWalletMutation = <
+      TError = unknown,
+      TContext = unknown
     >(
       client: GraphQLClient,
-      variables?: UserWalletQueryVariables,
-      options?: UseQueryOptions<UserWalletQuery, TError, TData>,
+      options?: UseMutationOptions<ReadyWalletMutation, TError, ReadyWalletMutationVariables, TContext>,
       headers?: RequestInit['headers']
     ) =>
-    useQuery<UserWalletQuery, TError, TData>(
-      variables === undefined ? ['userWallet'] : ['userWallet', variables],
-      fetcher<UserWalletQuery, UserWalletQueryVariables>(client, ReactQuery_UserWalletDocument, variables, headers),
+    useMutation<ReadyWalletMutation, TError, ReadyWalletMutationVariables, TContext>(
+      ['readyWallet'],
+      (variables?: ReadyWalletMutationVariables) => fetcher<ReadyWalletMutation, ReadyWalletMutationVariables>(client, ReactQuery_ReadyWalletDocument, variables, headers)(),
       options
     );
 export const ReactQuery_RegisterWalletDocument = `
@@ -828,26 +826,28 @@ export const useVerifyWalletMutation = <
       (variables?: VerifyWalletMutationVariables) => fetcher<VerifyWalletMutation, VerifyWalletMutationVariables>(client, ReactQuery_VerifyWalletDocument, variables, headers)(),
       options
     );
-export const ReactQuery_ReadyWalletDocument = `
-    mutation readyWallet($address: String!) {
-  readyWallet(address: $address) {
+export const ReactQuery_UserWalletDocument = `
+    query userWallet {
+  wallet {
     id
     address
     state
+    verificationCode
   }
 }
     `;
-export const useReadyWalletMutation = <
-      TError = unknown,
-      TContext = unknown
+export const useUserWalletQuery = <
+      TData = UserWalletQuery,
+      TError = unknown
     >(
       client: GraphQLClient,
-      options?: UseMutationOptions<ReadyWalletMutation, TError, ReadyWalletMutationVariables, TContext>,
+      variables?: UserWalletQueryVariables,
+      options?: UseQueryOptions<UserWalletQuery, TError, TData>,
       headers?: RequestInit['headers']
     ) =>
-    useMutation<ReadyWalletMutation, TError, ReadyWalletMutationVariables, TContext>(
-      ['readyWallet'],
-      (variables?: ReadyWalletMutationVariables) => fetcher<ReadyWalletMutation, ReadyWalletMutationVariables>(client, ReactQuery_ReadyWalletDocument, variables, headers)(),
+    useQuery<UserWalletQuery, TError, TData>(
+      variables === undefined ? ['userWallet'] : ['userWallet', variables],
+      fetcher<UserWalletQuery, UserWalletQueryVariables>(client, ReactQuery_UserWalletDocument, variables, headers),
       options
     );
 export const ReactQuery_TransferNftToUserDocument = `
@@ -1027,13 +1027,12 @@ export const useNftModelsQuery = <
       options
     );
 
-export const UserWalletDocument = gql`
-    query userWallet {
-  wallet {
+export const ReadyWalletDocument = gql`
+    mutation readyWallet($address: String!) {
+  readyWallet(address: $address) {
     id
     address
     state
-    verificationCode
   }
 }
     `;
@@ -1056,12 +1055,13 @@ export const VerifyWalletDocument = gql`
   }
 }
     `;
-export const ReadyWalletDocument = gql`
-    mutation readyWallet($address: String!) {
-  readyWallet(address: $address) {
+export const UserWalletDocument = gql`
+    query userWallet {
+  wallet {
     id
     address
     state
+    verificationCode
   }
 }
     `;
@@ -1180,8 +1180,8 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    userWallet(variables?: UserWalletQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserWalletQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<UserWalletQuery>(UserWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'userWallet', 'query');
+    readyWallet(variables: ReadyWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ReadyWalletMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ReadyWalletMutation>(ReadyWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'readyWallet', 'mutation');
     },
     registerWallet(variables: RegisterWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RegisterWalletMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<RegisterWalletMutation>(RegisterWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'registerWallet', 'mutation');
@@ -1189,8 +1189,8 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     verifyWallet(variables: VerifyWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<VerifyWalletMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<VerifyWalletMutation>(VerifyWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'verifyWallet', 'mutation');
     },
-    readyWallet(variables: ReadyWalletMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ReadyWalletMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<ReadyWalletMutation>(ReadyWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'readyWallet', 'mutation');
+    userWallet(variables?: UserWalletQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserWalletQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UserWalletQuery>(UserWalletDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'userWallet', 'query');
     },
     transferNFTToUser(variables: TransferNftToUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<TransferNftToUserMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<TransferNftToUserMutation>(TransferNftToUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'transferNFTToUser', 'mutation');
