@@ -1,13 +1,14 @@
 {
   "name": "basic-app",
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3008",
+    "dev": "concurrently \"next dev\" \"yarn generate --watch\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-graphql-types": "dotenv graphql-codegen --config codegen.yml"
+    "generate": "dotenv -- graphql-codegen"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
@@ -48,6 +49,7 @@
     "@types/node": "18.0.1",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
+    "concurrently": "^7.3.0",
     "dotenv-cli": "^6.0.0",
     "eslint": "8.19.0",
     "eslint-config-next": "12.2.0",
