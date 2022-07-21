@@ -6,6 +6,7 @@ import { useFlowUser } from "../../hooks/useFlowUser";
 import { useFlowAccountConfiguration as useFlowAccountConfiguration } from "../../hooks/useFlowAccountConfiguration";
 import { WalletSetupStepProps } from "./WalletSetup";
 import { gql } from "graphql-request";
+import { useQueryClient } from "react-query";
 
 gql`
   mutation readyWallet($address: String!) {
@@ -23,38 +24,39 @@ export function ConfigureWallet({
 }: WalletSetupStepProps) {
   const flowUser = useFlowUser();
 
-  const client = useGraphQLClient();
-  const { mutate: readyWallet } = useReadyWalletMutation(client);
+  const reactQueryClient = useQueryClient();
+  const graphqlClient = useGraphQLClient();
+  const { mutate: readyWallet } = useReadyWalletMutation(graphqlClient, {
+    onSuccess: () => reactQueryClient.invalidateQueries(["userWallet"]),
+
+    onError: (error) => setError(error as Error),
+    onMutate: () => setIsLoading(true),
+    onSettled: () => setIsLoading(false),
+  });
 
   const { configured, configure } = useFlowAccountConfiguration();
 
+  // On click, prompt the user to run the configuration transaction
+  const onClick = useCallback(async () => {
+    try {
+      await configure();
+    } catch (e) {
+      setError(e);
+    }
+  }, [configure, setError]);
+
+  // Once the wallet is configured, call the ready mutation to tell Niftory it's ready to receive NFTs
   useEffect(() => {
     if (!configured) {
       return;
     }
 
-    setIsLoading(true);
     try {
       readyWallet({ address: flowUser?.addr });
     } catch (e) {
       setError(e);
-    } finally {
-      setIsLoading(false);
     }
-  }, [flowUser?.addr, configured, readyWallet, setError, setIsLoading]);
-
-  const onClick = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      if (configured) {
-        await configure();
-      }
-    } catch (e) {
-      setError(e);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [configure, configured, setError, setIsLoading]);
+  }, [flowUser?.addr, configured, readyWallet, setError]);
 
   return (
     <>

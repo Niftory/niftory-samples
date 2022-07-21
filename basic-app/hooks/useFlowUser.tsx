@@ -12,7 +12,10 @@ export function useFlowUser() {
       .put("accessNode.api", process.env.NEXT_PUBLIC_FLOW_ACCESS_API) // connect to Flow
       .put("discovery.wallet", process.env.NEXT_PUBLIC_WALLET_API); // use Blocto wallet
 
-    fcl.currentUser.subscribe(setFlowUser);
+    fcl.currentUser.subscribe((user, ...args) => {
+      console.log("setting user", user, args);
+      setFlowUser(user);
+    });
   }, []);
 
   return flowUser;

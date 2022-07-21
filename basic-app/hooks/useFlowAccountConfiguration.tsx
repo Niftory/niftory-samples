@@ -37,22 +37,22 @@ export function useFlowAccountConfiguration(): FlowAccountConfiguration {
     } finally {
       setConfiguring(false);
     }
-  }, []);
+  }, [setConfiguring]);
 
   // When configuration script completes, check if the account is initialized
   useEffect(() => {
-    if (configuring) {
-      return;
-    }
+    (async function () {
+      if (configuring) {
+        return;
+      }
 
-    fcl
-      .query({
+      const result = await fcl.query({
         cadence: isConfiguredScript,
         args: (arg, t) => [arg(flowUser?.addr, t.Address)],
-      })
-      .then((result) => {
-        setConfigured(result);
       });
+
+      setConfigured(result);
+    })();
   }, [flowUser?.addr, configuring]);
 
   return {

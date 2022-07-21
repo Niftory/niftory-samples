@@ -39,30 +39,12 @@ export function WalletSetup() {
   const flowUser = useFlowUser();
 
   const client = useGraphQLClient();
-  const {
-    data,
-    isLoading: walletLoading,
-    refetch,
-  } = useUserWalletQuery(client);
-  const wallet = data?.wallet;
 
-  const didMount = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error>(null);
 
-  // Respond to updates from the inner components
-  useEffect(() => {
-    if (!didMount.current) {
-      didMount.current = true;
-      return;
-    }
-
-    if (isLoading) {
-      return;
-    }
-
-    refetch();
-  }, [isLoading, refetch]);
+  const { data, isFetching: walletLoading } = useUserWalletQuery(client, {});
+  const wallet = data?.wallet;
 
   return (
     <Skeleton isLoaded={!walletLoading && !isLoading}>

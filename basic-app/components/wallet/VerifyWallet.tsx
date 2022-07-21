@@ -8,6 +8,7 @@ import { useGraphQLClient } from "../../hooks/useGraphQLClient";
 import * as fcl from "@onflow/fcl";
 import { WalletSetupStepProps } from "./WalletSetup";
 import { gql } from "graphql-request";
+import { useQueryClient } from "react-query";
 
 gql`
   mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
@@ -23,12 +24,22 @@ gql`
 `;
 
 export function VerifyWallet({ setIsLoading, setError }: WalletSetupStepProps) {
-  const client = useGraphQLClient();
-  const { data } = useUserWalletQuery(client);
-  const { mutate: verifyWallet } = useVerifyWalletMutation(client);
+  const graphqlClient = useGraphQLClient();
+  const reactQueryClient = useQueryClient();
+
+  const { data } = useUserWalletQuery(graphqlClient);
+  const { mutate: verifyWallet } = useVerifyWalletMutation(graphqlClient, {
+    // Ensure the user wallet query is invalidated and refetched on success
+    onSuccess: () => reactQueryClient.invalidateQueries(["userWallet"]),
+
+    onError: (error) => setError(error as Error),
+    onMutate: () => setIsLoading(true),
+    onSettled: () => setIsLoading(false),
+  });
 
   const wallet = data?.wallet;
 
+  // On click, prompt the user to sign the verification message
   const onClick = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -44,7 +55,6 @@ export function VerifyWallet({ setIsLoading, setError }: WalletSetupStepProps) {
       });
     } catch (e) {
       setError(e);
-    } finally {
       setIsLoading(false);
     }
   }, [

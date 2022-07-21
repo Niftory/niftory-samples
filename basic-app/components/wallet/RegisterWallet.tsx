@@ -1,11 +1,12 @@
 import { Box, Button } from "@chakra-ui/react";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useRegisterWalletMutation } from "../../generated/graphql";
 import { useFlowUser } from "../../hooks/useFlowUser";
 import { useGraphQLClient } from "../../hooks/useGraphQLClient";
 import * as fcl from "@onflow/fcl";
 import { WalletSetupStepProps } from "./WalletSetup";
 import { gql } from "graphql-request";
+import { useQueryClient } from "react-query";
 
 gql`
   mutation registerWallet($address: String!) {
@@ -24,23 +25,35 @@ export function RegisterWallet({
 }: WalletSetupStepProps) {
   const flowUser = useFlowUser();
 
-  const client = useGraphQLClient();
-  const { mutate: registerWallet } = useRegisterWalletMutation(client);
+  const reactQueryClient = useQueryClient();
+  const graphqlClient = useGraphQLClient();
 
-  const onClick = useCallback(async () => {
-    setIsLoading(true);
+  const { mutate: registerWallet } = useRegisterWalletMutation(graphqlClient, {
+    // Ensure the user wallet query is invalidated and refetched on success
+    onSuccess: () => reactQueryClient.invalidateQueries(["userWallet"]),
+
+    onMutate: () => setIsLoading(true),
+    onSettled: () => setIsLoading(false),
+    onError: (error) => setError(error as Error),
+  });
+
+  // On click, log the user into their flow account
+  const onClick = useCallback(() => {
     try {
-      if (!flowUser?.loggedIn) {
-        fcl.logIn();
-      }
-
-      registerWallet({ address: flowUser.addr });
+      fcl.logIn();
     } catch (e) {
       setError(e);
-    } finally {
-      setIsLoading(false);
     }
-  }, [flowUser, registerWallet, setError, setIsLoading]);
+  }, [setError]);
+
+  // When the user logs in, register their wallet
+  useEffect(() => {
+    if (!flowUser?.addr) {
+      return;
+    }
+
+    registerWallet({ address: flowUser.addr });
+  }, [flowUser?.addr, flowUser?.loggedIn, registerWallet, setIsLoading]);
 
   return (
     <>
