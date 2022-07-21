@@ -21,7 +21,7 @@ gql`
 `;
 
 const handler: NextApiHandler = async (req, res) => {
-  const { nftModelId, userId } = req.query;
+  const { nftModelId } = req.query;
 
   if (req.method !== "POST") {
     res.status(405).end();
@@ -54,7 +54,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   const transferResponse = await sdk.transferNFTToUser({
     nftModelId: nftModelId as string,
-    userId: userId as string,
+    userId: userToken.sub,
   });
 
   res.status(200).json(transferResponse);

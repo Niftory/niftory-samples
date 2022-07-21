@@ -36,8 +36,6 @@ gql`
 `;
 
 export function WalletSetup() {
-  const flowUser = useFlowUser();
-
   const client = useGraphQLClient();
   const router = useRouter();
 
@@ -50,7 +48,7 @@ export function WalletSetup() {
 
   if (!error && !walletLoading) {
     // User doesn't have a wallet yet
-    if (!flowUser?.loggedIn || !wallet?.address) {
+    if (!wallet?.address) {
       return <RegisterWallet />;
     }
 

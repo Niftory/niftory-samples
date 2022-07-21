@@ -52,21 +52,18 @@ const Collection: ComponentWithAuth = () => {
 
   const { data: userNftsData, isFetching: isFetchingUserNfts } =
     useUserNftsQuery(client, {});
-  const alreadyClaimed = userNftsData?.nfts && userNftsData.nfts.length > 1;
-
-  const { data: session } = useSession();
-  const userId = session?.userId;
+  const alreadyClaimed = userNftsData?.nfts && userNftsData.nfts.length >= 1;
 
   const [isTransferring, setIsTransferring] = useState(false);
 
   const initiateTransfer = useCallback(() => {
     setIsTransferring(true);
     axios
-      .post(`/api/nft/${nftModelId}/transfer?userId=${userId}`)
-      .then(({ data }) => router.push(`/app/collection/${data.nftId}`))
+      .post(`/api/nft/${nftModelId}/transfer`)
+      .then(({ data }) => router.push(`/app/collection/${data.transfer.id}`))
       .catch((error) => console.error(error))
       .finally(() => setIsTransferring(false));
-  }, [nftModelId, router, userId]);
+  }, [nftModelId, router]);
 
   return (
     <AppLayout>
@@ -74,8 +71,6 @@ const Collection: ComponentWithAuth = () => {
         <VStack>
           <AppHeader />
           {nftModel ? (
-            <Spinner />
-          ) : (
             <>
               <Heading>{nftModel.title}</Heading>
               <Text>{nftModel.description}</Text>
@@ -86,9 +81,11 @@ const Collection: ComponentWithAuth = () => {
                 colorScheme="blue"
                 my="auto"
               >
-                Claim
+                {alreadyClaimed ? "Already Claimed" : "Claim"}
               </Button>
             </>
+          ) : (
+            <Spinner />
           )}
         </VStack>
       </Box>

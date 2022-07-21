@@ -16,7 +16,7 @@ export const WalletSetupBox = ({
   error,
   onClick,
 }: WalletSetupBoxProps) => {
-  useMemo(() => console.error(error), [error]);
+  useMemo(() => error && console.error(error), [error]);
 
   if (isLoading) {
     return <Spinner />;
