@@ -1,4 +1,12 @@
-import { Box, Heading, Text, VStack, Button, Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  VStack,
+  Button,
+  Spinner,
+  Image,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
@@ -52,7 +60,9 @@ const Collection: ComponentWithAuth = () => {
 
   const { data: userNftsData, isFetching: isFetchingUserNfts } =
     useUserNftsQuery(client, {});
-  const alreadyClaimed = userNftsData?.nfts && userNftsData.nfts.length >= 1;
+  const alreadyClaimed =
+    userNftsData?.nfts &&
+    userNftsData.nfts.length >= 1 
 
   const [isTransferring, setIsTransferring] = useState(false);
 
@@ -67,16 +77,22 @@ const Collection: ComponentWithAuth = () => {
 
   return (
     <AppLayout>
-      <Box mx="auto" color="white" mt="5vh">
+      <Box mx="auto" color="white">
         <VStack>
           <AppHeader />
           {nftModel ? (
             <>
+              <Image
+                alt={nftModel.title}
+                boxSize="30vh"
+                src={nftModel.content?.poster?.url}
+              ></Image>
               <Heading>{nftModel.title}</Heading>
               <Text>{nftModel.description}</Text>
+              <Text>{"Blockchain: " + nftModel.blockchainId}</Text>
               <Button
                 isLoading={isTransferring || isFetchingUserNfts}
-                isDisabled={alreadyClaimed}
+                isDisabled={alreadyClaimed || !nftModel.blockchainId}
                 onClick={initiateTransfer}
                 colorScheme="blue"
                 my="auto"
@@ -85,7 +101,7 @@ const Collection: ComponentWithAuth = () => {
               </Button>
             </>
           ) : (
-            <Spinner />
+            <Spinner size="lg"></Spinner>
           )}
         </VStack>
       </Box>

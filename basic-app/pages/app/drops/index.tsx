@@ -1,4 +1,12 @@
-import { Box, Link, SimpleGrid, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Link,
+  SimpleGrid,
+  VStack,
+  Image,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import AppLayout from "../../../components/AppLayout";
@@ -45,21 +53,31 @@ const Drops: ComponentWithAuth = () => {
 
   return (
     <AppLayout>
-      <Box mx="auto" color="white" mt="5vh">
+      <Box mx="auto" color="white">
         <VStack>
           <AppHeader />
           <SimpleGrid>
-            {nftModels?.map(
-              (nftModel) =>
-                nftModel && (
-                  <Box key={nftModel.id}>
-                    <Link
-                      onClick={() => router.push(`/app/drops/${nftModel.id}`)}
-                    >
-                      {nftModel.title}
-                    </Link>{" "}
-                  </Box>
-                )
+            {nftModels ? (
+              nftModels.map((nftModel) => {
+                const nftModelImageUrl = nftModel.content?.poster?.url;
+                return (
+                  <Link
+                    key={nftModel.id}
+                    onClick={() => router.push(`/app/drops/${nftModel.id}`)}
+                  >
+                    <VStack spacing="2vh">
+                      <Image
+                        alt={nftModel.title}
+                        boxSize="20vh"
+                        src={nftModelImageUrl}
+                      ></Image>
+                      <Text>{nftModel.title}</Text>
+                    </VStack>
+                  </Link>
+                );
+              })
+            ) : (
+              <Spinner size="lg"></Spinner>
             )}
           </SimpleGrid>
         </VStack>
