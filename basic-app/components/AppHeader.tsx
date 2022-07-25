@@ -9,7 +9,7 @@ export function AppHeader() {
   const router = useRouter();
 
   return (
-    <VStack textColor="white">
+    <VStack textColor="white" mb = '3vh'>
       <Heading>Sample App: Logged In</Heading>
       <Text> Name: {session?.user?.name} </Text>
       <Text> Email: {session?.user?.email} </Text>

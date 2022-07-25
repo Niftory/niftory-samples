@@ -7,7 +7,7 @@ import { ComponentWithAuth } from "../../components/ComponentWithAuth";
 
 const Drops: ComponentWithAuth = () => (
   <AppLayout>
-    <Box mx="auto" color="white" mt="5vh">
+    <Box mx="auto" color="white" >
       <VStack>
         <AppHeader />
         <WalletSetup />

@@ -257,14 +257,16 @@ export type NftFile = File & {
   url: Scalars['URL'];
 };
 
-/** Properties to filter NFT's when querying them. */
+/** Properties to filter NFTs by when querying them. */
 export type NftFilterInput = {
-  /** Blockchain IDs of the [NFT]({{Types.NFT}})'s to find. */
+  /** Blockchain IDs of the [NFT]({{Types.NFT}})s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Database IDs of the [NFT]({{Types.NFT}})'s to find. */
+  /** Database IDs of the [NFT]({{Types.NFT}})s to find. */
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** The IDs of the [NFTModel]({{Types.NFTModel}}) that the NFT should belong to. */
   nftModelIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Transfer states of the [NFT]({{Types.NFT}})s to find. Defaults to all. */
+  transferStates?: InputMaybe<Array<InputMaybe<TransferState>>>;
 };
 
 /** Current Prisma Mapping: CollectibleListing. A listing of NFTs for sale. */
@@ -337,13 +339,13 @@ export type NftModel = BlockchainEntity & BlockchainResource & Identifiable & Re
   title: Scalars['String'];
 };
 
-/** Properties to filter NFTModel's when querying them. */
+/** Properties to filter NFTModels when querying them. */
 export type NftModelFilterInput = {
-  /** Blockchain IDs of the [NFTModel]({{Types.NFTModel}})'s to find. */
+  /** Blockchain IDs of the [NFTModel]({{Types.NFTModel}})s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Database IDs of the [NFTModel]({{Types.NFTModel}})'s to find. */
+  /** Database IDs of the [NFTModel]({{Types.NFTModel}})s to find. */
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** The IDs of the [NFTSet]({{Types.NFTSet}})'s that the [NFTModel]({{Types.NFTModel}}) should belong to. */
+  /** The IDs of the [NFTSet]({{Types.NFTSet}})s that the [NFTModel]({{Types.NFTModel}}) should belong to. */
   setIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** Filter by [NFTModel]({{Types.NFTModel}}) status. */
   status?: InputMaybe<Status>;
@@ -373,9 +375,9 @@ export type NftSet = BlockchainEntity & BlockchainResource & Identifiable & Reso
 };
 
 export type NftSetFilterInput = {
-  /** Blockchain IDs of the [NFTSet]({{Types.NFTSet}})'s to find. */
+  /** Blockchain IDs of the [NFTSet]({{Types.NFTSet}})s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Database IDs of the [NFTSet]({{Types.NFTSet}})'s to find. */
+  /** Database IDs of the [NFTSet]({{Types.NFTSet}})s to find. */
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** The title of the [NFTSet]({{Types.NFTSet}}) to find. */
   title?: InputMaybe<Scalars['String']>;
@@ -499,7 +501,7 @@ export type Query = {
   nftModel?: Maybe<NftModel>;
   /** Gets [NFTModel]({{Types.NFTModel}})'s for the current [App]({{Types.App}}) context. */
   nftModels?: Maybe<Array<Maybe<NftModel>>>;
-  /** Gets all [NFT]({{Types.NFT}})'s belonging to the current [AppUser]({{Types.AppUser}}) context. */
+  /** Gets all [NFT]({{Types.NFT}})s associated with the current [AppUser]({{Types.AppUser}}) context, including those that are transferring or failed to transfer. */
   nfts?: Maybe<Array<Maybe<Nft>>>;
   /** Gets an [NFTSet]({{Types.NFTSet}}) by database ID. */
   set?: Maybe<NftSet>;
