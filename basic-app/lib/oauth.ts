@@ -25,6 +25,10 @@ async function getOAuthClient() {
   return client;
 }
 
+/**
+ * Gets a client credentials token.
+ * @returns The client credentials token that represents the client itself.
+ */
 export async function getClientCredentialsToken() {
   const client = await getOAuthClient();
 
@@ -33,4 +37,15 @@ export async function getClientCredentialsToken() {
   }
 
   return token.access_token;
+}
+
+/**
+ * Refreshes an auth token.
+ * @param refreshToken The refresh token to use to refresh the auth token
+ * @returns A refreshed token set
+ */
+export async function refreshAuthToken(refreshToken: string) {
+  const client = await getOAuthClient();
+
+  return await client.refresh(refreshToken);
 }

@@ -1,8 +1,14 @@
 import { GraphQLClient } from "graphql-request";
 import { getClientCredentialsToken } from "../oauth";
+import type { GraphQLClientProvider } from "../../components/GraphQLClientProvider";
 
 let client: GraphQLClient;
 
+/**
+ * Gets a GraphQL client for use in the backend.
+ * @see GraphQLClientProvider for a client for use in the frontend.
+ * @returns A GraphQL client.
+ */
 export async function getBackendGraphQLClient() {
   client =
     client ||

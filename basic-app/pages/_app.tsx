@@ -14,20 +14,19 @@ type AppProps<P = {}> = NextAppProps<P> & {
 const App = ({
   Component,
   pageProps: { session, auth, ...pageProps },
-}: AppProps): JSX.Element => {
-  return (
-    <SessionProvider session={session} refetchOnWindowFocus={false}>
-      <ReactQueryClientProvider>
-        <GraphQLClientProvider>
-          <ChakraProvider>
-            <AuthProvider requireAuth={Component.requireAuth}>
-              <Component {...pageProps} />
-            </AuthProvider>
-          </ChakraProvider>
-        </GraphQLClientProvider>
-      </ReactQueryClientProvider>
-    </SessionProvider>
-  );
-};
+}: AppProps): JSX.Element => (
+  // Refetch session every hour since niftory tokens expire after 1 hour
+  <SessionProvider session={session} refetchInterval={60 * 60}>
+    <ReactQueryClientProvider>
+      <GraphQLClientProvider>
+        <ChakraProvider>
+          <AuthProvider requireAuth={Component.requireAuth}>
+            <Component {...pageProps} />
+          </AuthProvider>
+        </ChakraProvider>
+      </GraphQLClientProvider>
+    </ReactQueryClientProvider>
+  </SessionProvider>
+);
 
 export default App;
