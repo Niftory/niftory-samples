@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, {useEffect} from "react";
 
-import { LoginSkeleton } from "./LoginSkeleton";
 import { useSession } from "next-auth/react";
+import {LoginSkeleton} from "./LoginSkeleton";
+import {signOutUser} from "./SignOutUser";
 
 type AuthComponentProps = {
   children: React.ReactNode;
@@ -14,15 +15,24 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
   const { data: session, status } = useSession();
   const loading = status === "loading";
 
-  if (requireAuth) {
-    if (loading) {
-      return <LoginSkeleton />;
+  useEffect(() => {
+    if (!requireAuth) {
+      return;
     }
 
-    if (!session) {
-      // user isn't signed in, redirect to login
-      router.push("/");
+    if(!session) {
+      router.push("/")
+      return
     }
+
+    if(session.error) {
+      signOutUser();
+      return
+    }
+  }, [requireAuth, session, router]);
+
+  if(requireAuth && loading) {
+    return <LoginSkeleton/>
   }
 
   return <>{children}</>;

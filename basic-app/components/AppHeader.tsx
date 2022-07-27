@@ -10,17 +10,11 @@ import { useRouter } from "next/router";
 
 import { signOutUser } from "./SignOutUser";
 import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
 
 export function AppHeader() {
-  const [value, setValue] = React.useState("");
-  const { onCopy } = useClipboard(value);
   const { data: session } = useSession();
+  const { onCopy } = useClipboard(session?.authToken as string);
   const router = useRouter();
-
-  React.useEffect(() => {
-    setValue(session?.authToken?.toString());
-  }, [session.authToken]);
 
   return (
     <VStack textColor="white" mb="3vh">
