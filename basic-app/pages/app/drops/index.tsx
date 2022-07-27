@@ -56,7 +56,7 @@ const Drops: ComponentWithAuth = () => {
       <Box mx="auto" color="white">
         <VStack>
           <AppHeader />
-          <SimpleGrid>
+          <SimpleGrid columns={2} spacing={10}>
             {nftModels ? (
               nftModels.map((nftModel) => {
                 const nftModelImageUrl = nftModel.content?.poster?.url;
