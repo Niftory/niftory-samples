@@ -12,8 +12,7 @@ import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 import axios from "axios";
-import { useSession } from "next-auth/react";
-import { useNftModelQuery, useUserNftsQuery } from "../../../generated/graphql";
+import { useNftModelQuery } from "../../../generated/graphql";
 import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
 import { useCallback, useState } from "react";
 
@@ -51,18 +50,13 @@ gql`
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
   const nftModelId = router.query["nftModelId"] as string;
-
   const client = useGraphQLClient();
+
   const { data: nftModelData } = useNftModelQuery(client, {
     id: nftModelId,
   });
-  const nftModel = nftModelData?.nftModel;
 
-  const { data: userNftsData, isFetching: isFetchingUserNfts } =
-    useUserNftsQuery(client, {});
-  const alreadyClaimed =
-    userNftsData?.nfts &&
-    userNftsData.nfts.length >= 1 
+  const nftModel = nftModelData?.nftModel;
 
   const [isTransferring, setIsTransferring] = useState(false);
 
@@ -91,13 +85,12 @@ const Collection: ComponentWithAuth = () => {
               <Text>{nftModel.description}</Text>
               <Text>{"Blockchain: " + nftModel.blockchainId}</Text>
               <Button
-                isLoading={isTransferring || isFetchingUserNfts}
-                isDisabled={alreadyClaimed || !nftModel.blockchainId}
+                isLoading={isTransferring}
                 onClick={initiateTransfer}
                 colorScheme="blue"
                 my="auto"
               >
-                {alreadyClaimed ? "Already Claimed" : "Claim"}
+                Claim
               </Button>
             </>
           ) : (
