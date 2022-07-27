@@ -4,12 +4,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev --port 3008 \" \"yarn generate --watch\"",
+    "dev": "concurrently \"next dev\" \"yarn generate --watch\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "dotenv -- graphql-codegen",
-    "postinstall": "yarn generate"
+    "generate": "dotenv -- graphql-codegen"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
