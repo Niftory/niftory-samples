@@ -1,4 +1,12 @@
-import { Box, Link, SimpleGrid, VStack,Image,Spinner ,Text} from "@chakra-ui/react";
+import {
+  Box,
+  Link,
+  SimpleGrid,
+  VStack,
+  Image,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import AppLayout from "../../../components/AppLayout";
@@ -15,6 +23,11 @@ gql`
       model {
         id
         title
+        content {
+          poster {
+            url
+          }
+        }
       }
     }
   }
