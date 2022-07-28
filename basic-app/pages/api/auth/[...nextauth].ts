@@ -69,11 +69,12 @@ export default NextAuth({
         return { ...token, error: "RefreshAccessTokenError" };
       }
     },
-    session: async ({ session, token }) => {
+    session: async ({ session, token, user }) => {
       session.clientId = token.aud;
       session.userId = token.sub;
       session.authToken = token.authToken;
       session.error = token.error;
+      session.user = user;
 
       return session;
     },
