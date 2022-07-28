@@ -13,7 +13,7 @@ import { AppHeader } from "../../../components/AppHeader";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 import axios from "axios";
 import { useNftModelQuery } from "../../../generated/graphql";
-import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
+import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery";
 import { useCallback, useState } from "react";
 
 import { gql } from "graphql-request";
@@ -50,9 +50,8 @@ gql`
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
   const nftModelId = router.query["nftModelId"] as string;
-  const client = useGraphQLClient();
 
-  const { data: nftModelData } = useNftModelQuery(client, {
+  const { data: nftModelData } = useGraphQLQuery(useNftModelQuery, {
     id: nftModelId,
   });
 

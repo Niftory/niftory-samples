@@ -13,8 +13,8 @@ import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 import { gql } from "graphql-request";
-import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
 import { useNftModelsQuery } from "../../../generated/graphql";
+import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery";
 
 gql`
   query nftModels {
@@ -47,8 +47,7 @@ gql`
 
 const Drops: ComponentWithAuth = () => {
   const router = useRouter();
-  const client = useGraphQLClient();
-  const { data } = useNftModelsQuery(client);
+  const { data } = useGraphQLQuery(useNftModelsQuery);
   const nftModels = data?.nftModels;
 
   return (

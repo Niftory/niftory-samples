@@ -3,12 +3,11 @@ import {
   useUserWalletQuery,
   useVerifyWalletMutation,
 } from "../../generated/graphql";
-import { useGraphQLClient } from "../../hooks/useGraphQLClient";
 import * as fcl from "@onflow/fcl";
-import { WalletSetupStepProps } from "./WalletSetup";
 import { gql } from "graphql-request";
-import { useQueryClient } from "react-query";
 import { WalletSetupBox } from "./WalletSetupBox";
+import { useWalletMutation } from "../../hooks/useWalletMutation";
+import { useGraphQLQuery } from "../../hooks/useGraphQLQuery";
 
 gql`
   mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
@@ -24,18 +23,12 @@ gql`
 `;
 
 export function VerifyWallet() {
-  const graphqlClient = useGraphQLClient();
-  const reactQueryClient = useQueryClient();
-
-  const { data } = useUserWalletQuery(graphqlClient);
+  const { data } = useGraphQLQuery(useUserWalletQuery);
   const {
     mutate: verifyWallet,
     isLoading,
     error,
-  } = useVerifyWalletMutation(graphqlClient, {
-    // Ensure the user wallet query is invalidated and refetched on success
-    onSuccess: () => reactQueryClient.invalidateQueries(["userWallet"]),
-  });
+  } = useWalletMutation(useVerifyWalletMutation);
 
   const wallet = data?.wallet;
 

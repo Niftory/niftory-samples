@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
 import { useSession } from "next-auth/react";
-import {LoginSkeleton} from "./LoginSkeleton";
-import {signOutUser} from "./SignOutUser";
+import { LoginSkeleton } from "./LoginSkeleton";
+import { signOutUser } from "./SignOutUser";
 
 type AuthComponentProps = {
   children: React.ReactNode;
@@ -16,23 +16,23 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
   const loading = status === "loading";
 
   useEffect(() => {
-    if (!requireAuth) {
+    if (!requireAuth || loading) {
       return;
     }
 
-    if(!session) {
-      router.push("/")
-      return
+    if (!session) {
+      router.push("/");
+      return;
     }
 
-    if(session.error) {
+    if (session?.error) {
       signOutUser();
-      return
+      return;
     }
-  }, [requireAuth, session, router]);
+  }, [requireAuth, session, router, loading]);
 
-  if(requireAuth && loading) {
-    return <LoginSkeleton/>
+  if (requireAuth && loading) {
+    return <LoginSkeleton />;
   }
 
   return <>{children}</>;

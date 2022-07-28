@@ -1,6 +1,6 @@
 import { gql } from "graphql-request";
 import { useContractQuery } from "../generated/graphql";
-import { useGraphQLClient } from "./useGraphQLClient";
+import { useGraphQLQuery } from "./useGraphQLQuery";
 
 gql`
   query contract {
@@ -19,9 +19,9 @@ const IS_ACCOUNT_CONFIGURED__SCRIPT = `
     pub fun main(account: Address): Bool {
 
         let acct = getAccount(account)
-    
+
         return acct.getCapability<&{{contractName}.{contractName}CollectionPublic}>({contractName}.CollectionPublicPath).check()
-    
+
     }`;
 
 const CONFIGURE_ACCOUNT__TRANSACTION = `
@@ -65,9 +65,7 @@ function prepareCadence(script: string, contractName: string, address: string) {
 }
 
 export function useContractCadence() {
-  const client = useGraphQLClient();
-
-  const { data, isFetched } = useContractQuery(client, {});
+  const { data, isFetched } = useGraphQLQuery(useContractQuery);
 
   let isAccountConfigured_script: string;
   let configureAccount_transaction: string;

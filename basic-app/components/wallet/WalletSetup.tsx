@@ -3,8 +3,6 @@ import {
   Wallet,
   WalletState,
 } from "../../generated/graphql";
-import { useFlowUser } from "../../hooks/useFlowUser";
-import { useGraphQLClient } from "../../hooks/useGraphQLClient";
 import { ConfigureWallet } from "./ConfigureWallet";
 import { RegisterWallet } from "./RegisterWallet";
 import { VerifyWallet } from "./VerifyWallet";
@@ -12,6 +10,7 @@ import * as fcl from "@onflow/fcl";
 import { gql } from "graphql-request";
 import { useRouter } from "next/router";
 import { WalletSetupBox } from "./WalletSetupBox";
+import { useGraphQLQuery } from "../../hooks/useGraphQLQuery";
 
 export type WalletSetupStepProps = {
   setIsLoading: (isLoading: boolean) => void;
@@ -36,17 +35,16 @@ gql`
 `;
 
 export function WalletSetup() {
-  const client = useGraphQLClient();
   const router = useRouter();
 
   const {
     data,
-    isFetching: walletLoading,
+    isFetched: walletFetched,
     error,
-  } = useUserWalletQuery(client, {});
+  } = useGraphQLQuery(useUserWalletQuery);
   const wallet = data?.wallet;
 
-  if (!error && !walletLoading) {
+  if (!error && walletFetched) {
     // User doesn't have a wallet yet
     if (!wallet?.address) {
       return <RegisterWallet />;
@@ -68,7 +66,7 @@ export function WalletSetup() {
       text={`You}re all set up! Your wallet address is ${wallet?.address}`}
       buttonText="Go to Drops"
       error={error as Error}
-      isLoading={walletLoading}
+      isLoading={!walletFetched}
       onClick={() => router.push("/app/drops")}
     />
   );
