@@ -42,7 +42,7 @@ export default NextAuth({
       // user and account are only passed in at inital sign in.
       if (account && user) {
         return {
-          sub: user?.id,
+          ...token,
           authToken: account?.id_token,
           authTokenExpiresAt: account?.expires_at * 1000,
           refreshToken: account?.refresh_token,
@@ -59,7 +59,7 @@ export default NextAuth({
       try {
         const refreshed = await refreshAuthToken(token.refreshToken as string);
         return {
-          sub: refreshed?.sub as string,
+          ...token,
           authToken: refreshed?.id_token,
           authTokenExpiresAt: refreshed?.expires_at * 1000,
           refreshToken: refreshed?.refresh_token || token?.refresh_token,
@@ -70,8 +70,8 @@ export default NextAuth({
       }
     },
     session: async ({ session, token }) => {
-      session.clientId = token.aud;
       session.userId = token.sub;
+      session.clientId = token.aud;
       session.authToken = token.authToken;
       session.error = token.error;
 
