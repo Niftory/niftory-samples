@@ -73,6 +73,7 @@ export default NextAuth({
       session.clientId = token.aud;
       session.userId = token.sub;
       session.authToken = token.authToken;
+      session.error = token.error;
 
       return session;
     },
