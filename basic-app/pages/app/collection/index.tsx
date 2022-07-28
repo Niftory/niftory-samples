@@ -6,7 +6,7 @@ import { AppHeader } from "../../../components/AppHeader";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 import { gql } from "graphql-request";
 import { useUserNftsQuery } from "../../../generated/graphql";
-import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
+import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery";
 
 gql`
   query userNfts {
@@ -23,8 +23,7 @@ gql`
 const Collection: ComponentWithAuth = () => {
   const router = useRouter();
 
-  const client = useGraphQLClient();
-  const { data } = useUserNftsQuery(client);
+  const { data } = useGraphQLQuery(useUserNftsQuery);
   const nfts = data?.nfts;
 
   return (

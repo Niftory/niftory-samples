@@ -5,7 +5,7 @@ import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 import { useNftQuery } from "../../../generated/graphql";
-import { useGraphQLClient } from "../../../hooks/useGraphQLClient";
+import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery";
 
 import { gql } from "graphql-request";
 
@@ -47,8 +47,7 @@ const Collection: ComponentWithAuth = () => {
   const router = useRouter();
   const nftId = router.query["nftId"]?.toString();
 
-  const client = useGraphQLClient();
-  const { data } = useNftQuery(client, { id: nftId });
+  const { data } = useGraphQLQuery(useNftQuery, { id: nftId });
 
   const nft = data?.nft;
   const model = nft?.model;

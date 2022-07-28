@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useReadyWalletMutation } from "../../generated/graphql";
-import { useGraphQLClient } from "../../hooks/useGraphQLClient";
 import { useFlowUser } from "../../hooks/useFlowUser";
 import { useFlowAccountConfiguration as useFlowAccountConfiguration } from "../../hooks/useFlowAccountConfiguration";
 import { gql } from "graphql-request";
-import { useQueryClient } from "react-query";
 import { WalletSetupBox } from "./WalletSetupBox";
+import { useWalletMutation } from "../../hooks/useWalletMutation";
 
 gql`
   mutation readyWallet($address: String!) {
@@ -20,15 +19,11 @@ gql`
 export function ConfigureWallet() {
   const flowUser = useFlowUser();
 
-  const reactQueryClient = useQueryClient();
-  const graphqlClient = useGraphQLClient();
   const {
     mutate: readyWallet,
     isLoading: isReadyWalletLoading,
     error,
-  } = useReadyWalletMutation(graphqlClient, {
-    onSuccess: () => reactQueryClient.invalidateQueries(["userWallet"]),
-  });
+  } = useWalletMutation(useReadyWalletMutation);
 
   const {
     configured,

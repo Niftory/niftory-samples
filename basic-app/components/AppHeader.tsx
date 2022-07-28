@@ -15,6 +15,7 @@ export function AppHeader() {
   const { data: session } = useSession();
   const { onCopy } = useClipboard(session?.authToken as string);
   const router = useRouter();
+  console.log(session);
 
   return (
     <VStack textColor="white" mb="3vh">
