@@ -4,20 +4,22 @@ import { signIn, useSession } from "next-auth/react";
 
 import AppLayout from "../components/AppLayout";
 import { signOutUser } from "../components/SignOutUser";
+import { useCallback } from "react";
 
 const Login = () => {
   const { data: session, status } = useSession();
+  const isLoading = status === "loading";
   const router = useRouter();
 
-  const signInOrRedirect = async () => {
+  const signInOrRedirect = useCallback(async () => {
     // If the user is already signed in, redirect to the signed in home page
     if (session) {
-      router.push("app/collection");
+      await router.push("app/collection");
     } else {
       // Otherwise, sign in the user
       await signIn("niftory");
     }
-  };
+  }, [session, router]);
 
   return (
     <AppLayout>
@@ -29,8 +31,8 @@ const Login = () => {
           </Text>
           <Button
             colorScheme="blue"
-            onClick={() => signInOrRedirect()}
-            isLoading={status === "loading"}
+            onClick={signInOrRedirect}
+            isLoading={isLoading}
           >
             Start Exploring!
           </Button>
