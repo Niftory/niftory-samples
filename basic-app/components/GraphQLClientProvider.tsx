@@ -20,11 +20,16 @@ export const GraphQLClientProvider = ({ children }) => {
       return undefined;
     }
 
+    const headers = {
+      "X-Niftory-API-Key": process.env.NEXT_PUBLIC_API_KEY,
+    };
+
+    if (session?.authToken) {
+      headers["Authorization"] = `Bearer ${session.authToken}`;
+    }
+
     return new GraphQLClient(process.env.NEXT_PUBLIC_API_PATH, {
-      headers: {
-        "X-Niftory-API-Key": process.env.NEXT_PUBLIC_API_KEY,
-        Authorization: session?.authToken ? `Bearer ${session?.authToken}` : "",
-      },
+      headers,
     });
   }, [isLoading, session?.authToken]);
 
