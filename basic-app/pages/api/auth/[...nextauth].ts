@@ -67,7 +67,7 @@ export default NextAuth({
         };
       } catch (e) {
         console.error(e);
-        return { ...token, error: "RefreshAccessTokenError" };
+        return { ...token, error: e };
       }
     },
     session: async ({ session, token }) => {

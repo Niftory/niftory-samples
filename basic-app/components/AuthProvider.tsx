@@ -26,6 +26,7 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
     }
 
     if (session?.error) {
+      console.error(session.error);
       signOutUser();
       return;
     }
