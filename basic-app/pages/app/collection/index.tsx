@@ -33,7 +33,6 @@ const CollectionPage: ComponentWithAuth = () => {
     <AppLayout>
       <Box mx="auto" color="white" mt="5vh">
         <VStack>
-          <AppHeader />
           <SimpleGrid>
             {nfts?.map(
               (nft: Nft) =>
