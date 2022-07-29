@@ -85,8 +85,6 @@ export function useContractCadence() {
     );
   }
 
-  console.log(isAccountConfigured_script);
-
   return {
     isAccountConfigured_script,
     configureAccount_transaction,
