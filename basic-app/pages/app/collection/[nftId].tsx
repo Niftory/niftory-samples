@@ -62,7 +62,11 @@ const NftPage: ComponentWithAuth = () => {
           ></Image>
           <Heading>{model.title}</Heading>
           <Text>{model.description}</Text>
-          <Text>{"Blockchain ID: " + nft.blockchainId + " Serial: " + nft.serialNumber} </Text>
+          <Text>
+            {nft.blockchainId == null
+              ? "Blockchain State: Not yet minted."
+              : `Blockchain State: ID=${nft.blockchainId}, Serial=${nft.serialNumber}`}
+          </Text>
         </>
       ) : (
         <Spinner size="lg"></Spinner>
