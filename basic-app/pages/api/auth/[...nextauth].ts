@@ -36,6 +36,7 @@ const NIFTORY_AUTH_PROVIDER: Provider = {
 
 export default NextAuth({
   providers: [NIFTORY_AUTH_PROVIDER],
+  debug: true,
   callbacks: {
     // See also: https://next-auth.js.org/tutorials/refresh-token-rotation
     jwt: async ({ token, user, account }) => {
