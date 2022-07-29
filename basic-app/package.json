@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"yarn generate --watch\"",
+    "dev": "concurrently \"next dev --port 3008\" \"yarn generate --watch\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
