@@ -8,14 +8,12 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
-import { signOutUser } from "./SignOutUser";
-import { useSession } from "next-auth/react";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 export function AppHeader() {
-  const { data: session } = useSession();
+  const { session, signOut } = useAuthContext();
   const { onCopy } = useClipboard(session?.authToken as string);
   const router = useRouter();
-  console.log(session);
 
   return (
     <VStack textColor="white" mb="3vh">
@@ -47,7 +45,7 @@ export function AppHeader() {
         <Button colorScheme="blue" onClick={() => router.push("/app/wallet")}>
           Wallet
         </Button>
-        <Button colorScheme="blue" onClick={() => signOutUser()}>
+        <Button colorScheme="blue" onClick={signOut}>
           Sign Out
         </Button>
       </HStack>

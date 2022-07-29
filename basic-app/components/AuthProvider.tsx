@@ -1,22 +1,50 @@
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 
 import { useSession } from "next-auth/react";
+import * as fcl from "@onflow/fcl";
 import { LoginSkeleton } from "./LoginSkeleton";
-import { signOutUser } from "./SignOutUser";
+import { signOut as nextAuthSignOut } from "next-auth/react";
+import { Session } from "next-auth";
 
 type AuthComponentProps = {
   children: React.ReactNode;
   requireAuth: boolean | undefined;
 };
 
+type AuthContextType = {
+  session: Session;
+  isLoading: boolean;
+  signOut: () => Promise<void>;
+};
+
+export const AuthContext = createContext<AuthContextType>(null);
+
 export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
   const router = useRouter();
+
   const { data: session, status } = useSession();
-  const loading = status === "loading";
+  const sessionLoading = status === "loading";
+
+  const [isSigningOut, setIsSigningOut] = useState(false);
+  const isLoading = sessionLoading || isSigningOut;
+
+  const signOut = useCallback(async () => {
+    setIsSigningOut(true);
+    fcl.unauthenticate();
+    const { url } = await nextAuthSignOut({ redirect: false });
+    await router.push(url);
+    setIsSigningOut(false);
+  }, [router]);
 
   useEffect(() => {
-    if (!requireAuth || loading) {
+    if (!requireAuth || isLoading) {
+      return;
+    }
+
+    if (session?.error) {
+      console.error(session.error);
+      signOut();
       return;
     }
 
@@ -24,17 +52,11 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
       router.push("/");
       return;
     }
+  }, [requireAuth, session, router, isLoading, signOut]);
 
-    if (session?.error) {
-      console.error(session.error);
-      signOutUser();
-      return;
-    }
-  }, [requireAuth, session, router, loading]);
-
-  if (requireAuth && loading) {
-    return <LoginSkeleton />;
-  }
-
-  return <>{children}</>;
+  return (
+    <AuthContext.Provider value={{ session, isLoading, signOut }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
