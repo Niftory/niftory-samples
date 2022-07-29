@@ -1,6 +1,6 @@
-import { gql } from "graphql-request";
-import { useContractQuery } from "../generated/graphql";
-import { useGraphQLQuery } from "./useGraphQLQuery";
+import { gql } from "graphql-request"
+import { useContractQuery } from "../generated/graphql"
+import { useGraphQLQuery } from "./useGraphQLQuery"
 
 gql`
   query contract {
@@ -9,9 +9,9 @@ gql`
       address
     }
   }
-`;
+`
 
-const nonFungibleTokenAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS;
+const nonFungibleTokenAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS
 const IS_ACCOUNT_CONFIGURED__SCRIPT = `
     import {contractName} from {contractAddress}
     import NonFungibleToken from ${nonFungibleTokenAddress}
@@ -22,7 +22,7 @@ const IS_ACCOUNT_CONFIGURED__SCRIPT = `
 
         return acct.getCapability<&{{contractName}.{contractName}CollectionPublic}>({contractName}.CollectionPublicPath).check()
 
-    }`;
+    }`
 
 const CONFIGURE_ACCOUNT__TRANSACTION = `
     import {contractName} from {contractAddress}
@@ -56,38 +56,28 @@ const CONFIGURE_ACCOUNT__TRANSACTION = `
                 MetadataViews.ResolverCollection
             }>({contractName}.CollectionPublicPath, target: {contractName}.CollectionStoragePath)
         }
-    }`;
+    }`
 
 function prepareCadence(script: string, contractName: string, address: string) {
-  return script
-    .replaceAll("{contractName}", contractName)
-    .replaceAll("{contractAddress}", address);
+  return script.replaceAll("{contractName}", contractName).replaceAll("{contractAddress}", address)
 }
 
 export function useContractCadence() {
-  const { data, isFetched } = useGraphQLQuery(useContractQuery);
+  const { data, isFetched } = useGraphQLQuery(useContractQuery)
 
-  let isAccountConfigured_script: string;
-  let configureAccount_transaction: string;
+  let isAccountConfigured_script: string
+  let configureAccount_transaction: string
   if (isFetched) {
-    const { name, address } = data?.contract;
+    const { name, address } = data?.contract
 
-    isAccountConfigured_script = prepareCadence(
-      IS_ACCOUNT_CONFIGURED__SCRIPT,
-      name,
-      address
-    );
+    isAccountConfigured_script = prepareCadence(IS_ACCOUNT_CONFIGURED__SCRIPT, name, address)
 
-    configureAccount_transaction = prepareCadence(
-      CONFIGURE_ACCOUNT__TRANSACTION,
-      name,
-      address
-    );
+    configureAccount_transaction = prepareCadence(CONFIGURE_ACCOUNT__TRANSACTION, name, address)
   }
 
   return {
     isAccountConfigured_script,
     configureAccount_transaction,
     isLoading: !isFetched,
-  };
+  }
 }

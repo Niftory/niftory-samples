@@ -1,5 +1,5 @@
-import { GraphQLClient } from "graphql-request";
-import { useGraphQLClient } from "./useGraphQLClient";
+import { GraphQLClient } from "graphql-request"
+import { useGraphQLClient } from "./useGraphQLClient"
 
 export function useGraphQLQuery<Variables, Options, Headers, Result>(
   queryHook: (
@@ -12,12 +12,7 @@ export function useGraphQLQuery<Variables, Options, Headers, Result>(
   options: Options = undefined,
   headers: Headers = undefined
 ) {
-  const { client, isLoading } = useGraphQLClient();
+  const { client, isLoading } = useGraphQLClient()
 
-  return queryHook(
-    client,
-    variables,
-    { enabled: !isLoading, ...options },
-    headers
-  );
+  return queryHook(client, variables, { enabled: !isLoading, ...options }, headers)
 }

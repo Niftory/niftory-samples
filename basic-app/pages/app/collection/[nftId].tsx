@@ -1,12 +1,12 @@
-import { Heading, Text, Image, Spinner } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { Heading, Text, Image, Spinner } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 
-import AppLayout from "../../../components/AppLayout";
-import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
-import { useNftQuery } from "../../../generated/graphql";
-import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery";
+import AppLayout from "../../../components/AppLayout"
+import { ComponentWithAuth } from "../../../components/ComponentWithAuth"
+import { useNftQuery } from "../../../generated/graphql"
+import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery"
 
-import { gql } from "graphql-request";
+import { gql } from "graphql-request"
 
 gql`
   query nft($id: String!) {
@@ -40,16 +40,16 @@ gql`
       }
     }
   }
-`;
+`
 
 const NftPage: ComponentWithAuth = () => {
-  const router = useRouter();
-  const nftId = router.query["nftId"]?.toString();
+  const router = useRouter()
+  const nftId = router.query["nftId"]?.toString()
 
-  const { data } = useGraphQLQuery(useNftQuery, { id: nftId });
+  const { data } = useGraphQLQuery(useNftQuery, { id: nftId })
 
-  const nft = data?.nft;
-  const model = nft?.model;
+  const nft = data?.nft
+  const model = nft?.model
 
   return (
     <AppLayout>
@@ -62,19 +62,14 @@ const NftPage: ComponentWithAuth = () => {
           ></Image>
           <Heading>{model.title}</Heading>
           <Text>{model.description}</Text>
-          <Text>
-            {"Blockchain ID: " +
-              nft.blockchainId +
-              " Serial: " +
-              nft.serialNumber}{" "}
-          </Text>
+          <Text>{"Blockchain ID: " + nft.blockchainId + " Serial: " + nft.serialNumber} </Text>
         </>
       ) : (
         <Spinner size="lg"></Spinner>
       )}
     </AppLayout>
-  );
-};
+  )
+}
 
-NftPage.requireAuth = true;
-export default NftPage;
+NftPage.requireAuth = true
+export default NftPage

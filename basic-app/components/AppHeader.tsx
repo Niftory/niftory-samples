@@ -1,19 +1,12 @@
-import {
-  VStack,
-  Heading,
-  Button,
-  Text,
-  HStack,
-  useClipboard,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { VStack, Heading, Button, Text, HStack, useClipboard } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../hooks/useAuthContext"
 
 export function AppHeader() {
-  const { session, signOut, signIn } = useAuthContext();
-  const { onCopy } = useClipboard(session?.authToken as string);
-  const router = useRouter();
+  const { session, signOut, signIn } = useAuthContext()
+  const { onCopy } = useClipboard(session?.authToken as string)
+  const router = useRouter()
 
   return (
     <VStack textColor="white" mb="3vh">
@@ -38,10 +31,7 @@ export function AppHeader() {
 
       <HStack>
         {session && (
-          <Button
-            colorScheme="blue"
-            onClick={() => router.push("/app/collection")}
-          >
+          <Button colorScheme="blue" onClick={() => router.push("/app/collection")}>
             Collection
           </Button>
         )}
@@ -64,5 +54,5 @@ export function AppHeader() {
         )}
       </HStack>
     </VStack>
-  );
+  )
 }

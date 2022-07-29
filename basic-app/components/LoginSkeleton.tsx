@@ -1,5 +1,5 @@
-import { Center, SimpleGrid, SkeletonCircle, Stack } from "@chakra-ui/react";
-import * as React from "react";
+import { Center, SimpleGrid, SkeletonCircle, Stack } from "@chakra-ui/react"
+import * as React from "react"
 
 export const LoginSkeleton = () => {
   return (
@@ -12,5 +12,5 @@ export const LoginSkeleton = () => {
         </SimpleGrid>
       </Center>
     </Stack>
-  );
-};
+  )
+}

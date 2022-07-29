@@ -1,9 +1,9 @@
-import { BaseClient, Issuer, TokenSet, custom } from "openid-client";
+import { BaseClient, Issuer, TokenSet, custom } from "openid-client"
 
-let client: BaseClient;
-let token: TokenSet;
+let client: BaseClient
+let token: TokenSet
 
-custom.setHttpOptionsDefaults({ timeout: 30000 });
+custom.setHttpOptionsDefaults({ timeout: 30000 })
 
 async function getOAuthClient() {
   if (
@@ -11,20 +11,18 @@ async function getOAuthClient() {
     !process.env.CLIENT_SECRET ||
     !process.env.NIFTORY_AUTH_ISSUER
   ) {
-    throw new Error(
-      "NIFTORY_AUTH_ISSUER, NEXT_PUBLIC_CLIENT_ID, and CLIENT_SECRET must be set"
-    );
+    throw new Error("NIFTORY_AUTH_ISSUER, NEXT_PUBLIC_CLIENT_ID, and CLIENT_SECRET must be set")
   }
 
   if (!client) {
-    const issuer = await Issuer.discover(process.env.NIFTORY_AUTH_ISSUER);
+    const issuer = await Issuer.discover(process.env.NIFTORY_AUTH_ISSUER)
     client = new issuer.Client({
       client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
-    });
+    })
   }
 
-  return client;
+  return client
 }
 
 /**
@@ -32,13 +30,13 @@ async function getOAuthClient() {
  * @returns The client credentials token that represents the client itself.
  */
 export async function getClientCredentialsToken() {
-  const client = await getOAuthClient();
+  const client = await getOAuthClient()
 
   if (!token || token.expired()) {
-    token = await client.grant({ grant_type: "client_credentials" });
+    token = await client.grant({ grant_type: "client_credentials" })
   }
 
-  return token.access_token;
+  return token.access_token
 }
 
 /**
@@ -47,7 +45,7 @@ export async function getClientCredentialsToken() {
  * @returns A refreshed token set
  */
 export async function refreshAuthToken(refreshToken: string) {
-  const client = await getOAuthClient();
+  const client = await getOAuthClient()
 
-  return await client.refresh(refreshToken);
+  return await client.refresh(refreshToken)
 }

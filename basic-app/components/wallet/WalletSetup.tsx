@@ -1,27 +1,23 @@
-import {
-  useUserWalletQuery,
-  Wallet,
-  WalletState,
-} from "../../generated/graphql";
-import { ConfigureWallet } from "./ConfigureWallet";
-import { RegisterWallet } from "./RegisterWallet";
-import { VerifyWallet } from "./VerifyWallet";
-import * as fcl from "@onflow/fcl";
-import { gql } from "graphql-request";
-import { useRouter } from "next/router";
-import { WalletSetupBox } from "./WalletSetupBox";
-import { useGraphQLQuery } from "../../hooks/useGraphQLQuery";
+import { useUserWalletQuery, Wallet, WalletState } from "../../generated/graphql"
+import { ConfigureWallet } from "./ConfigureWallet"
+import { RegisterWallet } from "./RegisterWallet"
+import { VerifyWallet } from "./VerifyWallet"
+import * as fcl from "@onflow/fcl"
+import { gql } from "graphql-request"
+import { useRouter } from "next/router"
+import { WalletSetupBox } from "./WalletSetupBox"
+import { useGraphQLQuery } from "../../hooks/useGraphQLQuery"
 
 export type WalletSetupStepProps = {
-  setIsLoading: (isLoading: boolean) => void;
-  setError: (error: Error | null) => void;
-};
+  setIsLoading: (isLoading: boolean) => void
+  setError: (error: Error | null) => void
+}
 
 export type WalletSetupProps = WalletSetupStepProps & {
-  wallet: Wallet;
-  flowUser: fcl.CurrentUserObject;
-  error: Error;
-};
+  wallet: Wallet
+  flowUser: fcl.CurrentUserObject
+  error: Error
+}
 
 gql`
   query userWallet {
@@ -32,32 +28,28 @@ gql`
       verificationCode
     }
   }
-`;
+`
 
 export function WalletSetup() {
-  const router = useRouter();
+  const router = useRouter()
 
-  const {
-    data,
-    isFetched: walletFetched,
-    error,
-  } = useGraphQLQuery(useUserWalletQuery);
-  const wallet = data?.wallet;
+  const { data, isFetched: walletFetched, error } = useGraphQLQuery(useUserWalletQuery)
+  const wallet = data?.wallet
 
   if (!error && walletFetched) {
     // User doesn't have a wallet yet
     if (!wallet?.address) {
-      return <RegisterWallet />;
+      return <RegisterWallet />
     }
 
     switch (wallet.state) {
       case WalletState.Unverified:
         // User has a wallet but it's not verified yet
-        return <VerifyWallet />;
+        return <VerifyWallet />
 
       case WalletState.Verified:
         // The user has verified their wallet, but hasn't configured it yet
-        return <ConfigureWallet />;
+        return <ConfigureWallet />
     }
   }
 
@@ -69,5 +61,5 @@ export function WalletSetup() {
       isLoading={!walletFetched}
       onClick={() => router.push("/app/drops")}
     />
-  );
+  )
 }

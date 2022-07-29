@@ -1,8 +1,8 @@
-import { NextApiHandler } from "next";
-import { gql } from "graphql-request";
-import { getToken } from "next-auth/jwt";
-import { getBackendGraphQLClient } from "../../../../lib/graphql/backendClient";
-import { getSdk } from "../../../../generated/graphql";
+import { NextApiHandler } from "next"
+import { gql } from "graphql-request"
+import { getToken } from "next-auth/jwt"
+import { getBackendGraphQLClient } from "../../../../lib/graphql/backendClient"
+import { getSdk } from "../../../../generated/graphql"
 
 gql`
   query userNftsByUser($userId: ID!, $nftModelId: ID!) {
@@ -10,7 +10,7 @@ gql`
       id
     }
   }
-`;
+`
 
 gql`
   mutation transferNFTToUser($nftModelId: ID!, $userId: ID!) {
@@ -18,46 +18,46 @@ gql`
       id
     }
   }
-`;
+`
 
 const handler: NextApiHandler = async (req, res) => {
-  const { nftModelId } = req.query;
+  const { nftModelId } = req.query
 
   if (req.method !== "POST") {
-    res.status(405).end();
-    return;
+    res.status(405).end()
+    return
   }
 
-  const userToken = await getToken({ req });
+  const userToken = await getToken({ req })
   if (!userToken) {
-    res.status(401).send("You must be signed in to transfer NFTs");
+    res.status(401).send("You must be signed in to transfer NFTs")
   }
 
   if (!nftModelId) {
-    res.status(400).send("nftModelId is required");
-    return;
+    res.status(400).send("nftModelId is required")
+    return
   }
 
-  const client = await getBackendGraphQLClient();
-  const sdk = getSdk(client);
+  const client = await getBackendGraphQLClient()
+  const sdk = getSdk(client)
 
   // First verify that the user hasn't already claimed an NFT from this model
   const userNftsResponse = await sdk.userNftsByUser({
     userId: userToken.sub,
     nftModelId: nftModelId as string,
-  });
+  })
 
   if (userNftsResponse.nfts.length > 0) {
-    res.status(400).send("You already have an NFT from this model");
-    return;
+    res.status(400).send("You already have an NFT from this model")
+    return
   }
 
   const transferResponse = await sdk.transferNFTToUser({
     nftModelId: nftModelId as string,
     userId: userToken.sub,
-  });
+  })
 
-  res.status(200).json(transferResponse);
-};
+  res.status(200).json(transferResponse)
+}
 
-export default handler;
+export default handler
