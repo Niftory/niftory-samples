@@ -1,0 +1,13 @@
+{
+  "name": "niftory-samples",
+  "version": "1.0.0",
+  "description": "Samples using the Niftory API",
+  "repository": "https://github.com/Niftory/niftory-samples",
+  "author": "Niftory Inc",
+  "private": true,
+  "workspaces": [
+    "basic-app"
+  ],
+  "scripts": {
+  }
+}
