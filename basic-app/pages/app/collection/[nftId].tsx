@@ -63,7 +63,10 @@ const NftPage: ComponentWithAuth = () => {
           <Heading>{model.title}</Heading>
           <Text>{model.description}</Text>
           <Text>
-            {"Blockchain: " + nft.blockchainId + " Serial: " + nft.serialNumber}{" "}
+            {"Blockchain ID: " +
+              nft.blockchainId +
+              " Serial: " +
+              nft.serialNumber}{" "}
           </Text>
         </>
       ) : (

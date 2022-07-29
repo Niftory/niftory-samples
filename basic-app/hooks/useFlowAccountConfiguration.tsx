@@ -24,18 +24,18 @@ export function useFlowAccountConfiguration(): FlowAccountConfiguration {
   const flowUser = useFlowUser();
 
   const [configured, setConfigured] = useState(false);
-  const [configuring, setConfiguring] = useState(false);
+  const [isConfiguring, setIsConfiguring] = useState(false);
 
   const {
     isAccountConfigured_script,
     configureAccount_transaction,
-    isLoading,
+    isLoading: isContractLoading,
   } = useContractCadence();
 
   // A callback that runs a transaction against the user account to initialize it
   const configure = useCallback(async () => {
     try {
-      setConfiguring(true);
+      setIsConfiguring(true);
       const txId = await fcl.mutate({
         cadence: configureAccount_transaction,
         limit: 9999,
@@ -43,14 +43,14 @@ export function useFlowAccountConfiguration(): FlowAccountConfiguration {
 
       await fcl.tx(txId).onceSealed();
     } finally {
-      setConfiguring(false);
+      setIsConfiguring(false);
     }
   }, [configureAccount_transaction]);
 
   // When configuration transaction completes, check if the account is configured
   useEffect(() => {
     (async function () {
-      if (configuring || !flowUser?.addr || !isAccountConfigured_script) {
+      if (isConfiguring || !flowUser?.addr || !isAccountConfigured_script) {
         return;
       }
 
@@ -61,7 +61,9 @@ export function useFlowAccountConfiguration(): FlowAccountConfiguration {
 
       setConfigured(result);
     })();
-  }, [flowUser?.addr, configuring, isAccountConfigured_script]);
+  }, [flowUser?.addr, isConfiguring, isAccountConfigured_script]);
+
+  const isLoading = isContractLoading || isConfiguring;
 
   return {
     configured,
