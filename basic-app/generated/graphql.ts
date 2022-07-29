@@ -162,9 +162,6 @@ export type InitiateCheckoutResponse = {
   redirectUrl?: Maybe<Scalars['URL']>;
 };
 
-/** Data field that can be paginated. ex- NFTs,NFTModels. */
-export type ListItem = Nft | NftModel;
-
 /** Current Prisma Mapping: PackListing. A listing of NFTs for sale. */
 export type Listing = Identifiable & Resource & {
   __typename?: 'Listing';
@@ -354,12 +351,8 @@ export type NftFile = File & {
 export type NftFilterInput = {
   /** Blockchain IDs of the [NFT]({{Types.NFT}})s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** The page token of the next page of NFTs. */
-  cursor?: InputMaybe<Scalars['String']>;
   /** Database IDs of the [NFT]({{Types.NFT}})s to find. */
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** The maximum number of NFT's to return. Defaults to 50. */
-  maxResults?: InputMaybe<Scalars['Int']>;
   /** The IDs of the [NFTModel]({{Types.NFTModel}}) that the [NFT]({{Types.NFT}}) should belong to. */
   nftModelIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** Transfer states of the [NFT]({{Types.NFT}})s to find. Defaults to all. */
@@ -440,12 +433,8 @@ export type NftModel = BlockchainEntity & BlockchainResource & Identifiable & Re
 export type NftModelFilterInput = {
   /** Blockchain IDs of the [NFTModel]({{Types.NFTModel}})s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** The page token of the next page of NFT Models. */
-  cursor?: InputMaybe<Scalars['String']>;
   /** Database IDs of the [NFTModel]({{Types.NFTModel}})s to find. */
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** The maximum number of NFT Models to return. Defaults to 50. */
-  maxResults?: InputMaybe<Scalars['Int']>;
   /** The IDs of the [NFTSet]({{Types.NFTSet}})s that the [NFTModel]({{Types.NFTModel}}) should belong to. */
   setIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** Filter by [NFTModel]({{Types.NFTModel}}) status. */
@@ -605,15 +594,6 @@ export type PackagingModelSelectionFilter = {
   setId: Scalars['ID'];
 };
 
-/** A list of different types of paginated results */
-export type PaginatedList = {
-  __typename?: 'PaginatedList';
-  /** The cursor for the next page of results. */
-  cursor?: Maybe<Scalars['String']>;
-  /** The items in this result. */
-  items?: Maybe<Array<Maybe<ListItem>>>;
-};
-
 /** The pricing for a particular listing */
 export type Pricing = SimplePricing;
 
@@ -641,10 +621,10 @@ export type Query = {
   nftListings?: Maybe<Array<Maybe<NftListing>>>;
   /** Gets an [NFTModel]({{Types.NFTModel}}) by database ID. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts). */
   nftModel?: Maybe<NftModel>;
-  /** Gets all [NFTModel]({{Types.NFTModel}})s for the current [App]({{Types.App}}) context. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts). */
-  nftModels?: Maybe<PaginatedList>;
+  /** Gets [NFTModel]({{Types.NFTModel}})s for the current [App]({{Types.App}}) context. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts). */
+  nftModels?: Maybe<Array<Maybe<NftModel>>>;
   /** Gets all [NFT]({{Types.NFT}})s associated with the current [AppUser]({{Types.AppUser}}) context, including those that are transferring or failed to transfer. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts). */
-  nfts?: Maybe<PaginatedList>;
+  nfts?: Maybe<Array<Maybe<Nft>>>;
   /** Gets the [Org]({{Types.Org}}) corresponding to the current [App]({{Types.App}}) context. */
   org?: Maybe<Org>;
   /** Gets an [Org]({{Types.Org}}) by ID. */
@@ -655,8 +635,6 @@ export type Query = {
   set?: Maybe<NftSet>;
   /** Gets [NFTSet]({{Types.NFTSet}})s for the current [App]({{Types.App}}) context. */
   sets?: Maybe<Array<Maybe<NftSet>>>;
-  /** Gets a list of [PaginatedList]({{Types.PaginatedList}}) of [NFT]({{Types.NFT}})s for a given [AppUser]({{Types.AppUser}}). Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts). */
-  userNfts?: Maybe<PaginatedList>;
   /** Gets the [Wallet]({{Types.Wallet}}) belonging to the current [AppUser]({{Types.AppUser}}) context. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/query-wallets). */
   wallet?: Maybe<Wallet>;
   /** Gets a [Wallet]({{Types.Wallet}}) by its blockchain address. Wallet must be registered using [registerWallet]({{Mutations.registerWallet}}) before this request succeeds. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/query-wallets). */
@@ -737,11 +715,6 @@ export type QuerySetArgs = {
 
 export type QuerySetsArgs = {
   filter?: InputMaybe<NftSetFilterInput>;
-};
-
-
-export type QueryUserNftsArgs = {
-  filter?: InputMaybe<NftFilterInput>;
 };
 
 
@@ -939,13 +912,13 @@ export type ContractQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ContractQuery = { __typename?: 'Query', contract?: { __typename?: 'Contract', name?: string | null, address?: string | null } | null };
 
-export type NftsByUserQueryVariables = Exact<{
+export type UserNftsByUserQueryVariables = Exact<{
   userId: Scalars['ID'];
-  filter?: InputMaybe<NftFilterInput>;
+  nftModelId: Scalars['ID'];
 }>;
 
 
-export type NftsByUserQuery = { __typename?: 'Query', nfts?: { __typename?: 'PaginatedList', items?: Array<{ __typename?: 'NFT', id: string } | { __typename?: 'NFTModel' } | null> | null } | null };
+export type UserNftsByUserQuery = { __typename?: 'Query', nfts?: Array<{ __typename?: 'NFT', id: string } | null> | null };
 
 export type TransferNftToUserMutationVariables = Exact<{
   nftModelId: Scalars['ID'];
@@ -965,7 +938,7 @@ export type NftQuery = { __typename?: 'Query', nft?: { __typename?: 'NFT', id: s
 export type UserNftsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserNftsQuery = { __typename?: 'Query', userNfts?: { __typename?: 'PaginatedList', items?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', title: string, id: string } | null } | { __typename?: 'NFTModel' } | null> | null } | null };
+export type UserNftsQuery = { __typename?: 'Query', nfts?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null };
 
 export type NftModelQueryVariables = Exact<{
   id: Scalars['String'];
@@ -977,7 +950,7 @@ export type NftModelQuery = { __typename?: 'Query', nftModel?: { __typename?: 'N
 export type NftModelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NftModelsQuery = { __typename?: 'Query', nftModels?: { __typename?: 'PaginatedList', items?: Array<{ __typename?: 'NFT' } | { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null } | null };
+export type NftModelsQuery = { __typename?: 'Query', nftModels?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null };
 
 
 export const ReactQuery_ReadyWalletDocument = `
@@ -1093,29 +1066,25 @@ export const useContractQuery = <
       fetcher<ContractQuery, ContractQueryVariables>(client, ReactQuery_ContractDocument, variables, headers),
       options
     );
-export const ReactQuery_NftsByUserDocument = `
-    query nftsByUser($userId: ID!, $filter: NFTFilterInput) {
-  nfts(userId: $userId, filter: $filter) {
-    items {
-      ... on NFT {
-        id
-      }
-    }
+export const ReactQuery_UserNftsByUserDocument = `
+    query userNftsByUser($userId: ID!, $nftModelId: ID!) {
+  nfts(userId: $userId, filter: {nftModelIds: [$nftModelId]}) {
+    id
   }
 }
     `;
-export const useNftsByUserQuery = <
-      TData = NftsByUserQuery,
+export const useUserNftsByUserQuery = <
+      TData = UserNftsByUserQuery,
       TError = unknown
     >(
       client: GraphQLClient,
-      variables: NftsByUserQueryVariables,
-      options?: UseQueryOptions<NftsByUserQuery, TError, TData>,
+      variables: UserNftsByUserQueryVariables,
+      options?: UseQueryOptions<UserNftsByUserQuery, TError, TData>,
       headers?: RequestInit['headers']
     ) =>
-    useQuery<NftsByUserQuery, TError, TData>(
-      ['nftsByUser', variables],
-      fetcher<NftsByUserQuery, NftsByUserQueryVariables>(client, ReactQuery_NftsByUserDocument, variables, headers),
+    useQuery<UserNftsByUserQuery, TError, TData>(
+      ['userNftsByUser', variables],
+      fetcher<UserNftsByUserQuery, UserNftsByUserQueryVariables>(client, ReactQuery_UserNftsByUserDocument, variables, headers),
       options
     );
 export const ReactQuery_TransferNftToUserDocument = `
@@ -1187,15 +1156,11 @@ export const useNftQuery = <
     );
 export const ReactQuery_UserNftsDocument = `
     query userNfts {
-  userNfts {
-    items {
-      ... on NFT {
-        id
-        model {
-          title
-          id
-        }
-      }
+  nfts {
+    id
+    model {
+      id
+      title
     }
   }
 }
@@ -1259,30 +1224,26 @@ export const useNftModelQuery = <
 export const ReactQuery_NftModelsDocument = `
     query nftModels {
   nftModels {
-    items {
-      ... on NFTModel {
-        id
-        blockchainId
-        title
-        description
-        quantity
-        status
-        rarity
-        content {
-          files {
-            media {
-              url
-              contentType
-            }
-            thumbnail {
-              url
-              contentType
-            }
-          }
-          poster {
-            url
-          }
+    id
+    blockchainId
+    title
+    description
+    quantity
+    status
+    rarity
+    content {
+      files {
+        media {
+          url
+          contentType
         }
+        thumbnail {
+          url
+          contentType
+        }
+      }
+      poster {
+        url
       }
     }
   }
@@ -1349,14 +1310,10 @@ export const ContractDocument = gql`
   }
 }
     `;
-export const NftsByUserDocument = gql`
-    query nftsByUser($userId: ID!, $filter: NFTFilterInput) {
-  nfts(userId: $userId, filter: $filter) {
-    items {
-      ... on NFT {
-        id
-      }
-    }
+export const UserNftsByUserDocument = gql`
+    query userNftsByUser($userId: ID!, $nftModelId: ID!) {
+  nfts(userId: $userId, filter: {nftModelIds: [$nftModelId]}) {
+    id
   }
 }
     `;
@@ -1402,15 +1359,11 @@ export const NftDocument = gql`
     `;
 export const UserNftsDocument = gql`
     query userNfts {
-  userNfts {
-    items {
-      ... on NFT {
-        id
-        model {
-          title
-          id
-        }
-      }
+  nfts {
+    id
+    model {
+      id
+      title
     }
   }
 }
@@ -1446,30 +1399,26 @@ export const NftModelDocument = gql`
 export const NftModelsDocument = gql`
     query nftModels {
   nftModels {
-    items {
-      ... on NFTModel {
-        id
-        blockchainId
-        title
-        description
-        quantity
-        status
-        rarity
-        content {
-          files {
-            media {
-              url
-              contentType
-            }
-            thumbnail {
-              url
-              contentType
-            }
-          }
-          poster {
-            url
-          }
+    id
+    blockchainId
+    title
+    description
+    quantity
+    status
+    rarity
+    content {
+      files {
+        media {
+          url
+          contentType
         }
+        thumbnail {
+          url
+          contentType
+        }
+      }
+      poster {
+        url
       }
     }
   }
@@ -1498,8 +1447,8 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     contract(variables?: ContractQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ContractQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ContractQuery>(ContractDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'contract', 'query');
     },
-    nftsByUser(variables: NftsByUserQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<NftsByUserQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<NftsByUserQuery>(NftsByUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'nftsByUser', 'query');
+    userNftsByUser(variables: UserNftsByUserQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserNftsByUserQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UserNftsByUserQuery>(UserNftsByUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'userNftsByUser', 'query');
     },
     transferNFTToUser(variables: TransferNftToUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<TransferNftToUserMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<TransferNftToUserMutation>(TransferNftToUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'transferNFTToUser', 'mutation');
