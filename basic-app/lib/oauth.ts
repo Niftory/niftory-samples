@@ -1,7 +1,9 @@
-import { BaseClient, Issuer, TokenSet } from "openid-client";
+import { BaseClient, Issuer, TokenSet, custom } from "openid-client";
 
 let client: BaseClient;
 let token: TokenSet;
+
+custom.setHttpOptionsDefaults({ timeout: 10000 });
 
 async function getOAuthClient() {
   if (
