@@ -13,32 +13,36 @@ import AppLayout from "../../../components/AppLayout";
 import { AppHeader } from "../../../components/AppHeader";
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth";
 import { gql } from "graphql-request";
-import { useNftModelsQuery } from "../../../generated/graphql";
+import { useNftModelsQuery, NftModel } from "../../../generated/graphql";
 import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery";
 
 gql`
   query nftModels {
     nftModels {
-      id
-      blockchainId
-      title
-      description
-      quantity
-      status
-      rarity
-      content {
-        files {
-          media {
-            url
-            contentType
+      items {
+        ... on NFTModel {
+          id
+          blockchainId
+          title
+          description
+          quantity
+          status
+          rarity
+          content {
+            files {
+              media {
+                url
+                contentType
+              }
+              thumbnail {
+                url
+                contentType
+              }
+            }
+            poster {
+              url
+            }
           }
-          thumbnail {
-            url
-            contentType
-          }
-        }
-        poster {
-          url
         }
       }
     }
@@ -48,7 +52,7 @@ gql`
 const DropsPage: ComponentWithAuth = () => {
   const router = useRouter();
   const { data } = useGraphQLQuery(useNftModelsQuery);
-  const nftModels = data?.nftModels;
+  const nftModels = data?.nftModels?.items;
 
   return (
     <AppLayout>
@@ -56,7 +60,7 @@ const DropsPage: ComponentWithAuth = () => {
         <VStack>
           <SimpleGrid columns={2} spacing={10}>
             {nftModels ? (
-              nftModels.map((nftModel) => {
+              nftModels.map((nftModel: NftModel) => {
                 const nftModelImageUrl = nftModel.content?.poster?.url;
                 return (
                   <Link
