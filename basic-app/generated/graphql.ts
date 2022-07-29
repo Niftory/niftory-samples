@@ -939,13 +939,13 @@ export type ContractQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ContractQuery = { __typename?: 'Query', contract?: { __typename?: 'Contract', name?: string | null, address?: string | null } | null };
 
-export type UserNftsByUserQueryVariables = Exact<{
+export type NftsByUserQueryVariables = Exact<{
   userId: Scalars['ID'];
-  nftModelId: Scalars['ID'];
+  filter?: InputMaybe<NftFilterInput>;
 }>;
 
 
-export type UserNftsByUserQuery = { __typename?: 'Query', nfts?: { __typename?: 'PaginatedList', items?: Array<{ __typename?: 'NFT', id: string } | { __typename?: 'NFTModel' } | null> | null } | null };
+export type NftsByUserQuery = { __typename?: 'Query', nfts?: { __typename?: 'PaginatedList', items?: Array<{ __typename?: 'NFT', id: string } | { __typename?: 'NFTModel' } | null> | null } | null };
 
 export type TransferNftToUserMutationVariables = Exact<{
   nftModelId: Scalars['ID'];
@@ -1093,9 +1093,9 @@ export const useContractQuery = <
       fetcher<ContractQuery, ContractQueryVariables>(client, ReactQuery_ContractDocument, variables, headers),
       options
     );
-export const ReactQuery_UserNftsByUserDocument = `
-    query userNftsByUser($userId: ID!, $nftModelId: ID!) {
-  nfts(userId: $userId, filter: {nftModelIds: [$nftModelId]}) {
+export const ReactQuery_NftsByUserDocument = `
+    query nftsByUser($userId: ID!, $filter: NFTFilterInput) {
+  nfts(userId: $userId, filter: $filter) {
     items {
       ... on NFT {
         id
@@ -1104,18 +1104,18 @@ export const ReactQuery_UserNftsByUserDocument = `
   }
 }
     `;
-export const useUserNftsByUserQuery = <
-      TData = UserNftsByUserQuery,
+export const useNftsByUserQuery = <
+      TData = NftsByUserQuery,
       TError = unknown
     >(
       client: GraphQLClient,
-      variables: UserNftsByUserQueryVariables,
-      options?: UseQueryOptions<UserNftsByUserQuery, TError, TData>,
+      variables: NftsByUserQueryVariables,
+      options?: UseQueryOptions<NftsByUserQuery, TError, TData>,
       headers?: RequestInit['headers']
     ) =>
-    useQuery<UserNftsByUserQuery, TError, TData>(
-      ['userNftsByUser', variables],
-      fetcher<UserNftsByUserQuery, UserNftsByUserQueryVariables>(client, ReactQuery_UserNftsByUserDocument, variables, headers),
+    useQuery<NftsByUserQuery, TError, TData>(
+      ['nftsByUser', variables],
+      fetcher<NftsByUserQuery, NftsByUserQueryVariables>(client, ReactQuery_NftsByUserDocument, variables, headers),
       options
     );
 export const ReactQuery_TransferNftToUserDocument = `
@@ -1349,9 +1349,9 @@ export const ContractDocument = gql`
   }
 }
     `;
-export const UserNftsByUserDocument = gql`
-    query userNftsByUser($userId: ID!, $nftModelId: ID!) {
-  nfts(userId: $userId, filter: {nftModelIds: [$nftModelId]}) {
+export const NftsByUserDocument = gql`
+    query nftsByUser($userId: ID!, $filter: NFTFilterInput) {
+  nfts(userId: $userId, filter: $filter) {
     items {
       ... on NFT {
         id
@@ -1498,8 +1498,8 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     contract(variables?: ContractQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ContractQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<ContractQuery>(ContractDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'contract', 'query');
     },
-    userNftsByUser(variables: UserNftsByUserQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UserNftsByUserQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<UserNftsByUserQuery>(UserNftsByUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'userNftsByUser', 'query');
+    nftsByUser(variables: NftsByUserQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<NftsByUserQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<NftsByUserQuery>(NftsByUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'nftsByUser', 'query');
     },
     transferNFTToUser(variables: TransferNftToUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<TransferNftToUserMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<TransferNftToUserMutation>(TransferNftToUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'transferNFTToUser', 'mutation');
