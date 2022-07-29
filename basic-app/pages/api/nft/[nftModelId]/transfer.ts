@@ -52,8 +52,8 @@ const handler: NextApiHandler = async (req, res) => {
   })
 
   if (userNftsResponse.nfts.items.length > 0) {
-    res.status(400).send("You already have an NFT from this model");
-    return;
+    res.status(400).send("You already have an NFT from this model")
+    return
   }
 
   const transferResponse = await sdk.transferNFTToUser({
