@@ -1,7 +1,7 @@
-import NextAuth from "next-auth";
-import { Provider } from "next-auth/providers";
-import urljoin from "url-join";
-import { refreshAuthToken } from "../../../lib/oauth";
+import NextAuth from "next-auth"
+import { Provider } from "next-auth/providers"
+import urljoin from "url-join"
+import { refreshAuthToken } from "../../../lib/oauth"
 
 const NIFTORY_AUTH_PROVIDER: Provider = {
   id: "niftory",
@@ -27,12 +27,12 @@ const NIFTORY_AUTH_PROVIDER: Provider = {
       name: profile.name,
       email: profile.email,
       image: profile.picture,
-    };
+    }
   },
   httpOptions: {
     timeout: 10000,
   },
-};
+}
 
 export default NextAuth({
   providers: [NIFTORY_AUTH_PROVIDER],
@@ -47,36 +47,36 @@ export default NextAuth({
           authToken: account?.id_token,
           authTokenExpiresAt: account?.expires_at * 1000,
           refreshToken: account?.refresh_token,
-        };
+        }
       }
 
       // this isn't initial sign-in, so let's see if the token is still valid
       if (Date.now() < token.authTokenExpiresAt) {
         // token is still valid, no need to refresh it
-        return token;
+        return token
       }
 
       // if we get here, the token is expired, so we need to refresh it
       try {
-        const refreshed = await refreshAuthToken(token.refreshToken as string);
+        const refreshed = await refreshAuthToken(token.refreshToken as string)
         return {
           ...token,
           authToken: refreshed?.id_token,
           authTokenExpiresAt: refreshed?.expires_at * 1000,
           refreshToken: refreshed?.refresh_token || token?.refresh_token,
-        };
+        }
       } catch (e) {
-        console.error(e);
-        return { ...token, error: e };
+        console.error(e)
+        return { ...token, error: e }
       }
     },
     session: async ({ session, token }) => {
-      session.userId = token.sub;
-      session.clientId = token.aud;
-      session.authToken = token.authToken;
-      session.error = token.error;
+      session.userId = token.sub
+      session.clientId = token.aud
+      session.authToken = token.authToken
+      session.error = token.error
 
-      return session;
+      return session
     },
   },
-});
+})

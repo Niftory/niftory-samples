@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "prettier --write .",
     "generate": "dotenv -- graphql-codegen"
   },
   "dependencies": {
@@ -53,6 +54,8 @@
     "dotenv-cli": "^6.0.0",
     "eslint": "8.19.0",
     "eslint-config-next": "12.2.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "2.7.1",
     "typescript": "4.7.4"
   },
   "dependenciesComments": {

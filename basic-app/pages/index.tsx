@@ -1,9 +1,9 @@
-import AppLayout from "../components/AppLayout";
+import AppLayout from "../components/AppLayout"
 
 const HomePage = () => (
   <AppLayout>
     <></>
   </AppLayout>
-);
+)
 
-export default HomePage;
+export default HomePage

@@ -1,9 +1,5 @@
-import { NextComponentType, NextPageContext } from "next";
+import { NextComponentType, NextPageContext } from "next"
 
-export type ComponentWithAuth<P = {}> = NextComponentType<
-  NextPageContext,
-  any,
-  P
-> & {
-  requireAuth?: boolean;
-};
+export type ComponentWithAuth<P = {}> = NextComponentType<NextPageContext, any, P> & {
+  requireAuth?: boolean
+}

@@ -1,8 +1,8 @@
-import { GraphQLClient } from "graphql-request";
-import { getClientCredentialsToken } from "../oauth";
-import type { GraphQLClientProvider } from "../../components/GraphQLClientProvider";
+import { GraphQLClient } from "graphql-request"
+import { getClientCredentialsToken } from "../oauth"
+import type { GraphQLClientProvider } from "../../components/GraphQLClientProvider"
 
-let client: GraphQLClient;
+let client: GraphQLClient
 
 /**
  * Gets a GraphQL client for use in the backend.
@@ -16,11 +16,11 @@ export async function getBackendGraphQLClient() {
       headers: {
         "X-Niftory-API-Key": process.env.NEXT_PUBLIC_API_KEY,
       },
-    });
+    })
 
-  const token = await getClientCredentialsToken();
+  const token = await getClientCredentialsToken()
 
-  client.setHeader("Authorization", `Bearer ${token}`);
+  client.setHeader("Authorization", `Bearer ${token}`)
 
-  return client;
+  return client
 }

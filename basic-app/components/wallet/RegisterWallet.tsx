@@ -1,10 +1,10 @@
-import { useEffect } from "react";
-import { useRegisterWalletMutation } from "../../generated/graphql";
-import { useFlowUser } from "../../hooks/useFlowUser";
-import * as fcl from "@onflow/fcl";
-import { gql } from "graphql-request";
-import { WalletSetupBox } from "./WalletSetupBox";
-import { useWalletMutation } from "../../hooks/useWalletMutation";
+import { useEffect } from "react"
+import { useRegisterWalletMutation } from "../../generated/graphql"
+import { useFlowUser } from "../../hooks/useFlowUser"
+import * as fcl from "@onflow/fcl"
+import { gql } from "graphql-request"
+import { WalletSetupBox } from "./WalletSetupBox"
+import { useWalletMutation } from "../../hooks/useWalletMutation"
 
 gql`
   mutation registerWallet($address: String!) {
@@ -15,25 +15,21 @@ gql`
       state
     }
   }
-`;
+`
 
 export function RegisterWallet() {
-  const flowUser = useFlowUser();
+  const flowUser = useFlowUser()
 
-  const {
-    mutate: registerWallet,
-    error,
-    isLoading,
-  } = useWalletMutation(useRegisterWalletMutation);
+  const { mutate: registerWallet, error, isLoading } = useWalletMutation(useRegisterWalletMutation)
 
   // When the user logs in, register their wallet
   useEffect(() => {
     if (!flowUser?.addr) {
-      return;
+      return
     }
 
-    registerWallet({ address: flowUser.addr });
-  }, [flowUser?.addr, flowUser?.loggedIn, registerWallet]);
+    registerWallet({ address: flowUser.addr })
+  }, [flowUser?.addr, flowUser?.loggedIn, registerWallet])
 
   return (
     <WalletSetupBox
@@ -45,5 +41,5 @@ export function RegisterWallet() {
       isLoading={isLoading}
       error={error as Error}
     />
-  );
+  )
 }

@@ -1,10 +1,10 @@
-import { useEffect } from "react";
-import { useReadyWalletMutation } from "../../generated/graphql";
-import { useFlowUser } from "../../hooks/useFlowUser";
-import { useFlowAccountConfiguration as useFlowAccountConfiguration } from "../../hooks/useFlowAccountConfiguration";
-import { gql } from "graphql-request";
-import { WalletSetupBox } from "./WalletSetupBox";
-import { useWalletMutation } from "../../hooks/useWalletMutation";
+import { useEffect } from "react"
+import { useReadyWalletMutation } from "../../generated/graphql"
+import { useFlowUser } from "../../hooks/useFlowUser"
+import { useFlowAccountConfiguration as useFlowAccountConfiguration } from "../../hooks/useFlowAccountConfiguration"
+import { gql } from "graphql-request"
+import { WalletSetupBox } from "./WalletSetupBox"
+import { useWalletMutation } from "../../hooks/useWalletMutation"
 
 gql`
   mutation readyWallet($address: String!) {
@@ -14,33 +14,33 @@ gql`
       state
     }
   }
-`;
+`
 
 export function ConfigureWallet() {
-  const flowUser = useFlowUser();
+  const flowUser = useFlowUser()
 
   const {
     mutate: readyWallet,
     isLoading: isReadyWalletLoading,
     error,
-  } = useWalletMutation(useReadyWalletMutation);
+  } = useWalletMutation(useReadyWalletMutation)
 
   const {
     configured,
     configure,
     isLoading: isFlowAccountConfigurationLoading,
-  } = useFlowAccountConfiguration();
+  } = useFlowAccountConfiguration()
 
   // Once the wallet is configured, call the ready mutation to tell Niftory it's ready to receive NFTs
   useEffect(() => {
     if (!configured) {
-      return;
+      return
     }
 
-    readyWallet({ address: flowUser?.addr });
-  }, [flowUser?.addr, configured, readyWallet]);
+    readyWallet({ address: flowUser?.addr })
+  }, [flowUser?.addr, configured, readyWallet])
 
-  const isLoading = isFlowAccountConfigurationLoading || isReadyWalletLoading;
+  const isLoading = isFlowAccountConfigurationLoading || isReadyWalletLoading
 
   return (
     <WalletSetupBox
@@ -52,5 +52,5 @@ export function ConfigureWallet() {
       isLoading={isLoading}
       error={error as Error}
     />
-  );
+  )
 }

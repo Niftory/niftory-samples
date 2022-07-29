@@ -1,10 +1,10 @@
-import { Box, Flex } from "@chakra-ui/layout";
-import { VStack } from "@chakra-ui/react";
-import { AppHeader } from "./AppHeader";
+import { Box, Flex } from "@chakra-ui/layout"
+import { VStack } from "@chakra-ui/react"
+import { AppHeader } from "./AppHeader"
 
 type Props = {
-  children: React.ReactNode;
-};
+  children: React.ReactNode
+}
 
 export default function AppLayout({ children }: Props) {
   return (
@@ -18,5 +18,5 @@ export default function AppLayout({ children }: Props) {
         </Box>
       </Box>
     </Flex>
-  );
+  )
 }
