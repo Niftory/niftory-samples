@@ -47,7 +47,6 @@ export async function getClientCredentialsToken() {
  * @returns A refreshed token set
  */
 export async function refreshAuthToken(refreshToken: string) {
-  console.log("refreshing token", refreshToken);
   const client = await getOAuthClient();
 
   return await client.refresh(refreshToken);
