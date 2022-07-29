@@ -5,8 +5,8 @@ import { getBackendGraphQLClient } from "../../../../lib/graphql/backendClient"
 import { getSdk } from "../../../../generated/graphql"
 
 gql`
-  query nftsByUser($userId: ID!, $filter: NFTFilterInput) {
-    nfts(userId: $userId, filter: $filter) {
+  query userNftsByUser($userId: ID!, $nftModelId: ID!) {
+    nfts(userId: $userId, filter: { nftModelIds: [$nftModelId] }) {
       items {
         ... on NFT {
           id
@@ -46,12 +46,10 @@ const handler: NextApiHandler = async (req, res) => {
   const sdk = getSdk(client)
 
   // First verify that the user hasn't already claimed an NFT from this model
-  const userNftsResponse = await sdk.nftsByUser({
+  const userNftsResponse = await sdk.userNftsByUser({
     userId: userToken.sub,
-    filter: {
-      ids: [nftModelId as string],
-    },
-  });
+    nftModelId: nftModelId as string,
+  })
 
   if (userNftsResponse.nfts.items.length > 0) {
     res.status(400).send("You already have an NFT from this model")
