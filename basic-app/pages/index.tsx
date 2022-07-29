@@ -1,14 +1,13 @@
 import { Box, Button, Center, Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 import AppLayout from "../components/AppLayout";
-import { signOutUser } from "../components/SignOutUser";
 import { useCallback } from "react";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const Login = () => {
-  const { data: session, status } = useSession();
-  const isLoading = status === "loading";
+  const { session, isLoading, signOut } = useAuthContext();
   const router = useRouter();
 
   const signInOrRedirect = useCallback(async () => {
@@ -36,7 +35,7 @@ const Login = () => {
           >
             Start Exploring!
           </Button>
-          <Button colorScheme="blue" onClick={() => signOutUser()}>
+          <Button colorScheme="blue" onClick={signOut}>
             Sign Out
           </Button>
         </VStack>

@@ -17,15 +17,15 @@ const App = ({
 }: AppProps): JSX.Element => (
   // Refetch session every hour since niftory tokens expire after 1 hour
   <SessionProvider session={session} refetchInterval={60 * 60}>
-    <ReactQueryClientProvider>
-      <GraphQLClientProvider>
-        <ChakraProvider>
-          <AuthProvider requireAuth={Component.requireAuth}>
+    <AuthProvider requireAuth={Component.requireAuth}>
+      <ReactQueryClientProvider>
+        <GraphQLClientProvider>
+          <ChakraProvider>
             <Component {...pageProps} />
-          </AuthProvider>
-        </ChakraProvider>
-      </GraphQLClientProvider>
-    </ReactQueryClientProvider>
+          </ChakraProvider>
+        </GraphQLClientProvider>
+      </ReactQueryClientProvider>
+    </AuthProvider>
   </SessionProvider>
 );
 
