@@ -63,7 +63,7 @@ export function WalletSetup() {
 
   return (
     <WalletSetupBox
-      text={`You}re all set up! Your wallet address is ${wallet?.address}`}
+      text={`You're all set up! Your wallet address is ${wallet?.address}`}
       buttonText="Go to Drops"
       error={error as Error}
       isLoading={!walletFetched}

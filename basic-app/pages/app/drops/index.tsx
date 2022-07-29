@@ -45,7 +45,7 @@ gql`
   }
 `;
 
-const Drops: ComponentWithAuth = () => {
+const DropsPage: ComponentWithAuth = () => {
   const router = useRouter();
   const { data } = useGraphQLQuery(useNftModelsQuery);
   const nftModels = data?.nftModels;
@@ -54,7 +54,6 @@ const Drops: ComponentWithAuth = () => {
     <AppLayout>
       <Box mx="auto" color="white">
         <VStack>
-          <AppHeader />
           <SimpleGrid columns={2} spacing={10}>
             {nftModels ? (
               nftModels.map((nftModel) => {
@@ -85,5 +84,4 @@ const Drops: ComponentWithAuth = () => {
   );
 };
 
-Drops.requireAuth = true;
-export default Drops;
+export default DropsPage;

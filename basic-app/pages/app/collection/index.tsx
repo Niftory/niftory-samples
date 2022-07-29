@@ -20,7 +20,7 @@ gql`
   }
 `;
 
-const Collection: ComponentWithAuth = () => {
+const CollectionPage: ComponentWithAuth = () => {
   const router = useRouter();
 
   const { data } = useGraphQLQuery(useUserNftsQuery);
@@ -28,28 +28,21 @@ const Collection: ComponentWithAuth = () => {
 
   return (
     <AppLayout>
-      <Box mx="auto" color="white" mt="5vh">
-        <VStack>
-          <AppHeader />
-          <SimpleGrid>
-            {nfts?.map(
-              (nft) =>
-                nft && (
-                  <Box key={nft.id}>
-                    <Link
-                      onClick={() => router.push(`/app/collection/${nft.id}`)}
-                    >
-                      {nft.model?.title}
-                    </Link>
-                  </Box>
-                )
-            )}
-          </SimpleGrid>
-        </VStack>
-      </Box>
+      <SimpleGrid>
+        {nfts?.map(
+          (nft) =>
+            nft && (
+              <Box key={nft.id}>
+                <Link onClick={() => router.push(`/app/collection/${nft.id}`)}>
+                  {nft.model?.title}
+                </Link>
+              </Box>
+            )
+        )}
+      </SimpleGrid>
     </AppLayout>
   );
 };
 
-Collection.requireAuth = true;
-export default Collection;
+CollectionPage.requireAuth = true;
+export default CollectionPage;

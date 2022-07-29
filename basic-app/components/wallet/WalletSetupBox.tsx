@@ -1,4 +1,4 @@
-import { Box, Button, Spinner } from "@chakra-ui/react";
+import { Box, Button, Spinner, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 
@@ -19,7 +19,7 @@ export const WalletSetupBox = ({
   useMemo(() => error && console.error(error), [error]);
 
   if (isLoading) {
-    return <Spinner />;
+    return <Spinner color="white" />;
   }
 
   if (error) {

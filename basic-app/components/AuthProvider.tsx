@@ -3,8 +3,10 @@ import { createContext, useCallback, useEffect, useState } from "react";
 
 import { useSession } from "next-auth/react";
 import * as fcl from "@onflow/fcl";
-import { LoginSkeleton } from "./LoginSkeleton";
-import { signOut as nextAuthSignOut } from "next-auth/react";
+import {
+  signOut as nextAuthSignOut,
+  signIn as nextAuthSignIn,
+} from "next-auth/react";
 import { Session } from "next-auth";
 
 type AuthComponentProps = {
@@ -15,6 +17,7 @@ type AuthComponentProps = {
 type AuthContextType = {
   session: Session;
   isLoading: boolean;
+  signIn: () => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -26,15 +29,21 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
   const { data: session, status } = useSession();
   const sessionLoading = status === "loading";
 
-  const [isSigningOut, setIsSigningOut] = useState(false);
-  const isLoading = sessionLoading || isSigningOut;
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const isLoading = sessionLoading || isAuthenticating;
+
+  const signIn = useCallback(async () => {
+    setIsAuthenticating(true);
+    await nextAuthSignIn("niftory");
+    setIsAuthenticating(false);
+  }, []);
 
   const signOut = useCallback(async () => {
-    setIsSigningOut(true);
+    setIsAuthenticating(true);
     fcl.unauthenticate();
     const { url } = await nextAuthSignOut({ redirect: false });
     await router.push(url);
-    setIsSigningOut(false);
+    setIsAuthenticating(false);
   }, [router]);
 
   useEffect(() => {
@@ -55,7 +64,7 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
   }, [requireAuth, session, router, isLoading, signOut]);
 
   return (
-    <AuthContext.Provider value={{ session, isLoading, signOut }}>
+    <AuthContext.Provider value={{ session, isLoading, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

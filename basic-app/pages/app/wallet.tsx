@@ -1,20 +1,12 @@
-import { Box, VStack } from "@chakra-ui/react";
-
 import AppLayout from "../../components/AppLayout";
-import { AppHeader } from "../../components/AppHeader";
 import { WalletSetup } from "../../components/wallet/WalletSetup";
 import { ComponentWithAuth } from "../../components/ComponentWithAuth";
 
-const Drops: ComponentWithAuth = () => (
+const WalletPage: ComponentWithAuth = () => (
   <AppLayout>
-    <Box mx="auto" color="white" >
-      <VStack>
-        <AppHeader />
-        <WalletSetup />
-      </VStack>
-    </Box>
+    <WalletSetup />
   </AppLayout>
 );
 
-Drops.requireAuth = true;
-export default Drops;
+WalletPage.requireAuth = true;
+export default WalletPage;
