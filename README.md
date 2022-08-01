@@ -1,7 +1,12 @@
-# Niftory Samples
+# Niftory
+#### web3 made easy
+The Niftory API distills everything you need to integrate web3 concepts like NFTs in your application into a platform that any developer can use. Our platform will turbo-charge your time-to-market by abstracting away all the complexity, so you can focus on experimenting, iterating quickly, and building rich web3 apps.
 
-Welcome to the Niftory Samples repo!
+Read the accompanying docs at [docs.niftory.com](https://docs.niftory.com).
 
-Check out the sample to get started:
+### Check out the sample apps to get started:
+- Basic App - A Next.js app for simple authentication, viewing, and transferring functionality.
+- More coming soon!
 
-- [Basic App](/basic-app/README.md) - A Next.js app for simple authentication, viewing, and transferring functionality.
+### Ready to start your own project? 
+Contact getstarted@niftory.com to connect with our team for onboarding. 
