@@ -8,7 +8,7 @@ Read the accompanying docs at [docs.niftory.com](https://docs.niftory.com).
 
 ### Check out the sample apps to get started:
 
-- Basic App - A Next.js app for simple authentication, viewing, and transferring functionality.
+- [Basic App](https://github.com/Niftory/niftory-samples/blob/main/basic-app/README.md) - A Next.js app for simple authentication, viewing, and transferring functionality.
 - _More coming soon!_
 
 ### Ready to start your own project?
