@@ -506,6 +506,7 @@ export type Org = Identifiable & {
   id: Scalars['ID'];
   /** This org's members. */
   members?: Maybe<Array<Maybe<AdminUser>>>;
+  name?: Maybe<Scalars['String']>;
 };
 
 /** Current Prisma Mapping: Pack. One or more NFTs packaged for sale. */
