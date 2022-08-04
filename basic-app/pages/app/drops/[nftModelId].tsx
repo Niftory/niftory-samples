@@ -53,13 +53,18 @@ const DropPage: ComponentWithAuth = () => {
   const nftModel = nftModelData?.nftModel
 
   const [isTransferring, setIsTransferring] = useState(false)
+  const [transferError, setTransferError] = useState<string>(null)
 
   const initiateTransfer = useCallback(() => {
     setIsTransferring(true)
+    setTransferError(null)
     axios
       .post(`/api/nft/${nftModelId}/transfer`)
       .then(({ data }) => router.push(`/app/collection/${data.transfer.id}`))
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        console.error(error)
+        setTransferError(error?.response?.data || error)
+      })
       .finally(() => setIsTransferring(false))
   }, [nftModelId, router])
 
@@ -90,6 +95,12 @@ const DropPage: ComponentWithAuth = () => {
           >
             {buttonText}
           </Button>
+          {transferError && (
+            <Text>
+              Something went wrong during transfer. The server responded with:
+              <Text color="red">{transferError.toString()}</Text>
+            </Text>
+          )}
         </>
       ) : (
         <Spinner size="lg"></Spinner>
