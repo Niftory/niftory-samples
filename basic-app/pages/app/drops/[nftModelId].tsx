@@ -96,9 +96,9 @@ const DropPage: ComponentWithAuth = () => {
             {buttonText}
           </Button>
           {transferError && (
-            <Text color="red">
-              Something went wrong during transfer. The server responded with this error:{" "}
-              {transferError.toString()}
+            <Text>
+              Something went wrong during transfer. The server responded with:
+              <Text color="red">{transferError.toString()}</Text>
             </Text>
           )}
         </>
