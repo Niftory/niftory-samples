@@ -5,6 +5,7 @@ import { gql } from "graphql-request"
 import { WalletSetupBox } from "./WalletSetupBox"
 import { useWalletMutation } from "../../hooks/useWalletMutation"
 import { useGraphQLQuery } from "../../hooks/useGraphQLQuery"
+import { useFlowUser } from "../../hooks/useFlowUser"
 
 gql`
   mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
@@ -17,6 +18,8 @@ gql`
 `
 
 export function VerifyWallet() {
+  useFlowUser()
+
   const { data } = useGraphQLQuery(useUserWalletQuery)
   const { mutate: verifyWallet, isLoading, error } = useWalletMutation(useVerifyWalletMutation)
 
