@@ -36,7 +36,7 @@ This app demonstrates three forms of authentication in the Niftory API.
 
 #### User authentication
 
-We use NextAuth to manage user sessions in this app.
+We use [NextAuth](https://next-auth.js.org/) to manage user sessions in this app.
 
 [Our configuration](pages/api/auth/[...nextauth].ts) uses Niftory as the only OAuth provider and saves the user's Niftory token in the session.
 
