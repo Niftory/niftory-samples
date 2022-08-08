@@ -50,7 +50,7 @@ const handler: NextApiHandler = async (req, res) => {
     nftModelId: nftModelId as string,
   })
 
-  if (userNftsResponse.nfts.length > 0) {
+  if (userNftsResponse.nfts?.items?.length > 0) {
     res.status(400).send("You already have an NFT from this model")
     return
   }
