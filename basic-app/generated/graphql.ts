@@ -359,6 +359,15 @@ export type NftFilterInput = {
   transferStates?: InputMaybe<Array<InputMaybe<TransferState>>>;
 };
 
+/** A list of NFTs. */
+export type NftList = Pageable & {
+  __typename?: 'NFTList';
+  /** The cursor to use to fetch the next page of results, if any. */
+  cursor?: Maybe<Scalars['String']>;
+  /** The NFTs in this list. */
+  items?: Maybe<Array<Maybe<Nft>>>;
+};
+
 /** Current Prisma Mapping: CollectibleListing. A listing of NFTs for sale. */
 export type NftListing = Identifiable & {
   __typename?: 'NFTListing';
@@ -439,6 +448,15 @@ export type NftModelFilterInput = {
   setIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** Filter by [NFTModel]({{Types.NFTModel}}) status. */
   status?: InputMaybe<Status>;
+};
+
+/** A list of NFTModels. */
+export type NftModelList = Pageable & {
+  __typename?: 'NFTModelList';
+  /** The cursor to use to fetch the next page of results, if any. */
+  cursor?: Maybe<Scalars['String']>;
+  /** The NFTModels in this list. */
+  items?: Maybe<Array<Maybe<NftModel>>>;
 };
 
 /** A set of NFTModels, to help you organize your NFTs. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts). */
@@ -595,6 +613,12 @@ export type PackagingModelSelectionFilter = {
   setId: Scalars['ID'];
 };
 
+/** An interface representing lists that can be paginated with a cursor. */
+export type Pageable = {
+  /** The cursor to use to fetch the next page of results, if any. */
+  cursor?: Maybe<Scalars['String']>;
+};
+
 /** The pricing for a particular listing */
 export type Pricing = SimplePricing;
 
@@ -623,9 +647,9 @@ export type Query = {
   /** Gets an [NFTModel]({{Types.NFTModel}}) by database ID. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts). */
   nftModel?: Maybe<NftModel>;
   /** Gets [NFTModel]({{Types.NFTModel}})s for the current [App]({{Types.App}}) context. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts). */
-  nftModels?: Maybe<Array<Maybe<NftModel>>>;
-  /** Gets all [NFT]({{Types.NFT}})s associated with the current [AppUser]({{Types.AppUser}}) context, including those that are transferring or failed to transfer. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts). */
-  nfts?: Maybe<Array<Maybe<Nft>>>;
+  nftModels?: Maybe<NftModelList>;
+  /** Gets [NFT]({{Types.NFT}})s associated with the current [AppUser]({{Types.AppUser}}) context, including those that are transferring or failed to transfer. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts). */
+  nfts?: Maybe<NftList>;
   /** Gets the [Org]({{Types.Org}}) corresponding to the current [App]({{Types.App}}) context. */
   org?: Maybe<Org>;
   /** Gets an [Org]({{Types.Org}}) by ID. */
@@ -689,12 +713,16 @@ export type QueryNftModelArgs = {
 
 
 export type QueryNftModelsArgs = {
+  cursor?: InputMaybe<Scalars['String']>;
   filter?: InputMaybe<NftModelFilterInput>;
+  maxResults?: InputMaybe<Scalars['PositiveInt']>;
 };
 
 
 export type QueryNftsArgs = {
+  cursor?: InputMaybe<Scalars['String']>;
   filter?: InputMaybe<NftFilterInput>;
+  maxResults?: InputMaybe<Scalars['PositiveInt']>;
   userId?: InputMaybe<Scalars['ID']>;
 };
 
@@ -919,7 +947,7 @@ export type UserNftsByUserQueryVariables = Exact<{
 }>;
 
 
-export type UserNftsByUserQuery = { __typename?: 'Query', nfts?: Array<{ __typename?: 'NFT', id: string } | null> | null };
+export type UserNftsByUserQuery = { __typename?: 'Query', nfts?: { __typename?: 'NFTList', cursor?: string | null, items?: Array<{ __typename?: 'NFT', id: string } | null> | null } | null };
 
 export type TransferNftToUserMutationVariables = Exact<{
   nftModelId: Scalars['ID'];
@@ -939,7 +967,7 @@ export type NftQuery = { __typename?: 'Query', nft?: { __typename?: 'NFT', id: s
 export type UserNftsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserNftsQuery = { __typename?: 'Query', nfts?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null };
+export type UserNftsQuery = { __typename?: 'Query', nfts?: { __typename?: 'NFTList', cursor?: string | null, items?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string } | null } | null> | null } | null };
 
 export type NftModelQueryVariables = Exact<{
   id: Scalars['String'];
@@ -951,7 +979,7 @@ export type NftModelQuery = { __typename?: 'Query', nftModel?: { __typename?: 'N
 export type NftModelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NftModelsQuery = { __typename?: 'Query', nftModels?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null };
+export type NftModelsQuery = { __typename?: 'Query', nftModels?: { __typename?: 'NFTModelList', cursor?: string | null, items?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTMedia', media: { __typename?: 'NFTFile', url: any, contentType: string }, thumbnail?: { __typename?: 'NFTFile', url: any, contentType: string } | { __typename?: 'SimpleFile', url: any, contentType: string } | null } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null } | null };
 
 
 export const ReactQuery_ReadyWalletDocument = `
@@ -1070,7 +1098,10 @@ export const useContractQuery = <
 export const ReactQuery_UserNftsByUserDocument = `
     query userNftsByUser($userId: ID!, $nftModelId: ID!) {
   nfts(userId: $userId, filter: {nftModelIds: [$nftModelId]}) {
-    id
+    items {
+      id
+    }
+    cursor
   }
 }
     `;
@@ -1158,10 +1189,12 @@ export const useNftQuery = <
 export const ReactQuery_UserNftsDocument = `
     query userNfts {
   nfts {
-    id
-    model {
+    cursor
+    items {
       id
-      title
+      model {
+        id
+      }
     }
   }
 }
@@ -1225,26 +1258,29 @@ export const useNftModelQuery = <
 export const ReactQuery_NftModelsDocument = `
     query nftModels {
   nftModels {
-    id
-    blockchainId
-    title
-    description
-    quantity
-    status
-    rarity
-    content {
-      files {
-        media {
-          url
-          contentType
+    cursor
+    items {
+      id
+      blockchainId
+      title
+      description
+      quantity
+      status
+      rarity
+      content {
+        files {
+          media {
+            url
+            contentType
+          }
+          thumbnail {
+            url
+            contentType
+          }
         }
-        thumbnail {
+        poster {
           url
-          contentType
         }
-      }
-      poster {
-        url
       }
     }
   }
@@ -1314,7 +1350,10 @@ export const ContractDocument = gql`
 export const UserNftsByUserDocument = gql`
     query userNftsByUser($userId: ID!, $nftModelId: ID!) {
   nfts(userId: $userId, filter: {nftModelIds: [$nftModelId]}) {
-    id
+    items {
+      id
+    }
+    cursor
   }
 }
     `;
@@ -1361,10 +1400,12 @@ export const NftDocument = gql`
 export const UserNftsDocument = gql`
     query userNfts {
   nfts {
-    id
-    model {
+    cursor
+    items {
       id
-      title
+      model {
+        id
+      }
     }
   }
 }
@@ -1400,26 +1441,29 @@ export const NftModelDocument = gql`
 export const NftModelsDocument = gql`
     query nftModels {
   nftModels {
-    id
-    blockchainId
-    title
-    description
-    quantity
-    status
-    rarity
-    content {
-      files {
-        media {
-          url
-          contentType
+    cursor
+    items {
+      id
+      blockchainId
+      title
+      description
+      quantity
+      status
+      rarity
+      content {
+        files {
+          media {
+            url
+            contentType
+          }
+          thumbnail {
+            url
+            contentType
+          }
         }
-        thumbnail {
+        poster {
           url
-          contentType
         }
-      }
-      poster {
-        url
       }
     }
   }

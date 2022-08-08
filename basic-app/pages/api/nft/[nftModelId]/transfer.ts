@@ -7,7 +7,10 @@ import { getSdk } from "../../../../generated/graphql"
 gql`
   query userNftsByUser($userId: ID!, $nftModelId: ID!) {
     nfts(userId: $userId, filter: { nftModelIds: [$nftModelId] }) {
-      id
+      items {
+        id
+      }
+      cursor
     }
   }
 `
