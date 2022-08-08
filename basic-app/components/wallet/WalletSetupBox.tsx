@@ -1,6 +1,5 @@
 import { Box, Button, Spinner, VStack } from "@chakra-ui/react"
-import { useRouter } from "next/router"
-import { useMemo } from "react"
+import { useEffect } from "react"
 
 type WalletSetupBoxProps = {
   text: string
@@ -16,7 +15,7 @@ export const WalletSetupBox = ({
   error,
   onClick,
 }: WalletSetupBoxProps) => {
-  useMemo(() => error && console.error(error), [error])
+  useEffect(() => error && console.error(error), [error])
 
   if (isLoading) {
     return <Spinner color="white" />
