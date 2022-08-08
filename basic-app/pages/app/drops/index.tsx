@@ -11,6 +11,8 @@ import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery";
 gql`
   query nftModels {
     nftModels {
+      cursor
+      items {
       id
       blockchainId
       title
@@ -34,13 +36,14 @@ gql`
         }
       }
     }
+    }
   }
 `
 
 const DropsPage: ComponentWithAuth = () => {
   const router = useRouter();
   const { data } = useGraphQLQuery(useNftModelsQuery);
-  const nftModels = data?.nftModels;
+  const nftModels = data?.nftModels?.items;
 
   return (
     <AppLayout>
