@@ -16,6 +16,7 @@ query userNfts {
       id
       model {
         id
+        title
       }
     }
   }
