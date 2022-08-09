@@ -1,9 +1,4 @@
-overwrite: true
-schema:
-  - ${NEXT_PUBLIC_API_PATH}:
-      headers:
-        X-Niftory-API-Key: ${NEXT_PUBLIC_API_KEY}
-
+schema: generated/schema.graphql
 documents: "./**/*.{ts,tsx}"
 generates:
   generated/graphql.ts:
@@ -17,3 +12,4 @@ generates:
           documentVariablePrefix: ReactQuery_
           fetcher: graphql-request
       - typescript-graphql-request
+overwrite: true
