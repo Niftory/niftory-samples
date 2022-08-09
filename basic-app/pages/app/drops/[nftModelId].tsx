@@ -1,4 +1,4 @@
-import { Heading, Text, Button, Spinner, Image } from "@chakra-ui/react"
+import { Heading, Text, Button, Image } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import AppLayout from "../../../components/AppLayout"
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth"
@@ -82,7 +82,7 @@ const DropPage: ComponentWithAuth = () => {
 
   return (
     <AppLayout>
-      {nftModel ? (
+      {nftModel && (
         <>
           <Image alt={nftModel.title} boxSize="30vh" src={nftModel.content?.poster?.url}></Image>
           <Heading>{nftModel.title}</Heading>
@@ -102,8 +102,6 @@ const DropPage: ComponentWithAuth = () => {
             </Text>
           )}
         </>
-      ) : (
-        <Spinner size="lg"></Spinner>
       )}
     </AppLayout>
   )

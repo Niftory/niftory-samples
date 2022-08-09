@@ -1,4 +1,4 @@
-import { Heading, Text, Image, Spinner } from "@chakra-ui/react"
+import { Heading, Text, Image } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 
 import AppLayout from "../../../components/AppLayout"
@@ -53,7 +53,7 @@ const NftPage: ComponentWithAuth = () => {
 
   return (
     <AppLayout>
-      {model ? (
+      {model && (
         <>
           <Image
             alt={nft.model?.title}
@@ -68,8 +68,6 @@ const NftPage: ComponentWithAuth = () => {
               : `Blockchain State: ID=${nft.blockchainId}, Serial=${nft.serialNumber}`}
           </Text>
         </>
-      ) : (
-        <Spinner size="lg"></Spinner>
       )}
     </AppLayout>
   )
