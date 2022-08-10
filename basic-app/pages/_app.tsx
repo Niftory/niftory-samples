@@ -6,14 +6,14 @@ import { AuthProvider } from "../components/AuthProvider"
 import { ComponentWithAuth } from "../components/ComponentWithAuth"
 import { GraphQLClientProvider } from "../components/GraphQLClientProvider"
 import { ReactQueryClientProvider } from "../components/ReactQueryClientProvider"
+import { SESSION_REFRESH_INTERVAL_MINUTES } from "../lib/constants"
 
 type AppProps<P = {}> = NextAppProps<P> & {
   Component: ComponentWithAuth
 }
 
 const App = ({ Component, pageProps: { session, auth, ...pageProps } }: AppProps): JSX.Element => (
-  // Refetch session every hour since niftory tokens expire after 1 hour
-  <SessionProvider session={session} refetchInterval={60 * 60}>
+  <SessionProvider session={session} refetchInterval={60 * SESSION_REFRESH_INTERVAL_MINUTES}>
     <AuthProvider requireAuth={Component.requireAuth}>
       <ReactQueryClientProvider>
         <GraphQLClientProvider>

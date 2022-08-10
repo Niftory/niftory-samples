@@ -23,6 +23,7 @@
     "@urql/exchange-retry": "^0.3.3",
     "axios": "^0.27.2",
     "buffer": "6.0.3",
+    "date-fns": "^2.29.1",
     "framer-motion": "^6.4.3",
     "google-protobuf": "^3.14.0",
     "graphql": "^15.5.3",

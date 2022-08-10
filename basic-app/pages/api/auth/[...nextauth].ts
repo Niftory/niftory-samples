@@ -2,6 +2,8 @@ import NextAuth from "next-auth"
 import { Provider } from "next-auth/providers"
 import urljoin from "url-join"
 import { refreshAuthToken } from "../../../lib/oauth"
+import subMinutes from "date-fns/subMinutes"
+import { SESSION_REFRESH_INTERVAL_MINUTES } from "../../../lib/constants"
 
 const NIFTORY_AUTH_PROVIDER: Provider = {
   id: "niftory",
@@ -34,6 +36,18 @@ const NIFTORY_AUTH_PROVIDER: Provider = {
   },
 }
 
+/**
+ * Checks if a given date is within the session refresh buffer
+ * @param expiresAt A date to check
+ * @returns True if the date is within the buffer, false otherwise
+ */
+function shouldRefresh(expiresAt: number | Date): boolean {
+  const now = Date.now()
+  const expiresAtDate = new Date(expiresAt)
+  const expiresAtDateMinus10Minutes = subMinutes(expiresAtDate, SESSION_REFRESH_INTERVAL_MINUTES)
+  return now < expiresAtDateMinus10Minutes.getTime()
+}
+
 export default NextAuth({
   providers: [NIFTORY_AUTH_PROVIDER],
   debug: true,
@@ -50,8 +64,8 @@ export default NextAuth({
         }
       }
 
-      // this isn't initial sign-in, so let's see if the token is still valid
-      if (Date.now() < token.authTokenExpiresAt) {
+      // this isn't initial sign-in, so let's see if the token expires soon
+      if (shouldRefresh(token.authTokenExpiresAt as number)) {
         // token is still valid, no need to refresh it
         return token
       }
