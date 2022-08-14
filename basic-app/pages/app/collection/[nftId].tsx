@@ -9,7 +9,7 @@ import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery"
 import { gql } from "graphql-request"
 
 gql`
-  query nft($id: String!) {
+  query nft($id: ID!) {
     nft(id: $id) {
       id
       blockchainId
@@ -27,14 +27,8 @@ gql`
             url
           }
           files {
-            media {
-              url
-              contentType
-            }
-            thumbnail {
-              url
-              contentType
-            }
+            url
+            contentType
           }
         }
       }
