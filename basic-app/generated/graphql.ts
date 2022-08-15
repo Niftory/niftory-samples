@@ -541,7 +541,9 @@ export type NftQueryVariables = Exact<{
 
 export type NftQuery = { __typename?: 'Query', nft?: { __typename?: 'NFT', id: string, blockchainId?: string | null, serialNumber?: number | null, model?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, rarity?: SimpleRarityLevel | null, quantity?: any | null, metadata?: any | null, content?: { __typename?: 'NFTContent', poster?: { __typename?: 'NFTFile', url: any } | null, files?: Array<{ __typename?: 'NFTFile', url: any, contentType: string } | null> | null } | null } | null } | null };
 
-export type UserNftsQueryVariables = Exact<{ [key: string]: never; }>;
+export type UserNftsQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['ID']>;
+}>;
 
 
 export type UserNftsQuery = { __typename?: 'Query', nfts?: { __typename?: 'NFTList', cursor?: string | null, items?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null } | null };
@@ -553,7 +555,9 @@ export type NftModelQueryVariables = Exact<{
 
 export type NftModelQuery = { __typename?: 'Query', nftModel?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTFile', url: any, contentType: string } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null };
 
-export type NftModelsQueryVariables = Exact<{ [key: string]: never; }>;
+export type NftModelsQueryVariables = Exact<{
+  appId?: InputMaybe<Scalars['ID']>;
+}>;
 
 
 export type NftModelsQuery = { __typename?: 'Query', nftModels?: { __typename?: 'NFTModelList', cursor?: string | null, items?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTFile', url: any, contentType: string } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null } | null };
@@ -758,8 +762,8 @@ export const useNftQuery = <
       options
     );
 export const ReactQuery_UserNftsDocument = `
-    query userNfts {
-  nfts {
+    query userNfts($userId: ID) {
+  nfts(userId: $userId) {
     cursor
     items {
       id
@@ -822,8 +826,8 @@ export const useNftModelQuery = <
       options
     );
 export const ReactQuery_NftModelsDocument = `
-    query nftModels {
-  nftModels {
+    query nftModels($appId: ID) {
+  nftModels(appId: $appId) {
     cursor
     items {
       id
@@ -952,8 +956,8 @@ export const NftDocument = gql`
 }
     `;
 export const UserNftsDocument = gql`
-    query userNfts {
-  nfts {
+    query userNfts($userId: ID) {
+  nfts(userId: $userId) {
     cursor
     items {
       id
@@ -988,8 +992,8 @@ export const NftModelDocument = gql`
 }
     `;
 export const NftModelsDocument = gql`
-    query nftModels {
-  nftModels {
+    query nftModels($appId: ID) {
+  nftModels(appId: $appId) {
     cursor
     items {
       id

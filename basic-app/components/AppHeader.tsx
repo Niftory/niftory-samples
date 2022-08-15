@@ -13,9 +13,12 @@ export function AppHeader() {
       <Heading>Niftory Sample App</Heading>
       {session && (
         <Text>
-          User: {session?.user?.name} ({session?.user?.email})
+          <>
+            User: {session?.user?.email} (ID: {session?.userId})
+          </>
         </Text>
       )}
+      <Text> App ID: {process.env.NEXT_PUBLIC_CLIENT_ID}</Text>
       <Text> X-Niftory-API-Key: </Text>
       <Text noOfLines={3} maxW="lg">
         {process.env.NEXT_PUBLIC_API_KEY}
