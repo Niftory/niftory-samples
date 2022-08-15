@@ -21,14 +21,8 @@ gql`
         rarity
         content {
           files {
-            media {
-              url
-              contentType
-            }
-            thumbnail {
-              url
-              contentType
-            }
+            url
+            contentType
           }
           poster {
             url

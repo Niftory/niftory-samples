@@ -11,7 +11,7 @@ import { gql } from "graphql-request"
 import { useAuthContext } from "../../../hooks/useAuthContext"
 
 gql`
-  query nftModel($id: String!) {
+  query nftModel($id: ID!) {
     nftModel(id: $id) {
       id
       blockchainId
@@ -21,14 +21,8 @@ gql`
       status
       content {
         files {
-          media {
-            url
-            contentType
-          }
-          thumbnail {
-            url
-            contentType
-          }
+          url
+          contentType
         }
         poster {
           url
