@@ -75,9 +75,33 @@ scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
 """An interface containing common data about files."""
 interface File {
   """The MIME content type for this file."""
-  contentType: String!
-  """The main URL for this file."""
+  contentType: String
+  """A unique identifier for this file in the Niftory API."""
+  id: ID!
+  """The MD5 hash of this file."""
+  md5: String
+  """A friendly name for the file."""
+  name: String!
+  """The upload state of the file."""
+  state: FileState!
+  """The cloud storage URL for this file. If state is GENERATED_UPLOAD_URL, then this url is the presigned URL to upload to."""
   url: URL!
+}
+
+"""The upload state of a File."""
+enum FileState {
+  """The file failed to ready."""
+  ERROR
+  """Niftory has created a pre-signed URL where the file can be uploaded."""
+  GENERATED_UPLOAD_URL
+  """Niftory has created a file entry in the database table."""
+  PENDING
+  """The file is ready for use."""
+  READY
+  """The file has been uploaded to a cloud storage for fast retrieval."""
+  UPLOADED_TO_CLOUD_STORAGE
+  """The file (and potentially its corresponding metadata) have been uploaded to IPFS."""
+  UPLOADED_TO_IPFS
 }
 
 """An interface representing objects with unique IDs"""
@@ -107,7 +131,7 @@ type Mutation {
     """Used if NFT ID is unspecified to randomly select an NFT from the [NFTModel]({{Types.NFTModel}})"""
     nftModelId: ID
     """The ID of the [AppUser]({{Types.AppUser}}) to send the NFT to."""
-    userId: ID!
+    userId: ID
   ): NFT
   """Verifies a [Wallet]({{Types.Wallet}}) to the currently signed-in user. If the signed verification code fails to decode with the wallet's public key or doesn't match the wallet's verification code, the request will fail. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/set-up-wallets)."""
   verifyWallet(
@@ -137,22 +161,32 @@ type NFT implements BlockchainEntity & Identifiable {
 }
 
 """The content for an NFT."""
-type NFTContent {
+type NFTContent implements Identifiable {
   """The file content in this NFT."""
   files: [NFTFile]
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
   """The poster file for this NFT's content"""
-  poster: NFTFile
+  poster: SimpleFile
 }
 
 """File (with ipfsContentUrl and ipfsMetadataUrl). A file to be included in an NFT. Extends [File]({{Types.File}}) to includes the IPFS addresses for the content and metadata."""
 type NFTFile implements File {
   """The MIME content type for this file."""
-  contentType: String!
+  contentType: String
+  """A unique identifier for this file in the Niftory API."""
+  id: ID!
   """The IPFS address for the content of this file."""
   ipfsContentAddress: String!
   """The IPFS address for the metadata of this file."""
   ipfsMetadataAddress: String!
-  """The main URL for this file."""
+  """The MD5 hash of this file."""
+  md5: String
+  """A friendly name for the file."""
+  name: String!
+  """The upload state of the file."""
+  state: FileState!
+  """The cloud storage URL for this file. If state is GENERATED_UPLOAD_URL, then this url is the presigned URL to upload to."""
   url: URL!
 }
 
@@ -365,6 +399,22 @@ interface Resource {
   status: Status
   """A mapping of tags for this resource. These will be stored in the Niftory API but will not be added to the blockchain."""
   tags: JSON
+}
+
+"""A file uploaded to the Niftory API."""
+type SimpleFile implements File {
+  """The MIME content type for this file."""
+  contentType: String
+  """A unique identifier for this file in the Niftory API."""
+  id: ID!
+  """The MD5 hash of this file."""
+  md5: String
+  """A friendly name for the file."""
+  name: String!
+  """The upload state of the file."""
+  state: FileState!
+  """The cloud storage URL for this file. If state is GENERATED_UPLOAD_URL, then this url is the presigned URL to upload to."""
+  url: URL!
 }
 
 """The default rarity levels in the Niftory API."""
