@@ -10,7 +10,7 @@ import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery"
 gql`
   query nftModels($appId: ID) {
     nftModels(appId: $appId) {
-      cursor
+      appId
       items {
         id
         blockchainId
@@ -29,6 +29,7 @@ gql`
           }
         }
       }
+      cursor
     }
   }
 `
