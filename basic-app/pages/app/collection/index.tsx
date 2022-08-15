@@ -11,7 +11,7 @@ import { useAuthContext } from "../../../hooks/useAuthContext"
 gql`
   query userNfts($userId: ID) {
     nfts(userId: $userId) {
-      cursor
+      userId
       items {
         id
         model {
@@ -19,6 +19,7 @@ gql`
           title
         }
       }
+      cursor
     }
   }
 `
