@@ -37,7 +37,7 @@ gql`
 const DropsPage: ComponentWithAuth = () => {
   const router = useRouter()
   const _appId = process.env.NEXT_PUBLIC_APP_CLIENT
-  const { data } = useGraphQLQuery(useNftModelsQuery, { appId: _appId })
+  const { data } = useGraphQLQuery(useNftModelsQuery)
   const nftModels = data?.nftModels?.items
 
   return (
