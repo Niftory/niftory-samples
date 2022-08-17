@@ -106,10 +106,34 @@ export type Contract = Identifiable & {
 /** An interface containing common data about files. */
 export type File = {
   /** The MIME content type for this file. */
-  contentType: Scalars['String'];
-  /** The main URL for this file. */
+  contentType?: Maybe<Scalars['String']>;
+  /** A unique identifier for this file in the Niftory API. */
+  id: Scalars['ID'];
+  /** The MD5 hash of this file. */
+  md5?: Maybe<Scalars['String']>;
+  /** A friendly name for the file. */
+  name: Scalars['String'];
+  /** The upload state of the file. */
+  state: FileState;
+  /** The cloud storage URL for this file. If state is GENERATED_UPLOAD_URL, then this url is the presigned URL to upload to. */
   url: Scalars['URL'];
 };
+
+/** The upload state of a File. */
+export enum FileState {
+  /** The file failed to ready. */
+  Error = 'ERROR',
+  /** Niftory has created a pre-signed URL where the file can be uploaded. */
+  GeneratedUploadUrl = 'GENERATED_UPLOAD_URL',
+  /** Niftory has created a file entry in the database table. */
+  Pending = 'PENDING',
+  /** The file is ready for use. */
+  Ready = 'READY',
+  /** The file has been uploaded to a cloud storage for fast retrieval. */
+  UploadedToCloudStorage = 'UPLOADED_TO_CLOUD_STORAGE',
+  /** The file (and potentially its corresponding metadata) have been uploaded to IPFS. */
+  UploadedToIpfs = 'UPLOADED_TO_IPFS'
+}
 
 /** An interface representing objects with unique IDs */
 export type Identifiable = {
@@ -143,7 +167,7 @@ export type MutationRegisterWalletArgs = {
 export type MutationTransferArgs = {
   id?: InputMaybe<Scalars['ID']>;
   nftModelId?: InputMaybe<Scalars['ID']>;
-  userId: Scalars['ID'];
+  userId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -172,24 +196,34 @@ export type Nft = BlockchainEntity & Identifiable & {
 };
 
 /** The content for an NFT. */
-export type NftContent = {
+export type NftContent = Identifiable & {
   __typename?: 'NFTContent';
   /** The file content in this NFT. */
   files?: Maybe<Array<Maybe<NftFile>>>;
+  /** A unique identifier for this object in the Niftory API. */
+  id: Scalars['ID'];
   /** The poster file for this NFT's content */
-  poster?: Maybe<NftFile>;
+  poster?: Maybe<SimpleFile>;
 };
 
 /** File (with ipfsContentUrl and ipfsMetadataUrl). A file to be included in an NFT. Extends [File]({{Types.File}}) to includes the IPFS addresses for the content and metadata. */
 export type NftFile = File & {
   __typename?: 'NFTFile';
   /** The MIME content type for this file. */
-  contentType: Scalars['String'];
+  contentType?: Maybe<Scalars['String']>;
+  /** A unique identifier for this file in the Niftory API. */
+  id: Scalars['ID'];
   /** The IPFS address for the content of this file. */
   ipfsContentAddress: Scalars['String'];
   /** The IPFS address for the metadata of this file. */
   ipfsMetadataAddress: Scalars['String'];
-  /** The main URL for this file. */
+  /** The MD5 hash of this file. */
+  md5?: Maybe<Scalars['String']>;
+  /** A friendly name for the file. */
+  name: Scalars['String'];
+  /** The upload state of the file. */
+  state: FileState;
+  /** The cloud storage URL for this file. If state is GENERATED_UPLOAD_URL, then this url is the presigned URL to upload to. */
   url: Scalars['URL'];
 };
 
@@ -415,6 +449,23 @@ export type Resource = {
   tags?: Maybe<Scalars['JSON']>;
 };
 
+/** A file uploaded to the Niftory API. */
+export type SimpleFile = File & {
+  __typename?: 'SimpleFile';
+  /** The MIME content type for this file. */
+  contentType?: Maybe<Scalars['String']>;
+  /** A unique identifier for this file in the Niftory API. */
+  id: Scalars['ID'];
+  /** The MD5 hash of this file. */
+  md5?: Maybe<Scalars['String']>;
+  /** A friendly name for the file. */
+  name: Scalars['String'];
+  /** The upload state of the file. */
+  state: FileState;
+  /** The cloud storage URL for this file. If state is GENERATED_UPLOAD_URL, then this url is the presigned URL to upload to. */
+  url: Scalars['URL'];
+};
+
 /** The default rarity levels in the Niftory API. */
 export enum SimpleRarityLevel {
   /** The most common NFTs. */
@@ -539,7 +590,7 @@ export type NftQueryVariables = Exact<{
 }>;
 
 
-export type NftQuery = { __typename?: 'Query', nft?: { __typename?: 'NFT', id: string, blockchainId?: string | null, serialNumber?: number | null, model?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, rarity?: SimpleRarityLevel | null, quantity?: any | null, metadata?: any | null, content?: { __typename?: 'NFTContent', poster?: { __typename?: 'NFTFile', url: any } | null, files?: Array<{ __typename?: 'NFTFile', url: any, contentType: string } | null> | null } | null } | null } | null };
+export type NftQuery = { __typename?: 'Query', nft?: { __typename?: 'NFT', id: string, blockchainId?: string | null, serialNumber?: number | null, model?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, rarity?: SimpleRarityLevel | null, quantity?: any | null, metadata?: any | null, content?: { __typename?: 'NFTContent', poster?: { __typename?: 'SimpleFile', url: any } | null, files?: Array<{ __typename?: 'NFTFile', url: any, contentType?: string | null } | null> | null } | null } | null } | null };
 
 export type UserNftsQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['ID']>;
@@ -553,14 +604,14 @@ export type NftModelQueryVariables = Exact<{
 }>;
 
 
-export type NftModelQuery = { __typename?: 'Query', nftModel?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTFile', url: any, contentType: string } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null };
+export type NftModelQuery = { __typename?: 'Query', nftModel?: { __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTFile', url: any, contentType?: string | null } | null> | null, poster?: { __typename?: 'SimpleFile', url: any } | null } | null } | null };
 
 export type NftModelsQueryVariables = Exact<{
   appId?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type NftModelsQuery = { __typename?: 'Query', nftModels?: { __typename?: 'NFTModelList', appId: string, cursor?: string | null, items?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTFile', url: any, contentType: string } | null> | null, poster?: { __typename?: 'NFTFile', url: any } | null } | null } | null> | null } | null };
+export type NftModelsQuery = { __typename?: 'Query', nftModels?: { __typename?: 'NFTModelList', appId: string, cursor?: string | null, items?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTFile', url: any, contentType?: string | null } | null> | null, poster?: { __typename?: 'SimpleFile', url: any } | null } | null } | null> | null } | null };
 
 
 export const ReactQuery_ReadyWalletDocument = `
