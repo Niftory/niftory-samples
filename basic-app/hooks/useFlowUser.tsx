@@ -12,6 +12,9 @@ export function useFlowUser() {
       .put("accessNode.api", process.env.NEXT_PUBLIC_FLOW_ACCESS_API) // connect to Flow
       .put("discovery.wallet", process.env.NEXT_PUBLIC_WALLET_API) // use Blocto wallet
 
+      // use pop instead of default IFRAME/RPC option for security enforcement
+      .put("discovery.wallet.method", "POP/RPC")
+
     // Sets flowUser whenver it changes
     fcl.currentUser.subscribe(setFlowUser)
   }, [])
