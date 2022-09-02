@@ -597,7 +597,7 @@ export type UserNftsQueryVariables = Exact<{
 }>;
 
 
-export type UserNftsQuery = { __typename?: 'Query', nfts?: { __typename?: 'NFTList', userId?: string | null, cursor?: string | null, items?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null } | null };
+export type UserNftsQuery = { __typename?: 'Query', nfts?: { __typename?: 'NFTList', cursor?: string | null, items?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null } | null };
 
 export type NftModelQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -611,7 +611,7 @@ export type NftModelsQueryVariables = Exact<{
 }>;
 
 
-export type NftModelsQuery = { __typename?: 'Query', nftModels?: { __typename?: 'NFTModelList', appId: string, cursor?: string | null, items?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTFile', url: any, contentType?: string | null } | null> | null, poster?: { __typename?: 'SimpleFile', url: any } | null } | null } | null> | null } | null };
+export type NftModelsQuery = { __typename?: 'Query', nftModels?: { __typename?: 'NFTModelList', cursor?: string | null, items?: Array<{ __typename?: 'NFTModel', id: string, blockchainId?: string | null, title: string, description: string, quantity?: any | null, status?: Status | null, rarity?: SimpleRarityLevel | null, content?: { __typename?: 'NFTContent', files?: Array<{ __typename?: 'NFTFile', url: any, contentType?: string | null } | null> | null, poster?: { __typename?: 'SimpleFile', url: any } | null } | null } | null> | null } | null };
 
 
 export const ReactQuery_ReadyWalletDocument = `
@@ -815,7 +815,6 @@ export const useNftQuery = <
 export const ReactQuery_UserNftsDocument = `
     query userNfts($userId: ID) {
   nfts(userId: $userId) {
-    userId
     items {
       id
       model {
@@ -880,7 +879,6 @@ export const useNftModelQuery = <
 export const ReactQuery_NftModelsDocument = `
     query nftModels($appId: ID) {
   nftModels(appId: $appId) {
-    appId
     items {
       id
       blockchainId
@@ -1011,7 +1009,6 @@ export const NftDocument = gql`
 export const UserNftsDocument = gql`
     query userNfts($userId: ID) {
   nfts(userId: $userId) {
-    userId
     items {
       id
       model {
@@ -1048,7 +1045,6 @@ export const NftModelDocument = gql`
 export const NftModelsDocument = gql`
     query nftModels($appId: ID) {
   nftModels(appId: $appId) {
-    appId
     items {
       id
       blockchainId

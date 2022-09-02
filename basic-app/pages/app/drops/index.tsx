@@ -10,7 +10,6 @@ import { useGraphQLQuery } from "../../../hooks/useGraphQLQuery"
 gql`
   query nftModels($appId: ID) {
     nftModels(appId: $appId) {
-      appId
       items {
         id
         blockchainId
@@ -36,8 +35,8 @@ gql`
 
 const DropsPage: ComponentWithAuth = () => {
   const router = useRouter()
-  const _appId = process.env.NEXT_PUBLIC_CLIENT_ID as string
-  const { data } = useGraphQLQuery(useNftModelsQuery, { appId: _appId })
+  const appId = process.env.NEXT_PUBLIC_CLIENT_ID as string
+  const { data } = useGraphQLQuery(useNftModelsQuery, { appId })
   const nftModels = data?.nftModels?.items
 
   return (
