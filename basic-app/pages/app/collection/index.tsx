@@ -11,7 +11,6 @@ import { useAuthContext } from "../../../hooks/useAuthContext"
 gql`
   query userNfts($userId: ID) {
     nfts(userId: $userId) {
-      userId
       items {
         id
         model {

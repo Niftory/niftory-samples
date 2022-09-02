@@ -597,7 +597,7 @@ export type UserNftsQueryVariables = Exact<{
 }>;
 
 
-export type UserNftsQuery = { __typename?: 'Query', nfts?: { __typename?: 'NFTList', userId?: string | null, cursor?: string | null, items?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null } | null };
+export type UserNftsQuery = { __typename?: 'Query', nfts?: { __typename?: 'NFTList', cursor?: string | null, items?: Array<{ __typename?: 'NFT', id: string, model?: { __typename?: 'NFTModel', id: string, title: string } | null } | null> | null } | null };
 
 export type NftModelQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -815,7 +815,6 @@ export const useNftQuery = <
 export const ReactQuery_UserNftsDocument = `
     query userNfts($userId: ID) {
   nfts(userId: $userId) {
-    userId
     items {
       id
       model {
@@ -1010,7 +1009,6 @@ export const NftDocument = gql`
 export const UserNftsDocument = gql`
     query userNfts($userId: ID) {
   nfts(userId: $userId) {
-    userId
     items {
       id
       model {
