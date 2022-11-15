@@ -1,8 +1,7 @@
 import { NextApiHandler } from "next"
 import { gql } from "graphql-request"
 import { getBackendGraphQLClient } from "../../../../lib/BackendGraphQLClient"
-import { getCookie, hasCookie } from "cookies-next"
-import { COOKIE_NAME, getAddressFromCookie } from "../../../../lib/cookieUtils"
+import { getAddressFromCookie } from "../../../../lib/cookieUtils"
 
 const CheckoutWithDapperWallet = gql`
   mutation CheckoutWithDapperWallet(
