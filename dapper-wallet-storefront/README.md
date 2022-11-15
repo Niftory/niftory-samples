@@ -6,6 +6,10 @@ This is an NFT Storefront using Dapper Wallet built on Next.js that uses the [Ni
 
 Visit https://dapper-sample.niftory.com/ to see a deployed instance of this app and explore the capabilities you can get started with for free!
 
+### Test credit card payments
+
+Dapper Wallet utilizes Circle for credit card payments. To try out the purchase flow, you can use [Circle's test credit card numbers](https://developers.circle.com/developer/docs/test-card-numbers).
+
 ## Usage
 
 Let's get you set up!
