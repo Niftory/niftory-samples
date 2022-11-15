@@ -290,7 +290,7 @@ transaction(
 
   pre {
     (nftId == nil && setId != nil && templateId != nil)
-      || (nftId != nil && setId == nil && templateId == nil)
+      || (nftId != nil)
       : "Either nftId or (setId and templateId) must be provided, but not both"
   }
 

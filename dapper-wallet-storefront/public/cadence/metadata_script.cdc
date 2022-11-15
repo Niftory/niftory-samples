@@ -28,6 +28,7 @@ pub fun main(
   registryAddress: Address,
   brand: String,
   nftId: UInt64?,
+  nftTypeRef: String,
   setId: Int?,
   templateId: Int?,
   price: UFix64,
