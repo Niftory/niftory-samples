@@ -23,3 +23,4 @@ yarn-error.log*
 .eslintcache
 
 .vercel
+node_modules
