@@ -2,17 +2,25 @@
 
 This is an NFT Storefront using Dapper Wallet built on Next.js that uses the [Niftory API](https://docs.niftory.com/home/v/api/).
 
-### NFT Purchases
+## See it in action
 
-This sample uses Dapper Wallet for the checkout flow, including handling payments.
+Visit https://dapper-sample.niftory.com/ to see a deployed instance of this app and explore the capabilities you can get started with for free!
 
 ## Usage
 
-### Configuration
+Let's get you set up!
+
+### Config
 
 This app uses [dotenv](https://github.com/motdotla/dotenv) for configuration, so you can set your app's environment variables by creating a `.env` file in this directory.
 
-See [.env.example](./.env.example) for an example of how to configure these environment variables.
+See [.env.example](./.env.example) for an example of how to configure these environment variables. The only thing you need to configure is:
+
+- `NEXT_PUBLIC_API_KEY`
+- `NEXT_PUBLIC_CLIENT_ID`
+- `CLIENT_SECRET`
+
+**Follow [this guide](https://docs.niftory.com/home/v/api/getting-started/api-quickstart#get-your-api-keys) to get your Niftory API keys.** Note that your project and contract will also need to be approved by Dapper in order to successfully execute transactions with Dapper Wallet
 
 ### Running the app
 
@@ -33,9 +41,24 @@ yarn dev
 - Graph QL Client: [urql](https://formidable.com/open-source/urql/)
 - GraphQL codegen: [graphql-codeg-generator](https://www.graphql-code-generator.com/)
 
+### Wallet Setup
+
+This app demonstrates how to take the user through the wallet setup steps with the [Flow client library](https://docs.onflow.org/fcl/).
+
+See the [WalletSetup component](./lib/components/../../components/wallet/WalletSetup.tsx) to explore how this flow works.
+
+### Dapper Wallet transactions
+
+The advantage of Niftory is that we handle the complex blockchain stuff for you. In that vein, Niftory has implemented all the cadence scripts and transactions needed to handle purchase, minting, listing and transfer using Dapper Wallet.
+
+While you will be using the Niftory APIs to get/sign the transactions, you can view the Cadence code here:
+
+- [Purchase transaction](./public/cadence/buy_from_dapper_with_duc_testnet.cdc) (used to handle everything associated with checkout with Dapper Wallet -- purchase, minting, transfer, etc.)
+- [Metadata script](./public/cadence/metadata_script_testnet.cdc) (used to display the item being checked out in the Dapper Wallet pop-up)
+
 ### Authentication
 
-This app demonstrates various forms of authentication in the Niftory API.
+This app demonstrates various forms of authentication using the Niftory API.
 
 #### User authentication
 
@@ -47,9 +70,3 @@ The browser's [GraphQL client](src/lib/GraphQLClientProvider.tsx) specifies the 
 This allows users to view available NFTs without signing in.
 
 Before purchasing an NFT, the app will prompt the user to set up their wallet.
-
-## Wallet Setup
-
-This app demonstrates how to take the user through the wallet setup steps with the [Flow client library](https://docs.onflow.org/fcl/).
-
-See the [WalletSetup component](./lib/components/../../components/wallet/WalletSetup.tsx) to explore how this flow works.
