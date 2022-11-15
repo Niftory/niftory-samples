@@ -1,9 +1,19 @@
-import { AspectRatio, Box, Center, HStack, Image, Link, Skeleton, Stack, Text } from '@chakra-ui/react';
-import router from 'next/router';
-import * as React from 'react';
+import {
+  AspectRatio,
+  Box,
+  Center,
+  HStack,
+  Image,
+  Link,
+  Skeleton,
+  Stack,
+  Text,
+} from "@chakra-ui/react"
+import router from "next/router"
+import * as React from "react"
 
-import { NftModel } from '../../../generated/graphql';
-import { ProductCardStats } from '../../ui/Content/ProductCard/ProductCardStats';
+import { NftModel } from "../../../generated/graphql"
+import { ProductCardStats } from "../../ui/Content/ProductCard/ProductCardStats"
 
 export const NFTModelCard = (props: { nftModel: NftModel; clickUrl: string }) => {
   const { nftModel, clickUrl } = props
@@ -12,6 +22,7 @@ export const NFTModelCard = (props: { nftModel: NftModel; clickUrl: string }) =>
   const title = nftModel?.title
   const quantity = nftModel?.quantity
   const stats = {
+    quantity: nftModel?.quantity,
     rarity: nftModel?.rarity,
   }
 
@@ -30,13 +41,8 @@ export const NFTModelCard = (props: { nftModel: NftModel; clickUrl: string }) =>
           </AspectRatio>
           <HStack spacing="3" position="absolute" top="4" left="4"></HStack>
         </Box>
-        <Center>
-          <Text fontWeight="medium" fontSize="sm" color="page.accent">
-            {title}
-          </Text>
-          <Text fontWeight="medium" fontSize="sm" color="page.accent">
-            {quantity}
-          </Text>
+        <Center fontWeight="medium" fontSize="sm" color="page.accent">
+          {title}
         </Center>
 
         {stats && <ProductCardStats {...stats} />}
