@@ -1,0 +1,23 @@
+query nftModels($appId: ID) {
+  nftModels(appId: $appId) {
+    items {
+      id
+      blockchainId
+      title
+      description
+      quantity
+      status
+      rarity
+      content {
+        files {
+          url
+          contentType
+        }
+        poster {
+          url
+        }
+      }
+    }
+    cursor
+  }
+}
