@@ -13,4 +13,4 @@ Read the accompanying docs at [docs.niftory.com](https://docs.niftory.com).
 
 ### Ready to start your own project?
 
-Contact getstarted@niftory.com to connect with our team for onboarding.
+Go to [Niftory.com](https://niftory.com) to get started!

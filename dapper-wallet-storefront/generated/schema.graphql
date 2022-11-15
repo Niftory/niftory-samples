@@ -1,0 +1,964 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+"""An application in the Niftory ecosystem. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/app-and-appuser)."""
+type App implements Identifiable {
+  """The contract associated with this app."""
+  contract: Contract
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+}
+
+"""Represents a user of a particular Niftory [App]({{Types.App}}). Read more [here](https://docs.niftory.com/home/v/api/core-concepts/app-and-appuser)."""
+type AppUser implements Identifiable & UserData {
+  """The app this user is scoped to."""
+  app: App
+  """This user's email."""
+  email: EmailAddress
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+  """The URL for this user's image."""
+  image: String
+  """The user's full name."""
+  name: String
+  """The primary wallet used by this user."""
+  primaryWallet: Wallet
+  """The wallet owned by this user."""
+  wallet: Wallet @deprecated(reason: "Use primaryWallet or wallets instead.")
+  """All wallets owned by this user."""
+  wallets: [Wallet]
+}
+
+"""Represents a list of [AppUser]({{Types.AppUser}})s of a particular Niftory [App]({{Types.App}}). Read more [here](https://docs.niftory.com/home/v/api/core-concepts/app-and-appuser)."""
+type AppUserList implements Pageable {
+  """The cursor to use to fetch the next page of results, if any."""
+  cursor: String
+  """The AppUsers in this list."""
+  items: [AppUser]
+}
+
+"""An interface representing objects that have attributes property for non-blockchain property storage."""
+interface Attributable {
+  """A mapping of attributes for this object. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+}
+
+"""The blockchains supported by Niftory."""
+enum Blockchain {
+  """The Ethereum blockchain. https://ethereum.org/en/"""
+  ETHEREUM
+  """The Flow blockchain. https://www.onflow.org/"""
+  FLOW
+  """The Polygon blockchain. https://polygon.technology/"""
+  POLYGON
+}
+
+"""An interface representing properties common to all objects that exist on the blockchain"""
+interface BlockchainEntity {
+  """The ID of this resource on the blockchain."""
+  blockchainId: String
+  """A mapping of properties that will be added to the blockchain."""
+  metadata: JSONObject
+}
+
+"""An interface representing properties common to all objects that exist on the blockchain"""
+interface BlockchainResource implements Attributable & BlockchainEntity & Identifiable & Resource {
+  """A mapping of attributes for this object. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+  """The ID of this resource on the blockchain."""
+  blockchainId: String
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+  """A mapping of properties that will be added to the blockchain."""
+  metadata: JSONObject
+  """The status of this resource. Can be used to track progress in designing and creating resources."""
+  status: Status
+}
+
+"""A smart contract on the blockchain. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/contract)."""
+type Contract implements Identifiable {
+  """The address at which this contract is deployed."""
+  address: String
+  """The blockchain in which this contract is deployed."""
+  blockchain: Blockchain
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+  """The name of this contract."""
+  name: String
+}
+
+input CreateFileOptionsInput {
+  """The Content-Type (MIME type) of the file to be uploaded. This must match the Content-Type header you will use to upload the file to the returned URL. If this is left empty, your Content-Type header must also be empty."""
+  contentType: String
+  """Required if the file to be uploaded is a video, and uploadToIPFS=true. In that case a poster must have already been uploaded (so it can be used as the image on IPFS)."""
+  posterFileId: ID
+  """Whether to asynchronously trigger an IPFS upload after the file has been uploaded to the returned cloud storage URL."""
+  uploadToIPFS: Boolean = true
+}
+
+"""The input to create a custodial Niftory [Wallet]({{Types.Wallet}})."""
+input CreateNiftoryWalletInput {
+  """A mapping of attributes for this resource. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+}
+
+"""A currency that can be accepted for payment."""
+enum Currency {
+  """The United States dollar."""
+  USD
+}
+
+"""A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/."""
+scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
+
+"""An interface containing common data about files."""
+interface File {
+  """The MIME content type for this file."""
+  contentType: String
+  """A unique identifier for this file in the Niftory API."""
+  id: ID!
+  """The MD5 hash of this file."""
+  md5: String
+  """A friendly name for the file."""
+  name: String!
+  """The upload state of the file."""
+  state: FileState!
+  """The cloud storage URL for this file. If state is GENERATED_UPLOAD_URL, then this url is the presigned URL to upload to."""
+  url: URL!
+}
+
+"""The upload state of a File."""
+enum FileState {
+  """The file failed to ready."""
+  ERROR
+  """Niftory has created a pre-signed URL where the file can be uploaded."""
+  GENERATED_UPLOAD_URL
+  """Niftory has created a file entry in the database table."""
+  PENDING
+  """The file is ready for use."""
+  READY
+  """The file has been uploaded to a cloud storage for fast retrieval."""
+  UPLOADED_TO_CLOUD_STORAGE
+  """The file (and potentially its corresponding metadata) have been uploaded to IPFS."""
+  UPLOADED_TO_IPFS
+}
+
+"""A simple pricing strategy for listings with fixed prices."""
+type FixedPricing {
+  """The currency at which this price is set."""
+  currency: Currency!
+  """The price in the specified currency at which this item is for sale."""
+  price: PositiveFloat!
+}
+
+"""An interface representing objects with unique IDs"""
+interface Identifiable {
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+}
+
+"""The response from initiating a purchase checkout."""
+type InitiateCheckoutResponse {
+  """The URL to redirect the user to."""
+  redirectUrl: URL
+  """The status of the payment"""
+  status: String
+  """A message to display to the user which contains checkout information"""
+  statusMessage: String
+}
+
+"""A purchase invoice for an NFT. The invoice is created when an NFT is reserved using reserve, and updated when a payment is initiated with checkout"""
+type Invoice implements Identifiable {
+  """The ID of the Niftory invoice for an NFT purchase"""
+  id: ID!
+  """The listing associated with this invoice"""
+  listingId: String
+  """The state of this invoice"""
+  state: InvoiceState
+  """The total spent in USD in this invoice"""
+  total: PositiveFloat
+  """The user id associated with this invoice"""
+  userId: String
+}
+
+"""A list of completed invoices for this app"""
+type InvoiceList implements Pageable {
+  """The cursor to use to fetch the next page of results, if any."""
+  cursor: String
+  """The invoices in this list."""
+  items: [Invoice]
+}
+
+"""The state of an invoice."""
+enum InvoiceState {
+  """This invoice is completed."""
+  COMPLETED
+  """This invoice was created and ready for payment."""
+  CREATED
+  """An error was encountered while performing this payment."""
+  ERROR
+  """This invoice is pending payment."""
+  PENDING
+}
+
+"""The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+"""The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."""
+scalar JSONObject @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+"""The state of a listing."""
+enum ListingState {
+  """The listing is active and available for sale."""
+  ACTIVE
+  """The listing is inactive, so it's not open for sale."""
+  INACTIVE
+  """All NFTs in this listing have been sold."""
+  SOLD
+}
+
+type Mutation {
+  """Initiates checkout for a reserved NFT."""
+  checkout(
+    """The ID of the Invoice representing the reserved NFT. This can be generated using reserve ."""
+    invoiceId: String!
+    """The URL to redirect to on payment error."""
+    onError: String!
+    """The URL to redirect to on successful payment."""
+    onSuccess: String!
+  ): InitiateCheckoutResponse
+  """Generates a pre-signed URL that can then be used to upload a file. Once the file has been uploaded to the URL, it will automatically be uploaded to IPFS (if desired). Use the returned [File]({{Types.SimpleFile}}).state to track the upload."""
+  createFileUploadUrl(
+    """Description about the file. If specified, and uploadToIpfs=true, this description will be added to the IPFS file metadata."""
+    description: String
+    """A friendly name for the file."""
+    name: String!
+    """File upload options, such as whether to upload to IPFS."""
+    options: CreateFileOptionsInput = {uploadToIPFS: true}
+  ): File
+  """Creates a new [NFTModel]({{Types.NFTModel}})."""
+  createNFTModel(
+    """The data to create the NFTModel."""
+    data: NFTModelCreateInput!
+    """The ID of the [NFTSet]({{Types.NFTSet}}) that this model should belong to. This can be created using [createNFTSet]({{Mutations.createSet}}) or retrieved using This can be created using [sets]({{Queries.sets}})."""
+    setId: ID!
+  ): NFTModel
+  """Creates a new [NFTSet]({{Types.NFTSet}})."""
+  createNFTSet(
+    """The input data for the NFTSet."""
+    data: NFTSetCreateInput!
+  ): NFTSet
+  """Provisions a custodial Niftory [Wallet]({{Types.Wallet}}) and, if specified, associates it with the given [AppUser]({{Types.AppUser}}). Note: The call fails if the user already has a wallet."""
+  createNiftoryWallet(
+    data: CreateNiftoryWalletInput
+    """The ID of the [AppUser]({{Types.AppUser}}) to associate with the created Wallet. If unspecified, the caller is responsible for mapping the Wallet to their user."""
+    userId: ID
+  ): Wallet
+  """Initiates minting for a given [NFTModel]({{Types.NFTmodel}})."""
+  mintNFTModel(
+    """The ID of the [NFTModel]({{Types.NFTmodel}}) to mint [NFT]({{Types.NFT}})s from."""
+    id: ID!
+    """The number of NFTs to mint. Defaults to minting all NFTs in the model. If quantity exceeds the quantity defined in the model, the latter is used."""
+    quantity: PositiveInt
+  ): NFTModel
+  """Marks a [Wallet]({{Types.Wallet}}) as ready, indicating that the wallet is ready to receive [NFT]({{Types.NFT}})s from the app's [Contract]({{Types.Contract}}). The wallet must be verified before this succeeds. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/set-up-wallets)."""
+  readyWallet(
+    """The address of the wallet."""
+    address: String!
+  ): Wallet
+  """Registers a [Wallet]({{Types.Wallet}}), associating it with the currently signed-in [AppUser]({{Types.AppUser}}) if specified. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/set-up-wallets)."""
+  registerWallet(
+    """The address of the wallet."""
+    address: String!
+    data: RegisterWalletInput
+  ): Wallet
+  """Reserves an [NFT]({{Types.NFT}}) for an [AppUser]({{Types.AppUser}}) and returns an [Invoice]({{Types.Invoice}}) for purchase."""
+  reserve(
+    """The ID of the listing to reserve an NFT from."""
+    listingId: ID!
+  ): Invoice
+  """Initiates the transfer of an [NFT]({{Types.NFT}}) to the currently-logged in [AppUser]({{Types.AppUser}}). The NFT is reserved for the user in database, and you can use the NFT.status field to check on the transfer progress."""
+  transfer(
+    """The address of the [Wallet]({{Types.Wallet}}) to filter by. This mutation requires the `userId`, `walletId' or the wallet `address` to be specified."""
+    address: String
+    """The ID of the [NFT]({{Types.NFT}}) to send."""
+    id: ID
+    """Used if NFT ID is unspecified to randomly select an NFT from the [NFTModel]({{Types.NFTModel}})"""
+    nftModelId: ID
+    """The ID of the [AppUser]({{Types.AppUser}}) to send the NFT to. This mutation requires the `userId`, `walletId' or the wallet `address` to be specified."""
+    userId: ID
+    """The database ID of the [Wallet]({{Types.Wallet}}) to filter by. This mutation requires the `userId`, `walletId' or the wallet `address` to be specified."""
+    walletId: ID
+  ): NFT
+  """Updates an existing [NFTModel]({{Types.NFTModel}}). Note that if this NFTModel has already been used to mint an NFT, the update operation will fail for any properties that affect the blockchain (such as 'quantity', 'title', 'metadata', etc.), whereas updating 'attributes' will succeed."""
+  updateNFTModel(
+    """The data to update the NFTModel."""
+    data: NFTModelUpdateInput!
+    """The ID of the NFT model to update."""
+    id: ID!
+  ): NFTModel
+  """Updates an existing [NFTSet]({{Types.NFTSet}})."""
+  updateNFTSet(
+    """The input data for the NFTSet."""
+    data: NFTSetUpdateInput!
+    """The ID of the NFTSet to update."""
+    id: ID!
+  ): NFTSet
+  """Update a [Wallet]({{Types.Wallet}}) of the currently signed-in user. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/set-up-wallets)."""
+  updateWallet(
+    """The address of the wallet."""
+    address: String!
+    data: UpdateWalletInput
+  ): Wallet
+  """Creates an [NFTContent]({{Types.NFTContent}}) object containing pre-signed URLs that can then be used to upload a file and poster. The primary file will automatically be uploaded to IPFS once it's been uploaded to the pre-signed URL. Each returned [File]({{Types.SimpleFile}}) has a 'state' property to track the upload."""
+  uploadNFTContent(
+    """The Content-Type (MIME type) of the file to be uploaded. This must match the Content-Type header you will use to upload the file to the returned URL. If this is left empty, your Content-Type header must also be empty."""
+    contentType: String
+    """Description about the file. If specified, this description will be added to the IPFS file metadata."""
+    description: String
+    """A friendly name for the file."""
+    name: String
+    """The Content-Type (MIME type) of the poster file to be uploaded. This must match the Content-Type header you will use to upload the poster to the returned URL. If this is left empty, your Content-Type header must also be empty."""
+    posterContentType: String
+  ): NFTContent
+  """Verifies a [Wallet]({{Types.Wallet}}) to the currently signed-in user. If the signed verification code fails to decode with the wallet's public key or doesn't match the wallet's verification code, the request will fail. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/set-up-wallets)."""
+  verifyWallet(
+    """The address of the wallet."""
+    address: String!
+    """The verification code of the wallet signed by the wallet's private key."""
+    signedVerificationCode: JSON!
+  ): Wallet
+}
+
+"""Respresentation of a [non-fungible token](https://en.wikipedia.org/wiki/Non-fungible_token) in the Niftory ecosystem (it doesn't have to be minted on the blockchain yet). Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts)."""
+type NFT implements BlockchainEntity & Identifiable & SellableEntity {
+  """The ID of this resource on the blockchain."""
+  blockchainId: String
+  """The state of this NFT on the blockchain"""
+  blockchainState: NFTBlockchainState!
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+  """A mapping of properties that will be added to the blockchain."""
+  metadata: JSONObject
+  """The model from which this NFT was created."""
+  model: NFTModel
+  """This state of this object's sale."""
+  saleState: SaleState
+  """The serial number for this NFT within its model."""
+  serialNumber: Int
+  """The status of this NFT (e.g. if it is available or being transferred to a user"""
+  status: TransferState @deprecated(reason: "Use blockchainState or saleState instead.")
+  """The wallet containing this NFT, if it is owned by a user."""
+  wallet: Wallet
+}
+
+"""The state of an NFT on the blockchain."""
+enum NFTBlockchainState {
+  """An error occurred with this item's last blockchain operation."""
+  ERROR
+  """The item is minted, and are no pending operations on it."""
+  MINTED
+  """The item is being minted."""
+  MINTING
+  """The item has already been transferred to a user's wallet."""
+  TRANSFERRED
+  """The item is being transferred."""
+  TRANSFERRING
+  """The item hasn't been minted yet."""
+  UNMINTED
+}
+
+"""The content for an NFT."""
+type NFTContent implements Identifiable {
+  """The file content in this NFT."""
+  files: [NFTFile]
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+  """The poster file for this NFT's content"""
+  poster: SimpleFile
+}
+
+"""The input to create or update [NFTContent]({{Types.NFTContent}})."""
+input NFTContentInput {
+  """The ID of the [NFTFile]({{Types.NFTFile}}) content. This can be created using [createFileUploadUrl]({{Mutations.createFileUploadUrl}})."""
+  fileId: ID!
+  """The ID of the poster [File]({{Types.File}}). This can be created using [createFileUploadUrl]({{Mutations.createFileUploadUrl}})."""
+  posterId: ID
+}
+
+"""File (with ipfsContentUrl and ipfsMetadataUrl). A file to be included in an NFT. Extends [File]({{Types.File}}) to includes the IPFS addresses for the content and metadata."""
+type NFTFile implements File {
+  """The MIME content type for this file."""
+  contentType: String
+  """A unique identifier for this file in the Niftory API."""
+  id: ID!
+  """The IPFS address for the content of this file."""
+  ipfsContentAddress: String!
+  """The IPFS address for the metadata of this file."""
+  ipfsMetadataAddress: String!
+  """The MD5 hash of this file."""
+  md5: String
+  """A friendly name for the file."""
+  name: String!
+  """The upload state of the file."""
+  state: FileState!
+  """The cloud storage URL for this file. If state is GENERATED_UPLOAD_URL, then this url is the presigned URL to upload to."""
+  url: URL!
+}
+
+"""Properties to filter [NFT]({{Types.NFT}})s by when querying them."""
+input NFTFilterInput {
+  """Blockchain IDs of the [NFT]({{Types.NFT}})s to find."""
+  blockchainIds: [String]
+  """Blockchain states of the [NFT]({{Types.NFT}})s to find. Defaults to all."""
+  blockchainStates: [NFTBlockchainState]
+  """Database IDs of the [NFT]({{Types.NFT}})s to find."""
+  ids: [ID]
+  """The IDs of the [NFTModel]({{Types.NFTModel}}) that the [NFT]({{Types.NFT}}) should belong to."""
+  nftModelIds: [ID]
+  """Sale states of the [NFT]({{Types.NFT}})s to find. Defaults to all."""
+  saleStates: [SaleState]
+  """Transfer states of the [NFT]({{Types.NFT}})s to find. Defaults to all."""
+  transferStates: [TransferState]
+}
+
+"""A list of NFTs."""
+type NFTList implements Pageable {
+  """The cursor to use to fetch the next page of results, if any."""
+  cursor: String
+  """The NFTs in this list."""
+  items: [NFT]
+}
+
+"""A listing of NFTs for sale."""
+type NFTListing implements Attributable & Identifiable {
+  """The appId of the app this NFTListing belongs to."""
+  appId: ID!
+  """A mapping of attributes for this object. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+  """The description of the listing."""
+  description: String
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+  """The NFT Model for this listing, NFTs from this model will be sold when a user checks out with this listing"""
+  nftModel: NFTModel!
+  """The pricing for this listing"""
+  pricing: FixedPricing!
+  """The state of this listing."""
+  state: ListingState!
+  """The title of the listing."""
+  title: String
+}
+
+input NFTListingFilterInput {
+  """The IDs of the NFTListing."""
+  ids: [ID]
+  """The ID of the NFTModel that the NFTListing should belong to."""
+  state: ListingState
+  """The title of the NFTListing."""
+  title: String
+}
+
+"""A list of NFTListings."""
+type NFTListingList implements Pageable {
+  """The cursor to use to fetch the next page of results, if any."""
+  cursor: String
+  """The NFTListings in this list."""
+  items: [NFTListing]
+}
+
+"""The blueprint for an NFT, containing everything needed to mint one -- file content, blockchain metadata, etc. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts)."""
+type NFTModel implements Attributable & BlockchainEntity & BlockchainResource & Identifiable & Resource {
+  """A mapping of attributes for this object. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+  """The ID of this resource on the blockchain."""
+  blockchainId: String
+  """This NFT model's content."""
+  content: NFTContent
+  """The user-friendly description for this model."""
+  description: String!
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+  """A mapping of properties that will be added to the blockchain."""
+  metadata: JSONObject
+  """The NFTs created using this model."""
+  nfts: [NFT]
+  """The total quantity of NFTs that will be available for this model."""
+  quantity: PositiveInt
+  """The rarity of the NFTs in this model."""
+  rarity: SimpleRarityLevel
+  """The NFT model set containing this model."""
+  set: NFTSet!
+  """The state of this NFT Model on the blockchain"""
+  state: NFTModelBlockchainState!
+  """The status of this resource. Can be used to track progress in designing and creating resources."""
+  status: Status
+  """The user-friendly title for this model."""
+  title: String!
+}
+
+"""The state of an NFT Model on the blockchain."""
+enum NFTModelBlockchainState {
+  """All NFTs in this model have been transferred to users."""
+  COMPLETED
+  """An error occurred with this item's last blockchain operation."""
+  ERROR
+  """The item is minted, and are no pending operations on it."""
+  MINTED
+  """The item is being minted."""
+  MINTING
+  """The item hasn't been minted yet."""
+  UNMINTED
+}
+
+"""The input to create an [NFTModel]({{Types.NFTModel}})."""
+input NFTModelCreateInput {
+  """A mapping of attributes for this resource. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+  """The file content for this model. Either 'content' or 'contentId' must be specified."""
+  content: NFTContentInput
+  """The ID of the [NFTContent]({{Types.NFTContent}}) for this model. Either 'content' or 'contentId' must be specified."""
+  contentId: ID
+  """The user-friendly details about this model. This will be added to the blockchain metadata when an NFT is minted."""
+  description: String
+  """Metadata that will be added to the blockchain for any NFTs minted from this model."""
+  metadata: JSONObject
+  """The total supply of NFTs that can be available for this model. This can be updated until the NFTModel is minted."""
+  quantity: PositiveInt
+  """The status of the model."""
+  status: Status
+  """The user-friendly subtitle for this model. This will be added to the blockchain metadata when an NFT is minted."""
+  subtitle: String
+  """String labels to tag this [NFTModel]({{Types.NFTModel}}) with. These will be stored in the Niftory API but will not be added to the blockchain."""
+  tags: [String]
+  """The user-friendly title for this model. This will be added to the blockchain metadata when an NFT is minted."""
+  title: String!
+}
+
+"""Properties to filter [NFTModel]({{Types.NFTModel}})s when querying them."""
+input NFTModelFilterInput {
+  """Blockchain IDs of the [NFTModel]({{Types.NFTModel}})s to find."""
+  blockchainIds: [String]
+  """Database IDs of the [NFTModel]({{Types.NFTModel}})s to find."""
+  ids: [ID]
+  """The IDs of the [NFTSet]({{Types.NFTSet}})s that the [NFTModel]({{Types.NFTModel}}) should belong to."""
+  setIds: [ID]
+  """Filter by [NFTModel]({{Types.NFTModel}}) status."""
+  status: Status
+  """The tags in the [NFTModel]({{Types.NFTModel}}) to find. The models returned will contain every tag specified."""
+  tags: [String]
+}
+
+"""A list of NFTModels."""
+type NFTModelList implements Pageable {
+  """The cursor to use to fetch the next page of results, if any."""
+  cursor: String
+  """The NFTModels in this list."""
+  items: [NFTModel]
+}
+
+"""The input to update an NFT model."""
+input NFTModelUpdateInput {
+  """A mapping of attributes for this resource. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+  """The file content for this model. This can be updated until the NFTModel is minted."""
+  content: NFTContentInput
+  """The ID of the [NFTContent]({{Types.NFTContent}}) for this model."""
+  contentId: ID
+  """The user-friendly details about this model. This will be added to the blockchain metadata when an NFT is minted."""
+  description: String
+  """Metadata that will be added to the blockchain for any NFTs minted from this model. This can be updated until the NFTModel is minted"""
+  metadata: JSONObject
+  """The total supply of NFTs that can be available for this model. This can be updated until the NFTModel is minted."""
+  quantity: PositiveInt
+  """The status of the model."""
+  status: Status
+  """The user-friendly subtitle for this model. This will be added to the blockchain metadata when an NFT is minted."""
+  subtitle: String
+  """String labels to tag this [NFTModel]({{Types.NFTModel}}) with. These will be stored in the Niftory API but will not be added to the blockchain. Updating this will replace the existing tags."""
+  tags: [String]
+  """The user-friendly title for this model. This will be added to the blockchain metadata when an NFT is minted."""
+  title: String
+}
+
+"""A set of NFTModels, to help you organize your NFTs. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts)."""
+type NFTSet implements Attributable & BlockchainEntity & BlockchainResource & Identifiable & Resource {
+  """The app this set belongs to."""
+  app: App
+  """A mapping of attributes for this object. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+  """The ID of this resource on the blockchain."""
+  blockchainId: String
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+  """The image to represent this set."""
+  image: URL
+  """A mapping of properties that will be added to the blockchain."""
+  metadata: JSONObject
+  """Models contained in this set."""
+  models: [NFTModel]
+  """The state of this NFT Set on the blockchain"""
+  state: NFTSetBlockchainState!
+  """The status of this resource. Can be used to track progress in designing and creating resources."""
+  status: Status
+  """The display image for this set."""
+  title: String!
+}
+
+"""The state of an NFT Set on the blockchain."""
+enum NFTSetBlockchainState {
+  """An error occurred with this item's last blockchain operation."""
+  ERROR
+  """The item is minted, and are no pending operations on it."""
+  MINTED
+  """The item is being minted."""
+  MINTING
+  """The item hasn't been minted yet."""
+  UNMINTED
+}
+
+"""The input to create an [NFTSet]({{Types.NFTSet}})."""
+input NFTSetCreateInput {
+  """A mapping of attributes for this resource. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+  """String labels to tag this [NFTSet]({{Types.NFTSet}}) with. These will be stored in the Niftory API but will not be added to the blockchain."""
+  tags: [String]
+  """The user-friendly title for this model."""
+  title: String!
+}
+
+input NFTSetFilterInput {
+  """Blockchain IDs of the [NFTSet]({{Types.NFTSet}})s to find."""
+  blockchainIds: [String]
+  """Database IDs of the [NFTSet]({{Types.NFTSet}})s to find."""
+  ids: [ID]
+  """The tags in the [NFTSet]({{Types.NFTSet}}) to find. The sets returned will contain every tag specified."""
+  tags: [String]
+  """The title of the [NFTSet]({{Types.NFTSet}}) to find."""
+  title: String
+}
+
+"""The input to update an [NFTSet]({{Types.NFTSet}})."""
+input NFTSetUpdateInput {
+  """A mapping of attributes for this resource. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+  """String labels to tag this [NFTSet]({{Types.NFTSet}}) with. These will be stored in the Niftory API but will not be added to the blockchain. Updating this will replace the existing tags."""
+  tags: [String]
+  """The user-friendly title for this set."""
+  title: String
+}
+
+"""An interface representing lists that can be paginated with a cursor."""
+interface Pageable {
+  """The cursor to use to fetch the next page of results, if any."""
+  cursor: String
+}
+
+"""Floats that will have a value greater than 0."""
+scalar PositiveFloat
+
+"""Integers that will have a value greater than 0."""
+scalar PositiveInt
+
+type Query {
+  """Gets the [App]({{Types.App}}) for the current application context. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/app-and-appuser)."""
+  app: App
+  """Gets an [App]({{Types.App}}) by its ID. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/app-and-appuser)."""
+  appById(
+    """The ID of the App to retrieve. If unspecified, then 'name' must be specified."""
+    id: ID
+    """The name of the App to retrieve. If unspecified, then 'id' must be specified."""
+    name: String
+  ): App
+  """Gets the currently logged-in [AppUser]({{Types.AppUser}}) context. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/app-and-appuser)."""
+  appUser: AppUser
+  """Gets an [AppUser]({{Types.AppUser}}) by its ID. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/app-and-appuser)."""
+  appUserById(
+    """The ID of the AppUser to retrieve."""
+    id: ID!
+  ): AppUser
+  """Gets the list of users for your app. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/app-and-appuser)."""
+  appUsers(
+    """The pagination cursor returned by your last call to appUsers"""
+    cursor: String
+    """The maximum number of results to return. Defaults to 50, max is 100."""
+    maxResults: PositiveInt
+  ): AppUserList
+  """Gets the [Contract]({{Types.Contract}}) from the currently authenticated app. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/contract)."""
+  contract: Contract
+  """Gets a [File]({{Types.File}}) by its ID."""
+  file(
+    """The database ID of the NFTFile to retrieve."""
+    id: ID!
+  ): SimpleFile
+  """Gets the list of invoices for your app."""
+  invoices(
+    """The ID of the client app."""
+    appId: ID
+    """The pagination cursor returned by your last call to appUsers"""
+    cursor: String
+    """The maximum number of results to return. Defaults to 50, max is 100."""
+    maxResults: PositiveInt
+  ): InvoiceList
+  """Gets an [NFT]({{Types.NFT}}) by database ID. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts)."""
+  nft(
+    """The database ID of the NFT to retrieve."""
+    id: ID!
+  ): NFT
+  """Gets an [NFTListing]({{Types.NFTListing}}) by ID."""
+  nftListing(
+    """The ID of the NFTListing to retrieve."""
+    id: ID!
+  ): NFTListing
+  """Gets [NFTListing]({{Types.NFTListing}})s for the current [App]({{Types.App}}) context"""
+  nftListings(
+    """The pagination cursor returned by your last call to NFTListings"""
+    cursor: String
+    """Properties to filter NFTListings by."""
+    filter: NFTListingFilterInput
+    """The maximum number of results to return. Defaults to 50, max is 100."""
+    maxResults: PositiveInt
+  ): NFTListingList
+  """Gets an [NFTModel]({{Types.NFTModel}}) by database ID. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts)."""
+  nftModel(
+    """The database ID of the NFTModel to retrieve."""
+    id: ID!
+  ): NFTModel
+  """Gets [NFTModel]({{Types.NFTModel}})s for the current [App]({{Types.App}}) context. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts)."""
+  nftModels(
+    """The ID of the client app."""
+    appId: ID
+    """The pagination cursor returned by your last call to nftModels"""
+    cursor: String
+    """Properties to filter NFTModel's by."""
+    filter: NFTModelFilterInput
+    """The maximum number of results to return. Defaults to 50, max is 100."""
+    maxResults: PositiveInt
+  ): NFTModelList
+  """Gets [NFT]({{Types.NFT}})s associated with the current [AppUser]({{Types.AppUser}}) context, including those that are transferring or failed to transfer. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts)."""
+  nfts(
+    """The ID of the client app."""
+    appId: ID
+    """The pagination cursor returned by your last call to nfts"""
+    cursor: String
+    """Properties to filter NFT's by."""
+    filter: NFTFilterInput
+    """The maximum number of results to return. Defaults to 50, max is 100."""
+    maxResults: PositiveInt
+    """The ID of the [AppUser]({{Types.AppUser}}) to filter by. Can only be the currently logged in user without privileged token."""
+    userId: ID
+  ): NFTList
+  """Gets [NFT]({{Types.NFT}})s associated with the current wallet, including those that are transferring or failed to transfer. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/nfts/querying-nfts)."""
+  nftsByWallet(
+    """The address of the [Wallet]({{Types.Wallet}}) to filter by. This query requires the ID or the Wallet Address."""
+    address: String
+    """The pagination cursor returned by your last call to nfts"""
+    cursor: String
+    """Properties to filter NFT's by."""
+    filter: NFTFilterInput
+    """The maximum number of results to return. Defaults to 50, max is 100."""
+    maxResults: PositiveInt
+    """The database ID of the [Wallet]({{Types.Wallet}}) to filter by. This query requires the ID or the Wallet Address."""
+    walletId: ID
+  ): NFTList
+  """Gets an [NFTSet]({{Types.NFTSet}}) by database ID."""
+  set(
+    """The database ID of the NFTSet to retrieve."""
+    id: ID!
+  ): NFTSet
+  """Gets [NFTSet]({{Types.NFTSet}})s for the current [App]({{Types.App}}) context."""
+  sets(
+    """Properties to filter NFTSets by."""
+    filter: NFTSetFilterInput
+  ): [NFTSet]
+  """Gets the primary [Wallet]({{Types.Wallet}}) belonging to the current [AppUser]({{Types.AppUser}}) context. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/query-wallets)."""
+  wallet: Wallet
+  """Gets a [Wallet]({{Types.Wallet}}) by its blockchain address. Wallet must be registered using [registerWallet]({{Mutations.registerWallet}}) before this request succeeds. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/query-wallets)."""
+  walletByAddress(
+    """The address of the Wallet to retrieve."""
+    address: String!
+  ): Wallet
+  """Gets a [Wallet]({{Types.Wallet}}) by its database ID. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/query-wallets)."""
+  walletById(
+    """The ID of the Wallet to retrieve."""
+    id: ID!
+  ): Wallet
+  """Gets the primary [Wallet]({{Types.Wallet}}) for a given [AppUser]({{Types.AppUser}}). Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/query-wallets)."""
+  walletByUserId(
+    """The ID of the AppUser to retrieve the wallet for."""
+    userId: ID!
+  ): Wallet
+  """Gets all [Wallet]({{Types.Wallet}})s for a given app. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets/query-wallets)."""
+  wallets(
+    """The ID of the AppUser to retrieve the wallet for."""
+    appId: ID!
+    """The pagination cursor returned by your last call to nftModels"""
+    cursor: String
+    """The maximum number of results to return. Defaults to 50, max is 100."""
+    maxResults: PositiveInt
+  ): WalletList
+}
+
+"""The input to register a [Wallet]({{Types.Wallet}})."""
+input RegisterWalletInput {
+  """A mapping of attributes for this resource. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+}
+
+"""An interface representing properties common to all user-managed resources in the Niftory API."""
+interface Resource implements Attributable & Identifiable {
+  """A mapping of attributes for this object. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+  """The status of this resource. Can be used to track progress in designing and creating resources."""
+  status: Status
+}
+
+"""The state of an item being sold."""
+enum SaleState {
+  """The item has not been reserved or purchased yet."""
+  AVAILABLE
+  """The item has been delivered."""
+  FULFILLED
+  """The item has been paid for and is being fulfilled."""
+  PAID
+  """The item is reserved for a future purchase."""
+  RESERVED
+}
+
+"""An interface representing properties common to all objects that can be bought and sold"""
+interface SellableEntity {
+  """This state of this object's sale."""
+  saleState: SaleState
+}
+
+"""A file uploaded to the Niftory API."""
+type SimpleFile implements File {
+  """The MIME content type for this file."""
+  contentType: String
+  """A unique identifier for this file in the Niftory API."""
+  id: ID!
+  """The MD5 hash of this file."""
+  md5: String
+  """A friendly name for the file."""
+  name: String!
+  """The upload state of the file."""
+  state: FileState!
+  """The cloud storage URL for this file. If state is GENERATED_UPLOAD_URL, then this url is the presigned URL to upload to."""
+  url: URL!
+}
+
+"""The default rarity levels in the Niftory API."""
+enum SimpleRarityLevel {
+  """The most common NFTs."""
+  COMMON
+  """The rarest of the rare NFTs, for the most dedicated collectors."""
+  LEGENDARY
+  """These are rarer, harder to get and more expensive."""
+  RARE
+}
+
+"""Status of this resource for user workflows."""
+enum Status {
+  """
+  "Here you go!"
+  """
+  DONE
+  """
+  "I'm just getting started."
+  """
+  DRAFT
+  """
+  "I'm working on it!"
+  """
+  IN_PROGRESS
+  """
+  "I'll get to it eventually..."
+  """
+  TO_DO
+}
+
+"""The state of an item being transferred."""
+enum TransferState {
+  """The item has been created, but not transferred."""
+  AVAILABLE
+  """The item failed to transfer."""
+  ERROR
+  """The item is being transferred."""
+  IN_PROGRESS
+  """The item is reserved for a future transfer."""
+  RESERVED
+  """The item has been transferred."""
+  SUCCESS
+}
+
+"""Floats that will have a value of 0 or more."""
+scalar UnsignedFloat
+
+"""Integers that will have a value of 0 or more."""
+scalar UnsignedInt
+
+"""The input to update [Wallet]({{Types.Wallet}}) data."""
+input UpdateWalletInput {
+  """A mapping of attributes for this resource. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+"""A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt."""
+scalar URL
+
+"""An interface containing common data about users."""
+interface UserData {
+  """This user's email."""
+  email: EmailAddress
+  """The URL for this user's image."""
+  image: String
+  """The user's full name."""
+  name: String
+}
+
+"""Represents a blockchain wallet scoped to a particular [App]({{Types.App}}) and [AppUser]({{Types.AppUser}}). Read more [here](https://docs.niftory.com/home/v/api/core-concepts/wallets)."""
+type Wallet implements Attributable & Identifiable {
+  """This wallet's address on the blockchain."""
+  address: String!
+  """The User who owns the wallet"""
+  appUser: AppUser
+  """A mapping of attributes for this object. These will be stored in the Niftory API but will not be added to the blockchain."""
+  attributes: JSONObject
+  """A unique identifier for this object in the Niftory API."""
+  id: ID!
+  """The NFTs from the current app that are in this wallet."""
+  nfts: [NFT]
+  """The state of this wallet."""
+  state: WalletState!
+  """The verification code that can be used to verify this wallet for this user."""
+  verificationCode: String
+}
+
+"""A list of Wallets."""
+type WalletList implements Pageable {
+  """The cursor to use to fetch the next page of results, if any."""
+  cursor: String
+  """The Wallets in this list."""
+  items: [Wallet]
+}
+
+"""The state of a wallet."""
+enum WalletState {
+  """(Custodial Wallet Only) The Niftory custodial wallet failed to be created on the blockchain."""
+  CREATION_FAILED
+  """(Custodial Wallet Only) The Niftory custodial wallet is in the process of being created on-chain. The address and state of the Wallet object will be updated once complete."""
+  PENDING_CREATION
+  """The wallet is ready to receive NFTs from this app's contract."""
+  READY
+  """The wallet has been registered with Niftory, but not yet verified to belong to the signed-in user."""
+  UNVERIFIED
+  """The wallet is verified to belong to the signed-in user, but not yet ready to receive NFTs from this app's contract."""
+  VERIFIED
+}

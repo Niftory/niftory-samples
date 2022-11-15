@@ -4,6 +4,21 @@ This is a sample app built on Next.js that demonstrates basic usage of the [Nift
 
 You can see a live demo at [sample.niftory.com](https://sample.niftory.com).
 
+## Setup
+
+The Niftory Sample app is built on NextJS. You'll need NodeJS and NPM on your device to get started: 
+- Installers: https://nodejs.org/en/download/
+- (Optional) Mac: HomeBrew: https://formulae.brew.sh/formula/node
+
+Next, you'll need Yarn (additional package manager), which is available here: 
+- https://yarnpkg.com/getting-started/install
+
+With these two things ready, you can simply run the following on your terminal or console to install all dependencies.
+
+```
+yarn install
+```
+
 ## Usage
 
 ### Configuration
@@ -23,6 +38,7 @@ yarn dev
 ## Overview
 
 ### Stack:
+This is one potential stack, but this API can be plugged into any framework, frontend app or backend. 
 
 - Web framework: [Next.js](https://nextjs.org/)
 - Auth framework: [NextAuth](https://next-auth.js.org/)
