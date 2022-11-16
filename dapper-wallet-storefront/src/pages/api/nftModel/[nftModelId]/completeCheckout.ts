@@ -45,20 +45,15 @@ const handler: NextApiHandler = async (req, res) => {
 
   const backendGQLClient = await getBackendGraphQLClient()
 
-  try {
-    const completeCheckoutResponse = await backendGQLClient.request(
-      CompleteCheckoutWithDapperWallet,
-      {
-        transactionId: input.transactionId,
-        nftDatabaseId: input.nftDatabaseId,
-      }
-    )
+  const completeCheckoutResponse = await backendGQLClient.request(
+    CompleteCheckoutWithDapperWallet,
+    {
+      transactionId: input.transactionId,
+      nftDatabaseId: input.nftDatabaseId,
+    }
+  )
 
-    res.status(200).json(completeCheckoutResponse.completeCheckoutWithDapperWallet)
-  } catch (e) {
-    console.log(e)
-    res.status(500).end("Next API Error: ")
-  }
+  res.status(200).json(completeCheckoutResponse.completeCheckoutWithDapperWallet)
 }
 
 export default handler
