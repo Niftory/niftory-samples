@@ -11,7 +11,7 @@ const SignTransactionForDapperWallet = gql`
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "POST") {
-    res.status(405).end("Method not allowed, this endpoint only supports POST")
+    res.status(405).send("Method not allowed, this endpoint only supports POST")
     return
   }
 
@@ -24,22 +24,17 @@ const handler: NextApiHandler = async (req, res) => {
   const input = req.body
 
   if (input?.transaction == null) {
-    res.status(400).end("'transaction' isn't specified in the request body")
+    res.status(400).send("'transaction' isn't specified in the request body")
     return
   }
 
   const backendGQLClient = await getBackendGraphQLClient()
 
-  try {
-    const checkoutResponse = await backendGQLClient.request(SignTransactionForDapperWallet, {
-      transaction: input.transaction,
-    })
+  const checkoutResponse = await backendGQLClient.request(SignTransactionForDapperWallet, {
+    transaction: input.transaction,
+  })
 
-    res.status(200).json(checkoutResponse)
-  } catch (e) {
-    console.log(e)
-    res.status(500).end("Next API Error: ")
-  }
+  res.status(200).json(checkoutResponse)
 }
 
 export default handler
