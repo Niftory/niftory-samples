@@ -1,0 +1,17 @@
+query nftListing($id: ID!) {
+  nftListing(id: $id) {
+    id
+    title
+    description
+    attributes
+    pricing {
+      currency
+      price
+    }
+    appId
+    nftModel {
+      id
+    }
+    state
+  }
+}

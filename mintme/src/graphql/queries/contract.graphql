@@ -1,0 +1,8 @@
+query Contract {
+  contract {
+    id
+    address
+    blockchain
+    name
+  }
+}
