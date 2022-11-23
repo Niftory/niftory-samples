@@ -1,0 +1,36 @@
+query nftsByWallet($walletAddress: String) {
+  nftsByWallet(address: $walletAddress) {
+    items {
+      blockchainId
+      blockchainState
+      metadata
+      id
+      serialNumber
+
+      # mintTransactionHash
+      model {
+        id
+        metadata
+        title
+        description
+        state
+        quantity
+        attributes
+        content {
+          files {
+            url
+            contentType
+          }
+          poster {
+            url
+          }
+        }
+        set {
+          id
+        }
+      }
+      status
+    }
+    cursor
+  }
+}

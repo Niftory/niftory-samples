@@ -1,0 +1,19 @@
+mutation UploadNFTContent($description: String, $contentType: String, $posterContentType: String, $name: String) {
+  uploadNFTContent(description: $description, contentType: $contentType, posterContentType: $posterContentType, name: $name) {
+    id
+    files {
+      id
+      url
+      state
+      md5
+      contentType
+    }
+    poster {
+      id
+      url
+      state
+      contentType
+      md5
+    }
+  }
+}

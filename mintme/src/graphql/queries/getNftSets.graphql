@@ -1,0 +1,10 @@
+query getNftSets($filter: NFTSetFilterInput) {
+  sets(filter: $filter) {
+    id
+    title
+    attributes
+    models {
+      id
+    }
+  }
+}

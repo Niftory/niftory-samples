@@ -1,0 +1,8 @@
+mutation createNFTSet($data: NFTSetCreateInput!) {
+  createNFTSet(data: $data) {
+    id
+    attributes
+    title
+    metadata
+  }
+}

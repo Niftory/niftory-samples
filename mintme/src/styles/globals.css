@@ -1,0 +1,64 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* File pond customizations*/
+.filepond--panel,
+.filepond--root,
+.filepond--panel-root {
+  background-color: #dcdcdc !important;
+  border-radius: 1.6rem !important;
+}
+
+/* Masonry */
+.masonry-grid {
+  display: flex;
+  margin-left: -20px;
+  width: auto;
+}
+.masonry-grid_column {
+  padding-left: 20px;
+  background-clip: padding-box;
+}
+
+/* Style your items */
+.masonry-grid_column > div {
+  /* change div to reference your elements you put in <Masonry> */
+  background: grey;
+  margin-bottom: 20px;
+}
+
+/* Intro js*/
+.intro-tooltip .introjs-button {
+  padding: 0.2rem 0.5rem;
+}
+.intro-tooltip .introjs-tooltiptext {
+  padding: 1rem 1rem 0.5rem;
+}
+.intro-tooltip .introjs-tooltip-header {
+  min-height: 0;
+}
+.intro-tooltip .introjs-tooltip-header .introjs-skipbutton {
+  height: 25px;
+  width: 25px;
+  line-height: 1;
+}
+.intro-tooltip .introjs-tooltipbuttons {
+  padding: 0.5rem 1rem 0.7rem;
+}
+.intro-tooltip .introjs-tooltip-title {
+  display: none;
+}

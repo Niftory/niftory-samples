@@ -1,0 +1,22 @@
+mutation createNFTModel($setId: ID!, $data: NFTModelCreateInput!) {
+  createNFTModel(setId: $setId, data: $data) {
+    id
+    quantity
+    title
+    status
+    attributes
+    metadata
+    description
+    content {
+      id
+      files {
+        id
+        url
+      }
+      poster {
+        url
+        id
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+query nftListings {
+  nftListings {
+    items {
+      id
+      title
+      description
+      attributes
+      pricing {
+        currency
+        price
+      }
+      nftModel {
+        id
+      }
+      state
+    }
+    cursor
+  }
+}

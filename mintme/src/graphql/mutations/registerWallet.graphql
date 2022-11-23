@@ -1,0 +1,8 @@
+mutation registerWallet($address: String!) {
+  registerWallet(address: $address) {
+    id
+    address
+    verificationCode
+    state
+  }
+}

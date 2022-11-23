@@ -1,0 +1,35 @@
+query nftModel($id: ID!) {
+  nftModel(id: $id) {
+    id
+    attributes
+    status
+    blockchainId
+    metadata
+    title
+    description
+    rarity
+    quantity
+    quantityMinted
+    content {
+      id
+      poster {
+        url
+        state
+        contentType
+        id
+        md5
+      }
+      files {
+        url
+        id
+        state
+        contentType
+        md5
+      }
+    }
+    set {
+      id
+      title
+    }
+  }
+}

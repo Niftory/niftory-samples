@@ -1,0 +1,5 @@
+mutation deleteNFTModel($id: ID!) {
+  deleteNFTModel(id: $id) {
+    id
+  }
+}
