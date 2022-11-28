@@ -51,6 +51,9 @@ export const Footer: React.FunctionComponent = () => {
             <Heading size="md" mb="0.5rem">
               PAGES
             </Heading>
+            <ChakraLink fontSize="1rem" href={"/"}>
+              Home
+            </ChakraLink>
             <ChakraLink fontSize="1rem" href={session ? "/app/new-item" : "/"}>
               Create your NFT
             </ChakraLink>
@@ -134,7 +137,7 @@ export const Footer: React.FunctionComponent = () => {
             </Heading>
             <Button
               as="a"
-              href="https://discord.gg/c3MPgGAV"
+              href="https://discord.gg/QAgDQXUGsU"
               colorScheme="white"
               variant="outline"
               leftIcon={<BsDiscord />}

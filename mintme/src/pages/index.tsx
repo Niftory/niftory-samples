@@ -18,10 +18,10 @@ const HomePage = () => {
   const router = useRouter()
   const scrollRef = useRef<HTMLDivElement>()
 
-  const { sets: userSets } = useBackendClient<GetNftSetsQuery>(session ? "getNFTSets" : null)
-  if (session && userSets?.[0] != null) {
-    router.push(`/app/collection`)
-  }
+  // const { sets: userSets } = useBackendClient<GetNftSetsQuery>(session ? "getNFTSets" : null)
+  // if (session && userSets?.[0] != null) {
+  //   router.push(`/app/collection`)
+  // }
 
   return (
     <AppLayout>

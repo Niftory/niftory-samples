@@ -71,7 +71,7 @@ export const SupportingResources = () => {
           body={
             <>
               Ask any queries you have in the{" "}
-              <ChakraLink href="https://discord.gg/c3MPgGAV" target="_blank" color="purple.100">
+              <ChakraLink href="https://discord.gg/QAgDQXUGsU" target="_blank" color="purple.100">
                 Niftory Discord
               </ChakraLink>
               .

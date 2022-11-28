@@ -39,6 +39,7 @@ import { AiFillInfoCircle } from "react-icons/ai"
 import { useTransfer } from "hooks/useTransfer"
 import toast from "react-hot-toast"
 import posthog from "posthog-js"
+import { TransactionCollapsibleTable } from "ui/TransactionCollapsibleTable"
 
 interface Props {
   nftModel: Subset<NftModel>
@@ -144,12 +145,6 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
     query: ContractDocument,
   })
 
-  const mintHash = useMemo(
-    () =>
-      nft?.transactions.find((trx) => trx.blockchainTxName === "BL_MINT_NFTS_TX")?.blockchainTxId,
-    [nft]
-  )
-
   const renderButtonText = () => {
     if (!nftsRemaining) {
       return `All NFTs have been minted`
@@ -174,7 +169,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
       <Stack
         direction={{ base: "column", lg: "row" }}
         spacing={{ base: "6", lg: "8", xl: "12" }}
-        minH="400px"
+        h="450px"
       >
         {product.content?.length > 0 && (
           <Box flex="1" bgColor="content.400" shadow="base">
@@ -193,6 +188,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
           alignItems="flex-start"
           shadow="base"
           bg="white"
+          overflow="auto"
         >
           <>
             <VStack
@@ -208,19 +204,6 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
                   {product?.title}
                 </Heading>
                 <Flex gap="0.3rem">
-                  {mintHash && (
-                    <Tooltip label="View Transaction" hasArrow placement="top">
-                      <a
-                        id="flowscan_transaction"
-                        href={`
-                        ${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/transaction/${mintHash}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Image src="/flowscan-logo-dark.svg" alt="flowscan" />
-                      </a>
-                    </Tooltip>
-                  )}
                   {contract && (
                     <Tooltip label="View Contract" hasArrow placement="top">
                       <a
@@ -358,6 +341,21 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
                     </Flex>
                   ))}
                 </VStack>
+              </Flex>
+            )}
+            {nft && (
+              <Flex
+                borderBottom={"2px"}
+                borderColor={"brand.300"}
+                alignItems="center"
+                justifyContent="space-between"
+                w="full"
+              >
+                <TransactionCollapsibleTable
+                  transactions={nft.transactions}
+                  buttonPadding="1rem 2rem"
+                  contentPadding="0rem 2rem"
+                />
               </Flex>
             )}
 
