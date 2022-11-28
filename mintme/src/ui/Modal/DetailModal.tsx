@@ -33,7 +33,7 @@ import { CheckIcon, EditIcon } from "@chakra-ui/icons"
 import { Field, FieldArray, Form, Formik } from "formik"
 import { backendClient } from "../../graphql/backendClient"
 import { MetadataForm, metadataToJson } from "../../components/form/MetadataForm"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { InfoPopOver } from "../PopOver/InfoPopOver"
 import { useTransfer } from "../../hooks/useTransfer"
 import { useAuthContext } from "../../hooks/useAuthContext"
@@ -117,6 +117,12 @@ export const DetailModal = ({
   if (!mintState) {
     mintState = nftModel.state
   }
+
+  const mintHash = useMemo(
+    () =>
+      nft?.transactions.find((trx) => trx.blockchainTxName === "BL_MINT_NFTS_TX")?.blockchainTxId,
+    [nft]
+  )
 
   useEffect(() => {
     if (
@@ -348,20 +354,19 @@ export const DetailModal = ({
                                   />
                                 </span>
                               </Tooltip>
-                              {/* TODO: Enable after mintHash comes from graphql resolvers */}
-                              {/* {nft?.mintTransactionHash && (
+                              {mintHash && (
                                 <Tooltip label="View Transaction" hasArrow placement="top">
                                   <a
                                     id="flowscan_transaction"
                                     href={`
-                                    ${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/transaction/${nft?.mintTransactionHash}`}
+                                    ${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/transaction/${mintHash}`}
                                     target="_blank"
                                     rel="noreferrer"
                                   >
                                     <Image src="/flowscan-logo.svg" alt="flowscan" />
                                   </a>
                                 </Tooltip>
-                              )} */}
+                              )}
                               {contract && (
                                 <Tooltip label="View Contract" hasArrow placement="top">
                                   <a

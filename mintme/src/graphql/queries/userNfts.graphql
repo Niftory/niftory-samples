@@ -6,7 +6,10 @@ query userNfts($id: ID) {
       metadata
       id
       serialNumber
-      # mintTransactionHash
+      transactions {
+        blockchainTxId
+        blockchainTxName
+      }
       model {
         id
         metadata

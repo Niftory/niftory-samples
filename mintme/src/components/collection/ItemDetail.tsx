@@ -28,7 +28,7 @@ import { Subset } from "../../lib/types"
 import { useRouter } from "next/router"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { InfoPopOver } from "../../ui/PopOver/InfoPopOver"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { backendClient } from "../../graphql/backendClient"
 import { useGraphQLQuery } from "../../graphql/useGraphQLQuery"
 import { MintRequestModal } from "../../ui/Modal/MintRequestModal"
@@ -144,6 +144,12 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
     query: ContractDocument,
   })
 
+  const mintHash = useMemo(
+    () =>
+      nft?.transactions.find((trx) => trx.blockchainTxName === "BL_MINT_NFTS_TX")?.blockchainTxId,
+    [nft]
+  )
+
   const renderButtonText = () => {
     if (!nftsRemaining) {
       return `All NFTs have been minted`
@@ -201,18 +207,33 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
                 <Heading fontWeight="bold" fontSize="24px">
                   {product?.title}
                 </Heading>
-                {contract && (
-                  <Tooltip label="View Contract" hasArrow placement="top">
-                    <a
-                      id="flowscan_contract"
-                      href={getContractUrl(contract)}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <ContractIcon size="20px" />
-                    </a>
-                  </Tooltip>
-                )}
+                <Flex gap="0.3rem">
+                  {mintHash && (
+                    <Tooltip label="View Transaction" hasArrow placement="top">
+                      <a
+                        id="flowscan_transaction"
+                        href={`
+                        ${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/transaction/${mintHash}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Image src="/flowscan-logo.svg" alt="flowscan" />
+                      </a>
+                    </Tooltip>
+                  )}
+                  {contract && (
+                    <Tooltip label="View Contract" hasArrow placement="top">
+                      <a
+                        id="flowscan_contract"
+                        href={getContractUrl(contract)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <ContractIcon size="20px" color="grey.100" />
+                      </a>
+                    </Tooltip>
+                  )}
+                </Flex>
               </Flex>
               <Box>
                 <Flex alignItems="center" fontWeight="bold" fontSize="16px">
