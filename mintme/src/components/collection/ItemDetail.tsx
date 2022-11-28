@@ -217,7 +217,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
                         target="_blank"
                         rel="noreferrer"
                       >
-                        <Image src="/flowscan-logo.svg" alt="flowscan" />
+                        <Image src="/flowscan-logo-dark.svg" alt="flowscan" />
                       </a>
                     </Tooltip>
                   )}
