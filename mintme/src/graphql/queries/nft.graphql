@@ -6,8 +6,8 @@ query nft($id: ID!) {
     id
     serialNumber
     transactions {
-      blockchainTxId
-      blockchainTxName
+      hash
+      name
     }
     model {
       id

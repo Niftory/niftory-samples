@@ -41,7 +41,7 @@ export const TransactionCollapsibleTable = ({
   <Accordion allowToggle w="full" {...props}>
     <AccordionItem w="full" border="0" mt="-1rem">
       <AccordionButton w="full" py="1rem" p={buttonPadding}>
-        <Flex fontWeight="bold" flex="1">
+        <Flex fontWeight="bold" flex="1" fontSize={{ base: "0.95rem" }}>
           Blockchain Transactions
           <InfoPopOver
             placement="top"
@@ -62,14 +62,14 @@ export const TransactionCollapsibleTable = ({
             </Thead>
             <Tbody>
               {transactions.map((item) => (
-                <Tr key={item.blockchainTxId} fontSize="0.9rem" borderBottom={0}>
-                  <Td pl="0">{TxNameTable[item.blockchainTxName]}</Td>
+                <Tr key={item.hash} fontSize="0.9rem" borderBottom={0}>
+                  <Td pl="0">{TxNameTable[item.name]}</Td>
                   <Td>
                     <Center
                       as="a"
                       id="flowscan_transaction"
                       href={`
-                        ${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/transaction/${item.blockchainTxId}`}
+                        ${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/transaction/${item.hash}`}
                       target="_blank"
                       rel="noreferrer"
                     >

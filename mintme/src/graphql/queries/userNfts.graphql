@@ -7,8 +7,8 @@ query userNfts($id: ID) {
       id
       serialNumber
       transactions {
-        blockchainTxId
-        blockchainTxName
+        hash
+        name
       }
       model {
         id

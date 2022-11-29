@@ -169,7 +169,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
       <Stack
         direction={{ base: "column", lg: "row" }}
         spacing={{ base: "6", lg: "8", xl: "12" }}
-        h="450px"
+        h={{ base: "auto", md: "450px" }}
       >
         {product.content?.length > 0 && (
           <Box flex="1" bgColor="content.400" shadow="base">

@@ -202,7 +202,7 @@ interface BlockchainResource implements Attributable & BlockchainEntity & HasTim
 }
 
 """
-Transaction performed within a blockchain
+Transaction performed on a blockchain.
 """
 type BlockchainTransaction {
   """
@@ -211,14 +211,14 @@ type BlockchainTransaction {
   blockchain: Blockchain!
 
   """
-  The transaction hash of the blockchain transaction
+  The hash of the blockchain transaction.
   """
-  blockchainTxId: String!
+  hash: String!
 
   """
   Name of the transaction performed
   """
-  blockchainTxName: String!
+  name: String!
 }
 
 """
