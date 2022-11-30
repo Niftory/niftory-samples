@@ -51,6 +51,7 @@ const EmbedPage = ({ nftModel, nft, host }: Props) => {
           flexDir="column"
           position="relative"
           onClick={() => window.open(routeLink)}
+          bg="transparent"
         >
           <Box overflow="hidden" w="100%">
             <MediaBox
