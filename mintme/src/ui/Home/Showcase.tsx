@@ -4,13 +4,14 @@ import { useRef } from "react"
 const LinkTable = {
   test: [
     {
-      url: "https://mint.test.niftory.com/app/collection/5f1e2545-0db1-453c-a6cc-63029916f043?nftId=46692d08-9564-43b8-9be0-6691d4fded6d",
-      image: "/images/robotica.png",
-    },
-    {
       url: "https://mint.test.niftory.com/app/collection/6872680e-4746-45bf-99fb-4a01b6987eb8?nftId=1381e6aa-17b4-4c1b-8436-6c92efb0751d",
       image: "/images/ai_conference.png",
     },
+    {
+      url: "https://mint.test.niftory.com/app/collection/5f1e2545-0db1-453c-a6cc-63029916f043?nftId=46692d08-9564-43b8-9be0-6691d4fded6d",
+      image: "/images/robotica.png",
+    },
+
     {
       url: "https://mint.test.niftory.com/app/collection/d2856642-ef50-4708-9019-e8f0b86004c9?nftId=edb23981-8ee4-431c-9403-de049afa7efe",
       image: "/images/painting.png",
@@ -18,13 +19,14 @@ const LinkTable = {
   ],
   development: [
     {
-      url: "https://mint.test.niftory.com/app/collection/5f1e2545-0db1-453c-a6cc-63029916f043?nftId=46692d08-9564-43b8-9be0-6691d4fded6d",
-      image: "/images/robotica.png",
-    },
-    {
       url: "https://mint.test.niftory.com/app/collection/6872680e-4746-45bf-99fb-4a01b6987eb8?nftId=1381e6aa-17b4-4c1b-8436-6c92efb0751d",
       image: "/images/ai_conference.png",
     },
+    {
+      url: "https://mint.test.niftory.com/app/collection/5f1e2545-0db1-453c-a6cc-63029916f043?nftId=46692d08-9564-43b8-9be0-6691d4fded6d",
+      image: "/images/robotica.png",
+    },
+
     {
       url: "https://mint.test.niftory.com/app/collection/d2856642-ef50-4708-9019-e8f0b86004c9?nftId=edb23981-8ee4-431c-9403-de049afa7efe",
       image: "/images/painting.png",
@@ -33,13 +35,14 @@ const LinkTable = {
 
   production: [
     {
-      url: "https://mint.test.niftory.com/app/collection/5f1e2545-0db1-453c-a6cc-63029916f043?nftId=46692d08-9564-43b8-9be0-6691d4fded6d",
-      image: "/images/robotica.png",
-    },
-    {
       url: "https://mint.test.niftory.com/app/collection/6872680e-4746-45bf-99fb-4a01b6987eb8?nftId=1381e6aa-17b4-4c1b-8436-6c92efb0751d",
       image: "/images/ai_conference.png",
     },
+    {
+      url: "https://mint.test.niftory.com/app/collection/5f1e2545-0db1-453c-a6cc-63029916f043?nftId=46692d08-9564-43b8-9be0-6691d4fded6d",
+      image: "/images/robotica.png",
+    },
+
     {
       url: "https://mint.test.niftory.com/app/collection/d2856642-ef50-4708-9019-e8f0b86004c9?nftId=edb23981-8ee4-431c-9403-de049afa7efe",
       image: "/images/painting.png",
