@@ -6,15 +6,13 @@ export const LoginText = () => {
   const { session, signIn } = useAuthContext()
   if (session) {
     return null
-  } else {
-    return (
-      <Text mt={{ base: "5" }} textAlign="center">
-        {" "}
-        Already have a mintme wallet?{" "}
-        <ChakraLink fontWeight="bold" onClick={() => signIn()}>
-          Log in
-        </ChakraLink>
-      </Text>
-    )
   }
+  return (
+    <Text mt={{ base: "5" }} textAlign="center">
+      Already have a mintme wallet?{" "}
+      <ChakraLink fontWeight="bold" onClick={() => signIn("/app/collection")}>
+        Log in
+      </ChakraLink>
+    </Text>
+  )
 }

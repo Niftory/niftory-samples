@@ -28,7 +28,7 @@ import { Subset } from "../../lib/types"
 import { useRouter } from "next/router"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { InfoPopOver } from "../../ui/PopOver/InfoPopOver"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { backendClient } from "../../graphql/backendClient"
 import { useGraphQLQuery } from "../../graphql/useGraphQLQuery"
 import { MintRequestModal } from "../../ui/Modal/MintRequestModal"
@@ -39,6 +39,7 @@ import { AiFillInfoCircle } from "react-icons/ai"
 import { useTransfer } from "hooks/useTransfer"
 import toast from "react-hot-toast"
 import posthog from "posthog-js"
+import { TransactionCollapsibleTable } from "ui/TransactionCollapsibleTable"
 
 interface Props {
   nftModel: Subset<NftModel>
@@ -168,7 +169,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
       <Stack
         direction={{ base: "column", lg: "row" }}
         spacing={{ base: "6", lg: "8", xl: "12" }}
-        minH="400px"
+        h={{ base: "auto", md: "450px" }}
       >
         {product.content?.length > 0 && (
           <Box flex="1" bgColor="content.400" shadow="base">
@@ -187,6 +188,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
           alignItems="flex-start"
           shadow="base"
           bg="white"
+          overflow="auto"
         >
           <>
             <VStack
@@ -201,18 +203,20 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
                 <Heading fontWeight="bold" fontSize="24px">
                   {product?.title}
                 </Heading>
-                {contract && (
-                  <Tooltip label="View Contract" hasArrow placement="top">
-                    <a
-                      id="flowscan_contract"
-                      href={getContractUrl(contract)}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <ContractIcon size="20px" />
-                    </a>
-                  </Tooltip>
-                )}
+                <Flex gap="0.3rem">
+                  {contract && (
+                    <Tooltip label="View Contract" hasArrow placement="top">
+                      <a
+                        id="flowscan_contract"
+                        href={getContractUrl(contract)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <ContractIcon size="20px" color="grey.100" />
+                      </a>
+                    </Tooltip>
+                  )}
+                </Flex>
               </Flex>
               <Box>
                 <Flex alignItems="center" fontWeight="bold" fontSize="16px">
@@ -337,6 +341,21 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
                     </Flex>
                   ))}
                 </VStack>
+              </Flex>
+            )}
+            {nft && (
+              <Flex
+                borderBottom={"2px"}
+                borderColor={"brand.300"}
+                alignItems="center"
+                justifyContent="space-between"
+                w="full"
+              >
+                <TransactionCollapsibleTable
+                  transactions={nft.transactions}
+                  buttonPadding="1rem 2rem"
+                  contentPadding="0rem 2rem"
+                />
               </Flex>
             )}
 
