@@ -169,7 +169,7 @@ export const Navbar = ({ onOpen }) => {
       <NiftoryNavbar
         leftComponent={
           <>
-            {isMobile && session && router?.pathname?.startsWith("/app/collection") && (
+            {isMobile && session && (
               <IconButton
                 variant="outline"
                 onClick={onOpen}
