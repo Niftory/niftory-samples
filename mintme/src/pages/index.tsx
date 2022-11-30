@@ -14,14 +14,7 @@ import { useRef } from "react"
 import { SupportingResources } from "ui/Home/SupportingResources"
 
 const HomePage = () => {
-  const { session } = useAuthContext()
-  const router = useRouter()
   const scrollRef = useRef<HTMLDivElement>()
-
-  // const { sets: userSets } = useBackendClient<GetNftSetsQuery>(session ? "getNFTSets" : null)
-  // if (session && userSets?.[0] != null) {
-  //   router.push(`/app/collection`)
-  // }
 
   return (
     <AppLayout>

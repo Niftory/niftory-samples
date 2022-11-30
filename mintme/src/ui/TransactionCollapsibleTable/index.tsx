@@ -15,7 +15,7 @@ import {
   Image,
   Center,
   Flex,
-  BoxProps,
+  Link as ChakraLink,
   AccordionProps,
 } from "@chakra-ui/react"
 import { InfoPopOver } from "ui/PopOver/InfoPopOver"
@@ -28,8 +28,8 @@ interface Props extends AccordionProps {
 }
 
 const TxNameTable = {
-  BL_MINT_NFTS_TX: "Mint NFT",
-  BL_TRANSFER_NFTS_TX: "Transfer NFT",
+  BL_MINT_NFTS_TX: "MINT NFT",
+  BL_TRANSFER_NFTS_TX: "TRANSFER NFT",
 }
 
 export const TransactionCollapsibleTable = ({
@@ -51,36 +51,26 @@ export const TransactionCollapsibleTable = ({
         <AccordionIcon />
       </AccordionButton>
 
-      <AccordionPanel padding={contentPadding}>
-        <TableContainer>
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th pl="0">Transaction Name</Th>
-                <Th pr="0">View on Flowscan</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {transactions.map((item) => (
-                <Tr key={item.hash} fontSize="0.9rem" borderBottom={0}>
-                  <Td pl="0">{TxNameTable[item.name]}</Td>
-                  <Td>
-                    <Center
-                      as="a"
-                      id="flowscan_transaction"
-                      href={`
+      <AccordionPanel padding={contentPadding} bg="whitesmoke">
+        <Flex py="0.5rem" flexDir="column" gap="0.5rem">
+          {transactions.map((item) => (
+            <Flex
+              gap="0.4rem"
+              as={ChakraLink}
+              id="flowscan_transaction"
+              p="0.1rem"
+              key={item.hash}
+              fontSize="0.8rem"
+              href={`
                         ${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/transaction/${item.hash}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <Image src="/flowscan-logo.svg" alt="flowscan" />
-                    </Center>
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Image src="/flowscan-logo.svg" alt="flowscan" />
+              {TxNameTable[item.name]}
+            </Flex>
+          ))}
+        </Flex>
       </AccordionPanel>
     </AccordionItem>
   </Accordion>
