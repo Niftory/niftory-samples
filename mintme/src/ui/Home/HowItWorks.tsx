@@ -44,15 +44,21 @@ export const HowItWorks = forwardRef<HTMLDivElement>(function HowItWorks(props, 
         position="relative"
         flexDir={{ base: "column", md: "row" }}
       >
-        <Box
-          flex={1}
-          // display={{ base: "none", md: "block" }}
-          shadow="base"
-          bgColor="white"
-          rounded="lg"
-        >
-          <Image src="/icon.png" alt="nft" />
-        </Box>
+        <Flex flex={1} justifyContent="flex-end">
+          <Box
+            as="video"
+            src="/mintme_demo.mp4"
+            loop
+            autoPlay
+            muted
+            maxH="480px"
+            p="1rem"
+            rounded="lg"
+            bg="white"
+            shadow="base"
+          />
+        </Flex>
+
         <Box flex={1}>
           <VStack alignItems="flex-starts" gap="1.2rem">
             <Heading fontSize="3.6rem">CREATE, MINT, SHARE</Heading>

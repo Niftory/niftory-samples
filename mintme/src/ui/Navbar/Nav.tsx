@@ -18,15 +18,17 @@ import { IoIosAddCircleOutline as AddIcon } from "react-icons/io"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { BsDiscord } from "react-icons/bs"
 import posthog from "posthog-js"
+import { useRouter } from "next/router"
 export const Navbar = ({ onOpen }) => {
   const { session, signIn } = useAuthContext()
   let onClick = () => {
-    signIn()
+    signIn("/app/collection")
     posthog.capture("HEADER_LOGIN", {
       posthogEventDetail: "Sign In with Google invoked from top banner",
     })
   }
   const isMobile = useBreakpointValue({ base: true, md: false })
+  const router = useRouter()
 
   const menuItems = React.useMemo(() => {
     if (!session) {
@@ -54,10 +56,10 @@ export const Navbar = ({ onOpen }) => {
           ),
         },
         {
-          href: "https://discord.gg/c3MPgGAV",
+          href: "https://discord.gg/QAgDQXUGsU",
           component: (
             <ChakraLink
-              href="https://discord.gg/c3MPgGAV"
+              href="https://discord.gg/QAgDQXUGsU"
               target="_blank"
               color="content.400"
               fontWeight="bold"
@@ -141,12 +143,12 @@ export const Navbar = ({ onOpen }) => {
           ),
         },
         {
-          href: "https://discord.gg/c3MPgGAV",
+          href: "https://discord.gg/QAgDQXUGsU",
           component: (
             <ChakraLink
               ml={{ md: "1rem" }}
               mt="0.1rem"
-              href="https://discord.gg/c3MPgGAV"
+              href="https://discord.gg/QAgDQXUGsU"
               target="_blank"
               color="content.400"
               fontWeight="bold"

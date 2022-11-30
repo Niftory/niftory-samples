@@ -1,95 +1,54 @@
-import { Center, Flex, Heading, SimpleGrid, Text, VStack } from "@chakra-ui/react"
+import { Box, Center, Flex, Heading, SimpleGrid, Text, VStack } from "@chakra-ui/react"
 import { useRef } from "react"
-import {
-  NftModel,
-  NftModelBlockchainState,
-  NftSetBlockchainState,
-} from "../../../generated/graphql"
-import { MasonryCard } from "../Card/MasonryCard"
 
-import { BsChevronDown as ChevronDownIcon } from "react-icons/bs"
+const LinkTable = {
+  test: [
+    {
+      url: "https://mint.test.niftory.com/app/collection/6872680e-4746-45bf-99fb-4a01b6987eb8?nftId=1381e6aa-17b4-4c1b-8436-6c92efb0751d",
+      image: "/images/ai_conference.png",
+    },
+    {
+      url: "https://mint.test.niftory.com/app/collection/5f1e2545-0db1-453c-a6cc-63029916f043?nftId=46692d08-9564-43b8-9be0-6691d4fded6d",
+      image: "/images/robotica.png",
+    },
 
-const mockNFTModels: NftModel[] = [
-  {
-    id: "31fe2089-b750-4ec7-86cc-4b886f1cc9a1",
-    title: "X nft",
-    description: "New X nft",
-    quantity: 1,
-    metadata: {
-      Name: "X nft",
+    {
+      url: "https://mint.test.niftory.com/app/collection/d2856642-ef50-4708-9019-e8f0b86004c9?nftId=edb23981-8ee4-431c-9403-de049afa7efe",
+      image: "/images/painting.png",
     },
-    content: {
-      id: "",
-      files: [
-        {
-          contentType: "image",
-          url: "/icon.png",
-        } as any,
-      ],
+  ],
+  development: [
+    {
+      url: "https://mint.test.niftory.com/app/collection/6872680e-4746-45bf-99fb-4a01b6987eb8?nftId=1381e6aa-17b4-4c1b-8436-6c92efb0751d",
+      image: "/images/ai_conference.png",
     },
-    createdAt: "",
-    state: NftModelBlockchainState.Minted,
-    set: {
-      id: "a7cae031-29bf-4b98-85c6-c10b82b3045a",
-      title: "Set for Usercl9psc3kc00003rz5nrjm3eev",
-      state: NftSetBlockchainState.Minted,
-      createdAt: "",
+    {
+      url: "https://mint.test.niftory.com/app/collection/5f1e2545-0db1-453c-a6cc-63029916f043?nftId=46692d08-9564-43b8-9be0-6691d4fded6d",
+      image: "/images/robotica.png",
     },
-  },
-  {
-    id: "31fe2089-b750-4ec7-86cc-4b886f1cc9a2",
-    title: "X nft",
-    description: "New X nft",
-    quantity: 12,
-    metadata: {
-      Name: "X nft",
-    },
-    createdAt: "",
-    content: {
-      id: "",
-      files: [
-        {
-          contentType: "image",
-          url: "/icon.png",
-        } as any,
-      ],
-    },
-    state: NftModelBlockchainState.Minted,
-    set: {
-      id: "a7cae031-29bf-4b98-85c6-c10b82b3045a",
-      title: "Set for Usercl9psc3kc00003rz5nrjm3eev",
-      state: NftSetBlockchainState.Minted,
-      createdAt: "",
-    },
-  },
-  {
-    id: "31fe2089-b750-4ec7-86cc-4b886f1cc9a3",
-    title: "X nft",
-    description: "New X nft",
 
-    quantity: 12,
-    metadata: {
-      Name: "X nft",
+    {
+      url: "https://mint.test.niftory.com/app/collection/d2856642-ef50-4708-9019-e8f0b86004c9?nftId=edb23981-8ee4-431c-9403-de049afa7efe",
+      image: "/images/painting.png",
     },
-    createdAt: "",
-    content: {
-      id: "",
-      files: [
-        {
-          contentType: "image",
-          url: "/icon.png",
-        } as any,
-      ],
+  ],
+
+  production: [
+    {
+      url: "https://mint.test.niftory.com/app/collection/6872680e-4746-45bf-99fb-4a01b6987eb8?nftId=1381e6aa-17b4-4c1b-8436-6c92efb0751d",
+      image: "/images/ai_conference.png",
     },
-    state: NftModelBlockchainState.Minted,
-    set: {
-      id: "a7cae031-29bf-4b98-85c6-c10b82b3045a",
-      title: "Set for Usercl9psc3kc00003rz5nrjm3eev",
-      state: NftSetBlockchainState.Minted,
-      createdAt: "",
+    {
+      url: "https://mint.test.niftory.com/app/collection/5f1e2545-0db1-453c-a6cc-63029916f043?nftId=46692d08-9564-43b8-9be0-6691d4fded6d",
+      image: "/images/robotica.png",
     },
-  },
-]
+
+    {
+      url: "https://mint.test.niftory.com/app/collection/d2856642-ef50-4708-9019-e8f0b86004c9?nftId=edb23981-8ee4-431c-9403-de049afa7efe",
+      image: "/images/painting.png",
+    },
+  ],
+}
 
 export const Showcase = () => {
   const gridRef = useRef<HTMLDivElement>()
@@ -99,14 +58,32 @@ export const Showcase = () => {
         Created With MintMe
       </Heading>
       <SimpleGrid
-        minChildWidth={{ base: "full", md: "120px" }}
+        minChildWidth={{ base: "full", md: "320px" }}
         spacing="2rem"
-        maxW="1000px"
+        maxW="1600px"
         mt={{ base: "1rem", md: "2rem" }}
         ref={gridRef}
       >
-        {mockNFTModels.map((nftModel) => (
-          <MasonryCard key={nftModel.id} nftModel={nftModel} hidePopUp />
+        {LinkTable[process.env.NODE_ENV ?? "test"].map((item) => (
+          <Box
+            as="a"
+            href={item.url}
+            target="_blank"
+            key={item.url}
+            background={`url("${item.image}")`}
+            flex="1"
+            h="320px"
+            rounded="lg"
+            shadow="base"
+            backgroundSize="contain"
+            bgColor="content.400"
+            p="1rem"
+            bgRepeat="no-repeat"
+            bgPos="center"
+            cursor="pointer"
+            transition="0.3s"
+            _hover={{ transform: "scale(1.01)" }}
+          ></Box>
         ))}
       </SimpleGrid>
     </Flex>

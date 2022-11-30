@@ -24,6 +24,10 @@ const App = ({ Component, pageProps: { session, auth, ...pageProps } }: AppProps
     posthog.init(process.env.NEXT_PUBLIC_POSTHOG_API_KEY, {
       api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
       autocapture: false,
+      loaded: (posthog) => {
+        // Ignore in development
+        if (process.env.NODE_ENV === "development") posthog.opt_out_capturing()
+      },
     })
     const handleRouteChange = () => {
       if (typeof window !== "undefined") {

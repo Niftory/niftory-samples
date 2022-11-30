@@ -20,7 +20,6 @@ import {
   ContractDocument,
   ContractQuery,
   ContractQueryVariables,
-  GetNftSetsQuery,
   Nft,
   NftBlockchainState,
   NftModel,
@@ -33,7 +32,7 @@ import { CheckIcon, EditIcon } from "@chakra-ui/icons"
 import { Field, FieldArray, Form, Formik } from "formik"
 import { backendClient } from "../../graphql/backendClient"
 import { MetadataForm, metadataToJson } from "../../components/form/MetadataForm"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { InfoPopOver } from "../PopOver/InfoPopOver"
 import { useTransfer } from "../../hooks/useTransfer"
 import { useAuthContext } from "../../hooks/useAuthContext"
@@ -45,6 +44,7 @@ import { useGraphQLQuery } from "../../graphql/useGraphQLQuery"
 import { Step, Steps } from "intro.js-react"
 import { getContractUrl } from "../../utils/contract"
 import posthog from "posthog-js"
+import { TransactionCollapsibleTable } from "ui/TransactionCollapsibleTable"
 
 type Disclosure = {
   isOpen: boolean
@@ -268,6 +268,7 @@ export const DetailModal = ({
                   maxH="500px"
                   overflow="auto"
                   alignItems="flex-start"
+                  mb="1rem"
                 >
                   <>
                     <VStack
@@ -322,7 +323,7 @@ export const DetailModal = ({
                           </Field>
                         </Flex>
 
-                        <HStack color="gray.400" minW="fit-content">
+                        <HStack minW="fit-content" color="content.400">
                           {nftModel.state === NftModelBlockchainState.Minted && (
                             <>
                               {isOwner && (
@@ -348,20 +349,7 @@ export const DetailModal = ({
                                   />
                                 </span>
                               </Tooltip>
-                              {/* TODO: Enable after mintHash comes from graphql resolvers */}
-                              {/* {nft?.mintTransactionHash && (
-                                <Tooltip label="View Transaction" hasArrow placement="top">
-                                  <a
-                                    id="flowscan_transaction"
-                                    href={`
-                                    ${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/transaction/${nft?.mintTransactionHash}`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                  >
-                                    <Image src="/flowscan-logo.svg" alt="flowscan" />
-                                  </a>
-                                </Tooltip>
-                              )} */}
+
                               {contract && (
                                 <Tooltip label="View Contract" hasArrow placement="top">
                                   <a
@@ -604,6 +592,22 @@ export const DetailModal = ({
                         </Flex>
 
                         <Text>{nft?.blockchainId} </Text>
+                      </Flex>
+                    )}
+                    {nft?.transactions?.length > 0 && (
+                      <Flex
+                        borderBottom={"2px"}
+                        borderColor={"brand.300"}
+                        alignItems="center"
+                        justifyContent="space-between"
+                        w="full"
+                        mt="-1rem"
+                      >
+                        <TransactionCollapsibleTable
+                          transactions={nft?.transactions}
+                          buttonPadding="1rem 3rem"
+                          contentPadding="0rem 3rem"
+                        />
                       </Flex>
                     )}
 
