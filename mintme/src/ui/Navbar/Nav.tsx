@@ -18,6 +18,7 @@ import { IoIosAddCircleOutline as AddIcon } from "react-icons/io"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { BsDiscord } from "react-icons/bs"
 import posthog from "posthog-js"
+import { useRouter } from "next/router"
 export const Navbar = ({ onOpen }) => {
   const { session, signIn } = useAuthContext()
   let onClick = () => {
@@ -27,6 +28,7 @@ export const Navbar = ({ onOpen }) => {
     })
   }
   const isMobile = useBreakpointValue({ base: true, md: false })
+  const router = useRouter()
 
   const menuItems = React.useMemo(() => {
     if (!session) {
