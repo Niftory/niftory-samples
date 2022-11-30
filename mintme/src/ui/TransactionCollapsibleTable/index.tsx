@@ -61,8 +61,7 @@ export const TransactionCollapsibleTable = ({
               p="0.1rem"
               key={item.hash}
               fontSize="0.8rem"
-              href={`
-                        ${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/transaction/${item.hash}`}
+              href={`${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/transaction/${item.hash}`}
               target="_blank"
               rel="noreferrer"
             >
