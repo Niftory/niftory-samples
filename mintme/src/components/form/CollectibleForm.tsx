@@ -250,7 +250,11 @@ export const CollectibleForm = (props: FormProps) => {
             </VStack>
             <Field name="numEntities">
               {({ field, form }) => (
-                <FormControl id="numEntities" isRequired>
+                <FormControl
+                  id="numEntities"
+                  isRequired
+                  isInvalid={errors.numEntities && touched.numEntities}
+                >
                   <VStack
                     alignItems="flex-start"
                     py="1rem"
@@ -281,7 +285,9 @@ export const CollectibleForm = (props: FormProps) => {
                     </NumberInput>
                   </VStack>
 
-                  <FormErrorMessage>{form.errors.numEntities}</FormErrorMessage>
+                  <FormErrorMessage fontWeight="semibold">
+                    {form.errors.numEntities}
+                  </FormErrorMessage>
                 </FormControl>
               )}
             </Field>

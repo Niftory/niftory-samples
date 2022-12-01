@@ -19,6 +19,9 @@ export const collectibleFormValidation = (props: collectibleFormValidationProps)
   } else if (!values.description) {
     errors.description = "Description is required to continue"
     error = errors.description
+  } else if (!values.numEntities) {
+    errors.numEntities = "Supply is required to continue"
+    error = errors.numEntities
   } else {
     if (!values.contentId) {
       errors.contentId = "Primary Content is required to continue"
@@ -27,6 +30,11 @@ export const collectibleFormValidation = (props: collectibleFormValidationProps)
     if (containsSpecialChars(values.title)) {
       errors.title = "Title cannot contain special characters"
       error = errors.title
+    }
+    if (Number(values.numEntities ?? 0) > 1000) {
+      errors.numEntities = "Supply should not exceed 1000"
+      error = errors.numEntities
+      console.log(error, errors)
     }
   }
   return { error, errors }

@@ -71,68 +71,74 @@ export const CollectibleCreateForm = (props: StackProps) => {
   }, [session, isLoading])
 
   const handleSubmit = async (values, actions) => {
-    actions.setSubmitting(true)
-    setIsSubmitting(true)
-    const { errors } = collectibleFormValidation({
-      values,
-    })
+    try {
+      actions.setSubmitting(true)
+      setIsSubmitting(true)
+      const { errors } = collectibleFormValidation({
+        values,
+      })
 
-    actions.setErrors(errors)
-    if (Object.keys(errors).length !== 0) {
-      actions.setSubmitting(false)
-      setIsSubmitting(false)
-      return
-    }
-    // Reset form dirty state so confirm prompt is not shown
-    actions.resetForm({ values })
-
-    const collectibleData = {
-      title: values.title,
-      subtitle: values.subtitle,
-      description: values.description,
-      quantity: +values.numEntities,
-      contentId: values.contentId,
-      status: "DRAFT" as any,
-      metadata: metadataToJson(values.metadata.filter((item) => item.key && item.val)),
-    }
-
-    if (!session) {
-      localStorage.setItem("COLLECTIBLE_CREATE_DATA", JSON.stringify(values))
-      signIn("/app/new-item?fromRedirect=true")
-      return
-    }
-
-    let createNFTModelData = currentNFTModel
-
-    if (!createNFTModelData) {
-      let currentSet = userSets?.[0]
-      if (!currentSet) {
-        const { createNFTSet: createNFTSetData } = await backendClient<CreateNftSetMutation>(
-          "createNFTSet"
-        )
-        currentSet = createNFTSetData
-      }
-
-      createNFTModelData = await createNFTModel(currentSet?.id, collectibleData)
-    }
-
-    if (createNFTModelData.id != null && !isDraft) {
-      try {
-        await backendClient("updateNFTModel", {
-          data: collectibleData,
-          updateNftModelId: createNFTModelData.id,
-        })
-        await transferNFTModel(createNFTModelData.id, session)
-      } catch (e) {
-        // Route to account as wallet state is creation failed
-        router.push("/app/account")
+      actions.setErrors(errors)
+      if (Object.keys(errors).length !== 0) {
+        actions.setSubmitting(false)
+        setIsSubmitting(false)
         return
       }
-    }
 
-    router.push(`/app/collection${isDraft ? "/created" : ""}`)
-    actions.setSubmitting(false)
-    setIsSubmitting(false)
+      // Reset form dirty state so confirm prompt is not shown
+      actions.resetForm({ values })
+
+      const collectibleData = {
+        title: values.title,
+        subtitle: values.subtitle,
+        description: values.description,
+        quantity: +values.numEntities,
+        contentId: values.contentId,
+        status: "DRAFT" as any,
+        metadata: metadataToJson(values.metadata.filter((item) => item.key && item.val)),
+      }
+
+      if (!session) {
+        localStorage.setItem("COLLECTIBLE_CREATE_DATA", JSON.stringify(values))
+        signIn("/app/new-item?fromRedirect=true")
+        return
+      }
+
+      let createNFTModelData = currentNFTModel
+
+      if (!createNFTModelData) {
+        let currentSet = userSets?.[0]
+        if (!currentSet) {
+          const { createNFTSet: createNFTSetData } = await backendClient<CreateNftSetMutation>(
+            "createNFTSet"
+          )
+          currentSet = createNFTSetData
+        }
+
+        createNFTModelData = await createNFTModel(currentSet?.id, collectibleData)
+      }
+
+      if (createNFTModelData.id != null && !isDraft) {
+        try {
+          await backendClient("updateNFTModel", {
+            data: collectibleData,
+            updateNftModelId: createNFTModelData.id,
+          })
+          await transferNFTModel(createNFTModelData.id, session)
+        } catch (e) {
+          // Route to account as wallet state is creation failed
+          router.push("/app/account")
+          return
+        }
+      }
+
+      router.push(`/app/collection${isDraft ? "/created" : ""}`)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      actions.setSubmitting(false)
+      setIsSubmitting(false)
+    }
   }
 
   const onRedirect = async (values) => {

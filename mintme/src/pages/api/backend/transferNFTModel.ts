@@ -29,6 +29,7 @@ const handler: NextApiHandler = async (req, res) => {
       const nftModelId = variables?.nftModelId
       if (!nftModelId) {
         res.status(400).send("There must an nft model id to share")
+        return
       }
 
       const { sets } = await serverSideBackendClient.request<
@@ -73,7 +74,7 @@ const handler: NextApiHandler = async (req, res) => {
     }
   } catch (e) {
     posthog.capture("ERROR_TRANSFERNFTMODEL_API", e)
-    throw e
+    res.status(500).json(e)
   }
 }
 

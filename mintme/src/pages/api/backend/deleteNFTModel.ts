@@ -11,6 +11,7 @@ const handler: NextApiHandler = async (req, res) => {
 
     if (!session.authToken || !session.userId) {
       res.status(401).send("There must be a user signed in to use this API route")
+      return
     }
     const requestMethod = req.method
     const variables = req.body
@@ -24,8 +25,8 @@ const handler: NextApiHandler = async (req, res) => {
       res.status(405).end("Method not allowed, this endpoint only supports POST")
     }
   } catch (e) {
+    res.status(500).json(e)
     posthog.capture("ERROR_DELETENFTMODEL_API", e)
-    throw e
   }
 }
 

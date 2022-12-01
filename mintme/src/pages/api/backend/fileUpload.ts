@@ -19,8 +19,8 @@ const handler: NextApiHandler = async (req, res) => {
       res.status(405).end("Method not allowed, this endpoint only supports POST")
     }
   } catch (e) {
+    res.status(500).json(e)
     posthog.capture("ERROR_FILEUPLOAD_API", e)
-    throw e
   }
 }
 

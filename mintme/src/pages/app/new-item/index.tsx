@@ -9,11 +9,11 @@ const NewItemPage = () => {
     <>
       <AppLayout title="Create New NFT | MintMe">
         <VStack w="full" p="1rem" my="3rem" gap="3rem">
-          <Box px="1rem">
-            <Center m="1.4rem">
+          <Center px={{ base: "0", md: "1rem" }} w="full" flexDirection="column">
+            <Center mb={{ base: "1rem", md: "4rem" }} px={{ base: "0", md: "1.4rem" }}>
               <Heading
                 as="h3"
-                fontWeight="400"
+                fontWeight="700"
                 textAlign="center"
                 maxW="600"
                 fontSize={{ base: "3xl", md: "5xl" }}
@@ -22,7 +22,7 @@ const NewItemPage = () => {
               </Heading>
             </Center>
             <Flex
-              minW={{ base: "280px", md: "800px" }}
+              minW={{ base: "100%", md: "800px" }}
               rounded="xl"
               alignItems="center"
               justifyContent="center"
@@ -30,7 +30,7 @@ const NewItemPage = () => {
             >
               <CollectibleCreateForm />
             </Flex>
-          </Box>
+          </Center>
           <HowItWorks />
           <SupportingResources />
           <Showcase />
