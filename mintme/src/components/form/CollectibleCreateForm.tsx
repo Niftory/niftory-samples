@@ -85,6 +85,9 @@ export const CollectibleCreateForm = (props: StackProps) => {
         return
       }
 
+      // Reset form dirty state so confirm prompt is not shown
+      actions.resetForm({ values })
+
       const collectibleData = {
         title: values.title,
         subtitle: values.subtitle,

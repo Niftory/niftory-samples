@@ -16,13 +16,14 @@ import { Field, FieldArray, useFormikContext } from "formik"
 import React, { useCallback, useEffect } from "react"
 import { FileUploadField } from "./FileUploadField"
 import { MetadataForm } from "./MetadataForm"
-import { useRouter } from "next/router"
+import { Router, useRouter } from "next/router"
 import { NftContent } from "../../../generated/graphql"
 import { InfoPopOver } from "../../ui/PopOver/InfoPopOver"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import toast from "react-hot-toast"
 import posthog from "posthog-js"
 import { Session } from "inspector"
+import { useRouteChangePrompt } from "hooks/useRouteChangePrompt"
 
 interface FormProps extends StackProps {
   isSetLoading?: boolean
@@ -46,7 +47,7 @@ export const CollectibleForm = (props: FormProps) => {
 
   const { session } = useAuthContext()
 
-  const { setValues, values, touched, errors, submitForm, dirty } =
+  const { setValues, values, touched, errors, submitForm, dirty, isSubmitting } =
     useFormikContext<CollectibleData>()
 
   const router = useRouter()
@@ -90,6 +91,8 @@ export const CollectibleForm = (props: FormProps) => {
   useEffect(() => {
     handleRedirect()
   }, [handleRedirect, isSetLoading])
+
+  useRouteChangePrompt(dirty)
 
   const getBaseUrl = (url) => {
     if (!url?.trim()) return

@@ -21,7 +21,6 @@ const handler: NextApiHandler = async (req, res) => {
   } catch (e) {
     res.status(500).json(e)
     posthog.capture("ERROR_FILEUPLOAD_API", e)
-    throw e
   }
 }
 

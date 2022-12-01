@@ -39,10 +39,10 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
     setIsAuthenticating(false)
   }, [])
 
-  const signOut = useCallback(async () => {
+  const signOut = useCallback(async (callbackUrl: string = "/") => {
     setIsAuthenticating(true)
     fcl.unauthenticate()
-    await nextAuthSignOut({ redirect: false })
+    await nextAuthSignOut({ redirect: false, callbackUrl })
     setIsAuthenticating(false)
   }, [])
 
