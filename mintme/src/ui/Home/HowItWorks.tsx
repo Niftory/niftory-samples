@@ -50,6 +50,7 @@ export const HowItWorks = forwardRef<HTMLDivElement>(function HowItWorks(props, 
             src="/mintme_demo.mp4"
             loop
             autoPlay
+            playsInline
             muted
             maxH="480px"
             p="1rem"
