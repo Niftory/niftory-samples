@@ -10,12 +10,11 @@ export function Logout() {
 
   return (
     <Button
-      p='6'
+      p="6"
       backgroundColor="brand.400"
       fontSize="md"
       onClick={() => {
         signOut()
-        router.push("/")
       }}
     >
       Log Out
