@@ -26,6 +26,7 @@ const handler: NextApiHandler = async (req, res) => {
     if (requestMethod === "POST") {
       if (!variables.token) {
         res.status(401).send("There must be a token to claim this nft")
+        return
       }
       const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET as string)
 
@@ -53,8 +54,8 @@ const handler: NextApiHandler = async (req, res) => {
       res.status(405).end("Method not allowed, this endpoint only supports POST")
     }
   } catch (e) {
+    res.status(500).json(e)
     posthog.capture("ERROR_CLAIMNFT_API", e)
-    throw e
   }
 }
 

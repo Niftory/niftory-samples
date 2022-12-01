@@ -28,9 +28,8 @@ interface Props {
 
 const ProductDropPage = ({ nftModel, host, nft }: Props) => {
   return (
-    <AppLayout>
+    <AppLayout title={`${nftModel.title} - NFT Collection | MintMe`}>
       <Head>
-        <title>{nftModel.title} - NFT Collection | MintMe</title>
         <meta property="og:title" content={nftModel.title} />
         <meta property="og:site_name" content="MintMe" />
         <meta property="og:url" content={`http://${host}/app/collection/${nftModel.id}`} />
