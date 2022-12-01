@@ -160,7 +160,12 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
   }
 
   return (
-    <Box maxW="7xl" mx="auto" px={{ base: "4", md: "8", lg: "12" }} py={{ base: "4" }}>
+    <Box
+      maxW={{ base: "7xl", xl: "1400px" }}
+      mx="auto"
+      px={{ base: "4", md: "8", lg: "12" }}
+      py={{ base: "4" }}
+    >
       <MintRequestModal disclosure={disclosure} />
       <Heading>{nftModel.title}</Heading>
       <Text fontSize="0.8rem" mb="2rem" fontStyle="italic">
@@ -169,7 +174,8 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
       <Stack
         direction={{ base: "column", lg: "row" }}
         spacing={{ base: "6", lg: "8", xl: "12" }}
-        h={{ base: "auto", md: "450px" }}
+        h={{ base: "auto", lg: "550px", xl: "600px" }}
+        mb="4rem"
       >
         {product.content?.length > 0 && (
           <Box flex="1" bgColor="content.400" shadow="base">

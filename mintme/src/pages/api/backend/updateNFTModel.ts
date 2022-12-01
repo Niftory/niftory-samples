@@ -11,6 +11,7 @@ const handler: NextApiHandler = async (req, res) => {
 
     if (!session.authToken || !session.userId) {
       res.status(401).send("There must be a user signed in to use this API route")
+      return
     }
     const requestMethod = req.method
     const variables = req.body
@@ -25,7 +26,7 @@ const handler: NextApiHandler = async (req, res) => {
     }
   } catch (e) {
     posthog.capture("ERROR_UPDATENFTMODEL_API", e)
-    throw e
+    res.status(500).json(e)
   }
 }
 
