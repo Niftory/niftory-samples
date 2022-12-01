@@ -16,7 +16,7 @@ import { BiEdit as EditIcon } from "react-icons/bi"
 import { MdOutlineErrorOutline as ErrorIcon } from "react-icons/md"
 import { MenuModal, MenuModalItems } from "../Modal/MenuModal"
 import { DetailModal } from "../Modal/DetailModal"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { useBackendClient } from "../../graphql/backendClient"
 import { useRouter } from "next/router"
@@ -97,6 +97,7 @@ export const MasonryCard = ({ nftModel, reExecuteQuery, hidePopUp, nft }: Masonr
   const file = nftModel?.content?.files?.[0]
   const poster = nftModel?.content?.poster
 
+  const mounted = useRef(false)
   const handleMinting = useCallback(async () => {
     if (
       session &&
@@ -105,6 +106,10 @@ export const MasonryCard = ({ nftModel, reExecuteQuery, hidePopUp, nft }: Masonr
     ) {
       setMintState(NftBlockchainState.Minting)
       backOff(async () => {
+        // This instance can be ignored as its not mounted
+        if (!mounted.current) {
+          return true
+        }
         const client = await getClientFromSession(session)
 
         const { nft: nftResponse } = await client.request<NftQuery, NftQueryVariables>(
@@ -125,10 +130,14 @@ export const MasonryCard = ({ nftModel, reExecuteQuery, hidePopUp, nft }: Masonr
         return true
       })
     }
-  }, [nft, session])
+  }, [nft, reExecuteQuery, session])
 
   useEffect(() => {
+    mounted.current = true
     handleMinting()
+    return () => {
+      mounted.current = false
+    }
   }, [handleMinting])
 
   return (
