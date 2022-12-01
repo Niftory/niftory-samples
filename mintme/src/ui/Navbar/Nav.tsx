@@ -20,7 +20,7 @@ import { BsDiscord } from "react-icons/bs"
 import posthog from "posthog-js"
 import { useRouter } from "next/router"
 export const Navbar = ({ onOpen }) => {
-  const { session, signIn } = useAuthContext()
+  const { session, signIn, isLoading } = useAuthContext()
   let onClick = () => {
     signIn("/app/collection")
     posthog.capture("HEADER_LOGIN", {
@@ -38,6 +38,7 @@ export const Navbar = ({ onOpen }) => {
           component: (
             <Button
               rounded="3xl"
+              isLoading={isLoading}
               cursor="pointer"
               onClick={onClick}
               colorScheme="white"

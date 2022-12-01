@@ -42,9 +42,7 @@ interface CollectibleData {
 
 export const CollectibleForm = (props: FormProps) => {
   const { setIsFileLoading, isSetLoading, onRedirect } = props
-  const { isLoading } = useAuthContext()
-
-  const { session } = useAuthContext()
+  const { session, isLoading } = useAuthContext()
 
   const { setValues, values, touched, errors, submitForm, dirty } =
     useFormikContext<CollectibleData>()
@@ -52,12 +50,12 @@ export const CollectibleForm = (props: FormProps) => {
   const router = useRouter()
 
   useEffect(() => {
-    if (dirty && !session) {
+    if (dirty && !session && !isLoading) {
       posthog.capture("FORM_FILLED_BEFORE_LOGIN", {
         posthogEventDetail: "User fills out creation form (before sign-in)",
       })
     }
-  }, [dirty, session])
+  }, [dirty, session, isLoading])
 
   const handleRedirect = useCallback(async () => {
     if (router.query?.fromRedirect === "true" && !isSetLoading && !isLoading) {
@@ -120,7 +118,7 @@ export const CollectibleForm = (props: FormProps) => {
                   onUpload={(content) => {
                     form.setFieldValue("contentId", content.id)
                     form.setFieldValue("content", content)
-                    if (!session) {
+                    if (!session && !isLoading) {
                       posthog.capture("FORM_FILE_UPLOADED", {
                         posthogEventDetail: "React-dropzone used for file upload (before sign-in)",
                         content,

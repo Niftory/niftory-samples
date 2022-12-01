@@ -49,7 +49,7 @@ interface Props {
 export const ItemDetail = ({ nftModel, nft }: Props) => {
   const router = useRouter()
 
-  const { session, signIn } = useAuthContext()
+  const { session, signIn, isLoading: isSessionLoading } = useAuthContext()
 
   const { token } = router.query
   const [isLoading, setLoading] = useState(false)
@@ -127,7 +127,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
       posthog.capture("ERROR_FAILED_CLAIMNFT_CALL", e)
       setLoading(false)
       toast.error(
-        "Uh-oh there was an error claiming your NFT. Please try claiming again. If the issue persists please contact us via discord."
+        "Uh-oh, there was an error claiming your NFT. Please try again. If the issue persists please contact us via discord."
       )
     }
   }, [nftModel?.id, session, signIn, token, nfts?.items])
@@ -147,7 +147,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
 
   const renderButtonText = () => {
     if (!nftsRemaining) {
-      return `All NFTs have been minted`
+      return `All NFTs have been claimed`
     }
 
     if (!session) {
@@ -365,7 +365,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
                   <Button
                     w="full"
                     onClick={handleClaimNFT}
-                    isLoading={isLoading || fetchingNfts}
+                    isLoading={isLoading || isSessionLoading || fetchingNfts}
                     disabled={alreadyClaimed || !nftsRemaining}
                   >
                     {renderButtonText()}
@@ -380,9 +380,11 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
                   >
                     <AiFillInfoCircle size="1.2rem" />
                     <Box ml="0.2rem" fontSize="0.8rem">
-                      {`All ${nftModel.quantity} NFT${
-                        nftModel.quantity > 1 ? "s" : ""
-                      } of this type have been minted or being minted.`}
+                      {`${
+                        nftModel.quantity > 1 ? `All ${nftModel.quantity} NFTs` : `The only NFT`
+                      } from this collection {${
+                        nftModel.quantity > 1 ? `have` : `has`
+                      } already been claimed.`}
                     </Box>
                   </Flex>
                 )}
@@ -391,13 +393,13 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
           </>
         </VStack>
       </Stack>
-      {!session && (
+      {!isSessionLoading && !session && (
         <Box my="4rem">
           <Flex direction={{ base: "column", md: "row" }} gap="1rem">
             <Image src="/mintme-logo.svg" maxW="25rem" alt="logo" />
             <Box mt="1.5rem">
               <Heading size="lg" mb="1rem">
-                What is MintMe?
+                About MintMe
               </Heading>
               MintMe is a no-code mint tool to mint NFTs on the{" "}
               <ChakraLink color="purple.100" target="_blank" href=" https://flow.com/">
