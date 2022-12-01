@@ -396,7 +396,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
       {!isSessionLoading && !session && (
         <Box my="4rem">
           <Flex direction={{ base: "column", md: "row" }} gap="1rem">
-            <Image src="/mintme-logo.svg" maxW="25rem" alt="logo" />
+            <Image src="/mintme-logo-header.svg" maxW="25rem" alt="logo" />
             <Box mt="1.5rem">
               <Heading size="lg" mb="1rem">
                 About MintMe

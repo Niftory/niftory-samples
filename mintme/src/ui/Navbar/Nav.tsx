@@ -181,7 +181,7 @@ export const Navbar = ({ onOpen }) => {
             <Link href="/" passHref>
               <Image
                 boxSize={{ md: "70" }}
-                src="/mintme-logo.svg"
+                src="/mintme-logo-header.svg"
                 alt="logo"
                 zIndex="1000"
                 w={{ base: "6rem", md: "13rem" }}
