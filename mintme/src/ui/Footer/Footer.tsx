@@ -29,7 +29,7 @@ export const Footer: React.FunctionComponent = () => {
       zIndex={1}
     >
       <Flex pl="1rem" justifyContent={{ base: "center", md: "flex-start" }}>
-        <Image src="/mintme-logo-white.svg" alt="logo" h="4rem" mb="2" />
+        <Image src="/mintme-logo-footer.svg" alt="logo" h="4rem" mb="2" />
       </Flex>
 
       <Flex
