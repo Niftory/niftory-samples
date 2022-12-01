@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/layout"
-import { useBreakpointValue, useDisclosure } from "@chakra-ui/react"
+import { useBreakpointValue, useDisclosure, useMediaQuery } from "@chakra-ui/react"
 import Head from "next/head"
 import { DEFAULT_TITLE } from "../constants/title"
 
@@ -14,7 +14,7 @@ type Props = {
 
 export default function AppLayout({ children, showSidebar = false, title = DEFAULT_TITLE }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const isMobile = useBreakpointValue({ base: true, md: false })
+  const [isMobile] = useMediaQuery("(max-width: 48em)")
 
   // Always enable sidebar on mobile
   if (isMobile) {
