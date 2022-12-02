@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios"
+import { signOut } from "next-auth/react"
 import useSWR from "swr"
 
 export const apiRoutesTable = {
@@ -43,6 +44,9 @@ export async function backendClient<T extends Record<string, unknown>, X = Objec
     return data
   } catch (e) {
     if (e & e.response) {
+      if (e?.response?.status === 401) {
+        signOut()
+      }
       const axiosError = e as AxiosError<any>
       return axiosError.response?.data
     }
