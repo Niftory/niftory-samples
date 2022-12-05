@@ -97,6 +97,7 @@ export const MasonryCard = ({ nftModel, reExecuteQuery, hidePopUp, nft }: Masonr
   const file = nftModel?.content?.files?.[0]
   const poster = nftModel?.content?.poster
 
+  // Used to track current component mount so we can cancel exponential backoff
   const mounted = useRef(false)
   const handleMinting = useCallback(async () => {
     if (
