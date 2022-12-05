@@ -1,6 +1,7 @@
 import type { GraphQLQueryType, GraphQLQuery } from "./types"
 import { useAuthContext } from "../hooks/useAuthContext"
 import { OperationContext, RequestPolicy, useQuery } from "urql"
+import { signOut } from "next-auth/react"
 
 export type GraphQLQueryResult<Outputs extends Record<string, unknown>> =
   GraphQLQueryType<Outputs> & {
@@ -46,6 +47,10 @@ export function useGraphQLQuery<Outputs extends Record<string, unknown>, Variabl
   })
 
   const { data, fetching, error } = result
+
+  if (error && error?.response?.status === 403) {
+    signOut()
+  }
 
   return {
     ...data,

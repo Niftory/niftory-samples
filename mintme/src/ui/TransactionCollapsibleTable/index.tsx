@@ -41,7 +41,13 @@ export const TransactionCollapsibleTable = ({
   <Accordion allowToggle w="full" {...props}>
     <AccordionItem w="full" border="0" mt="-1rem">
       <AccordionButton w="full" py="1rem" p={buttonPadding}>
-        <Flex fontWeight="bold" flex="1" fontSize={{ base: "0.95rem" }}>
+        <Flex
+          alignItems="center"
+          fontWeight="bold"
+          textAlign="left"
+          marginRight="auto"
+          maxW={{ base: "7rem", md: "100%" }}
+        >
           Blockchain Transactions
           <InfoPopOver
             placement="top"
