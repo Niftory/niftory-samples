@@ -70,7 +70,7 @@ export const SupportingResources = () => {
           }
           body={
             <>
-              Ask any queries you have in the{" "}
+              Have questions, or just want to show off your latest mints? Find us in the{" "}
               <ChakraLink href="https://discord.gg/QAgDQXUGsU" target="_blank" color="purple.100">
                 Niftory Discord
               </ChakraLink>

@@ -228,8 +228,7 @@ export const CollectibleCreateForm = (props: StackProps) => {
                             posthogEventDetail: "Sign in to Mint (from creation form)",
                             values,
                           })
-                        }
-                        if (session) {
+                        } else {
                           posthog.capture("FORM_MINT_NFT", {
                             posthogEventDetail: "Mint (from initial form)",
                             values,

@@ -46,7 +46,13 @@ const App = ({ Component, pageProps: { session, auth, ...pageProps } }: AppProps
     <>
       <Head>
         <title>{DEFAULT_TITLE}</title>
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+        <link rel="manifest" href="/favicon/site.webmanifest" />
+        <meta name="msapplication-config" content="/favicon/browserconfig.xml" />
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff" />
       </Head>
       <SessionProvider session={session} refetchInterval={60 * 60}>
         <AuthProvider requireAuth={Component.requireAuth}>
