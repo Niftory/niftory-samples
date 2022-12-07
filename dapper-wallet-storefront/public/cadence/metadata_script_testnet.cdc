@@ -53,12 +53,12 @@ pub fun main(
   let description = template["description"]!
   var imageURL = ""
   let posterURL = template["posterUrl"]
-  var mediaURL = template["mediaUrl"]!
+  var mediaURL = template["mediaUrl"]
 
   if (posterUrl != nil ) {
     imageURL = posterURL
   } else {
-    imageURL = mediaURL
+    imageURL = mediaURL!
   }
 
   if imageURL.slice(from: 0, upTo: 7) == "ipfs://" {
