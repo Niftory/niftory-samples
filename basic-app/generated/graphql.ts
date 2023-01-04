@@ -567,7 +567,7 @@ export type UserWalletQuery = { __typename?: 'Query', wallet?: { __typename?: 'W
 export type ContractQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ContractQuery = { __typename?: 'Query', contract?: { __typename?: 'Contract', name?: string | null, address?: string | null } | null };
+export type ContractQuery = { __typename?: 'Query', contract?: { __typename?: 'Contract', name?: string | null, address?: string | null, blockchain?: Blockchain | null } | null };
 
 export type UserNftsByUserQueryVariables = Exact<{
   userId: Scalars['ID'];
@@ -710,6 +710,7 @@ export const ReactQuery_ContractDocument = `
   contract {
     name
     address
+    blockchain
   }
 }
     `;
@@ -959,6 +960,7 @@ export const ContractDocument = gql`
   contract {
     name
     address
+    blockchain
   }
 }
     `;

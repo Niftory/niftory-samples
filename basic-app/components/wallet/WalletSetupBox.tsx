@@ -28,7 +28,9 @@ export const WalletSetupBox = ({
 
   return (
     <>
-      <Box maxW="xl">{text}</Box>
+      <Box maxW="xl" textAlign="center">
+        {text}
+      </Box>
       <Button onClick={onClick} colorScheme="blue">
         {buttonText}
       </Button>
