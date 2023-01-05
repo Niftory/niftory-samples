@@ -11,7 +11,7 @@ export const MetamaskWalletSetupBox = () => {
 
   switch (status) {
     case "initializing":
-      return <div>Ongoing synchronisation with MetaMask...</div>
+      return <div>Initializing wallet...</div>
     case "unavailable":
       return (
         <Text>
@@ -32,7 +32,7 @@ export const MetamaskWalletSetupBox = () => {
       return (
         <HStack>
           <Spinner />
-          <Text>Connecting to metamask...</Text>
+          <Text>Connecting to MetaMask...</Text>
         </HStack>
       )
     case "notConnected":
@@ -46,7 +46,7 @@ export const MetamaskWalletSetupBox = () => {
           }}
           colorScheme="blue"
         >
-          Connect to metamask
+          Connect to MetaMask
         </Button>
       )
 

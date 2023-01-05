@@ -36,15 +36,18 @@ export function VerifyWallet({ blockchain }: Props) {
   const onClick = useCallback(async () => {
     let signature
 
-    if (blockchain === Blockchain.Flow) {
-      // Use FCL to sign the verification message
-      signature = await fcl.currentUser.signUserMessage(wallet.verificationCode)
-    }
-    if (blockchain === Blockchain.Polygon) {
-      const provider = new ethers.providers.Web3Provider(ethereum)
-
-      const signer = provider.getSigner()
-      signature = await signer.signMessage(wallet.verificationCode)
+    switch (blockchain) {
+      case Blockchain.Flow:
+        // Use FCL to sign the verification message
+        signature = await fcl.currentUser.signUserMessage(wallet.verificationCode)
+        break
+      case Blockchain.Polygon: {
+        // User ethers signer to sign the verification message
+        const provider = new ethers.providers.Web3Provider(ethereum)
+        const signer = provider.getSigner()
+        signature = await signer.signMessage(wallet.verificationCode)
+        break
+      }
     }
 
     if (!signature) {

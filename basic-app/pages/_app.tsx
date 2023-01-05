@@ -19,6 +19,7 @@ const App = ({ Component, pageProps: { session, auth, ...pageProps } }: AppProps
       <ReactQueryClientProvider>
         <GraphQLClientProvider>
           <ChakraProvider>
+            {/* This is for Polygon/Eth blockchains only. This component is a no-op for the Flow blockchain */}
             <MetaMaskProvider>
               <Component {...pageProps} />
             </MetaMaskProvider>
