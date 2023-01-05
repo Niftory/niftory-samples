@@ -27,7 +27,7 @@ export function RegisterWallet({ blockchain }: Props) {
 
   const { mutate: registerWallet, error, isLoading } = useWalletMutation(useRegisterWalletMutation)
 
-  // When the user logs in, register their wallet
+  // When the user logs in, register their wallet. This is because we need to register after fcl.login and it doesn't return a promise.
   useEffect(() => {
     if (blockchain !== Blockchain.Flow || !flowUser?.addr) {
       return
@@ -43,6 +43,7 @@ export function RegisterWallet({ blockchain }: Props) {
       }
       case Blockchain.Polygon: {
         const wallets = await metamask.connect()
+        // Register wallet after connecting to metamask completes
         if (wallets?.length > 0) {
           registerWallet({ address: wallets[0] })
         }
