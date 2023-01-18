@@ -42,7 +42,6 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
     const response = await axios.post("/api/signTransaction", { transaction })
     return response.data.signTransactionForDapperWallet
   }, [])
-  console.log(checkoutStatusIndex)
 
   const handleCheckout = useCallback(async () => {
     try {

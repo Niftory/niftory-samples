@@ -12,7 +12,7 @@ gql`
 `
 
 const nonFungibleTokenAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS
-const metadataViewsAddress = process.env.NEXT_PUBLIC_METADATA_VIEWS_ADDRESS
+const metadataViewsAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS
 const niftoryAddress = process.env.NEXT_PUBLIC_NIFTORY_ADDRESS
 const registryAddress = process.env.NEXT_PUBLIC_REGISTRY_ADDRESS
 const clientId = process.env.NEXT_PUBLIC_CLIENT_ID

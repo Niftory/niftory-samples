@@ -51,7 +51,16 @@ pub fun main(
     .get() as! {String: String}
   let name = template["title"]!
   let description = template["description"]!
-  var imageURL = template["mediaUrl"]!
+  var imageURL = ""
+  let posterURL = template["posterUrl"]
+  var mediaURL = template["mediaUrl"]
+
+  if (posterUrl != nil ) {
+    imageURL = posterURL
+  } else {
+    imageURL = mediaURL!
+  }
+
   if imageURL.slice(from: 0, upTo: 7) == "ipfs://" {
     imageURL = "https://gateway.ipfs.io/ipfs/".concat(
       imageURL.slice(
