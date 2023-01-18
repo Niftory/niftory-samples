@@ -30,6 +30,7 @@ interface Props extends AccordionProps {
 const TxNameTable = {
   BL_MINT_NFTS_TX: "MINT NFT",
   BL_TRANSFER_NFTS_TX: "TRANSFER NFT",
+  BL_WITHDRAW_NFTS_FROM_CUSTODIAL_WALLET: "TRANSFER NFT",
 }
 
 export const TransactionCollapsibleTable = ({

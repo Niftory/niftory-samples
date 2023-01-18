@@ -1,5 +1,6 @@
 import { Box, Center, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react"
 import {
+  AppUserDocument,
   GetNftSetsQuery,
   Nft,
   NftBlockchainState,
@@ -8,6 +9,13 @@ import {
   NftModelBlockchainState,
   NftQuery,
   NftQueryVariables,
+  TransferDocument,
+  TransferMutation,
+  TransferMutationVariables,
+  Wallet,
+  WithdrawDocument,
+  WithdrawMutation,
+  WithdrawMutationVariables,
 } from "../../../generated/graphql"
 import { FaEllipsisH as EllipsisIcon } from "react-icons/fa"
 import { TfiReload as ReloadIcon } from "react-icons/tfi"
@@ -24,10 +32,14 @@ import { ShareModal } from "../Modal/ShareModel"
 import { useTransfer } from "../../hooks/useTransfer"
 import { EmbedModal } from "../Modal/EmbedModal"
 import { MediaBox } from "../MediaBox"
-import { OperationContext } from "urql"
+import { OperationContext, useMutation } from "urql"
 import { backOff } from "exponential-backoff"
 import { getClientFromSession } from "../../graphql/getClientFromSession"
 import { getReadableStateValue } from "utils/mint"
+import { useGraphQLMutation } from "graphql/useGraphQLMutation"
+import { useGraphQLQuery } from "graphql/useGraphQLQuery"
+import toast from "react-hot-toast"
+import { WalletSelectModal } from "ui/Modal/WalletSelectModal"
 
 interface MasonryCardProps {
   nftModel: NftModel
@@ -50,6 +62,7 @@ export const MasonryCard = ({ nftModel, reExecuteQuery, hidePopUp, nft }: Masonr
   const detailDisclosure = useDisclosure()
   const shareDisclosure = useDisclosure()
   const embedDisclosure = useDisclosure()
+  const walletSelectDisclosure = useDisclosure()
   const { onOpen } = disclosure
   const { onOpen: onDetailOpen } = detailDisclosure
 
@@ -66,6 +79,27 @@ export const MasonryCard = ({ nftModel, reExecuteQuery, hidePopUp, nft }: Masonr
   const isOwner = setIds?.includes(nftModel?.set?.id)
 
   const [mintState, setMintState] = useState(nft ? nft?.blockchainState : nftModel?.state)
+
+  const { executeMutation } = useGraphQLMutation<TransferMutation, TransferMutationVariables>(
+    TransferDocument
+  )
+
+  const { executeMutation: withdrawNFT } = useGraphQLMutation<
+    WithdrawMutation,
+    WithdrawMutationVariables
+  >(WithdrawDocument)
+
+  const handleWithdraw = async (wallet: Wallet) => {
+    const toastId = toast.loading("Withdrawing your NFT...")
+    await withdrawNFT({
+      id: nft?.id,
+      receiverAddress: wallet.address,
+    })
+    reExecuteQuery({ requestPolicy: "network-only" })
+    toast.success(`Successfully withdrawn NFT ${nft?.model.title} to wallet ${wallet.address}`, {
+      id: toastId,
+    })
+  }
 
   const items: MenuModalItems[] = useMemo(
     () =>
@@ -90,8 +124,20 @@ export const MasonryCard = ({ nftModel, reExecuteQuery, hidePopUp, nft }: Masonr
             router.push(`/app/collection?open=${id}`)
           },
         },
+        nft?.wallet?.walletType === "CUSTODIAL" && {
+          title: `Withdraw`,
+          onClick: () => walletSelectDisclosure.onOpen(),
+        },
       ].filter(Boolean),
-    [nftModel?.id, nftModel?.state, reExecuteQuery, session, shareDisclosure, transferNFTModel]
+    [
+      nftModel?.state,
+      nftModel?.id,
+      nft?.wallet?.walletType,
+      shareDisclosure,
+      embedDisclosure,
+      transferNFTModel,
+      walletSelectDisclosure,
+    ]
   )
 
   const file = nftModel?.content?.files?.[0]
@@ -144,6 +190,7 @@ export const MasonryCard = ({ nftModel, reExecuteQuery, hidePopUp, nft }: Masonr
   return (
     <>
       {items.length > 0 && <MenuModal disclosure={disclosure} items={items} />}
+      <WalletSelectModal disclosure={walletSelectDisclosure} onWalletSelect={handleWithdraw} />
 
       <DetailModal
         disclosure={detailDisclosure}

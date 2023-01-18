@@ -1,0 +1,16 @@
+query AppUser {
+  appUser {
+    wallets {
+      id
+      address
+      state
+      verificationCode
+      walletType
+    }
+    primaryWallet {
+      id
+      address
+      state
+    }
+  }
+}

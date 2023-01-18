@@ -6,6 +6,10 @@ query userNfts($id: ID) {
       metadata
       id
       serialNumber
+      wallet {
+        address
+        walletType
+      }
       transactions {
         hash
         name
