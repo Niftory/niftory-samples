@@ -40,6 +40,7 @@ export function RegisterWallet({ blockchain }: Props) {
     switch (blockchain) {
       case Blockchain.Flow: {
         fcl.logIn()
+        break
       }
       case Blockchain.Polygon: {
         const wallets = await metamask.connect()
@@ -47,6 +48,7 @@ export function RegisterWallet({ blockchain }: Props) {
         if (wallets?.length > 0) {
           registerWallet({ address: wallets[0] })
         }
+        break
       }
     }
   }
