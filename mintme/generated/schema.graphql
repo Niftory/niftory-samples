@@ -754,14 +754,14 @@ type Mutation {
   ): Wallet
 
   """
-  Initiates the withdraw of an [NFT]({{Types.NFT}}) from a [NiftoryWallet]({{Types.NiftoryWallet}} to a receiver [Wallet]({{Types.Wallet}}) address
+  Initiates the withdrawal of an [NFT]({{Types.NFT}}) from a custodial Niftory [Wallet]{{Types.Wallet}} to a receiver [Wallet]({{Types.Wallet}}) address
   """
   withdraw(
-    """The ID of the [NFT]({{Types.NFT}}) to send."""
-    id: ID
+    """The database ID of the [NFT]({{Types.NFT}}) to send."""
+    id: ID!
 
     """The address of the [Wallet]({{Types.Wallet}}) to withdraw to"""
-    receiverAddress: String
+    receiverAddress: String!
   ): NFT
 }
 
@@ -1848,7 +1848,9 @@ type Wallet implements Attributable & HasTimes & Identifiable {
   """
   verificationCode: String
 
-  """The type of this wallet."""
+  """
+  The type of wallet. This represents if the wallet was linked externally or created by Niftory
+  """
   walletType: WalletType
 }
 
