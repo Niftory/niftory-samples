@@ -38,9 +38,17 @@ interface NftModalProps {
 }
 
 export const EmbedModal = ({ nftModel, nft, disclosure }: NftModalProps) => {
-  const value = `<iframe src="http://${process.env.NEXT_PUBLIC_VERCEL_URL}/app/collection/embed/${
-    nftModel.id
-  }${nft ? `?nftId=${nft.id}` : ""}" title="NFT powered by MintME" height="350px" width="300px"/>`
+  // Set protocol from client side since its not available on server
+  let protocol = "https:"
+  if (typeof window !== "undefined") {
+    protocol = window.location.protocol
+  }
+
+  const value = `<iframe src="${protocol}//${
+    process.env.NEXT_PUBLIC_VERCEL_URL
+  }/app/collection/embed/${nftModel.id}${
+    nft ? `?nftId=${nft.id}` : ""
+  }" title="NFT powered by MintMe" height="350px" width="300px"/>`
   const { isOpen, onClose } = disclosure
   const { onCopy, hasCopied } = useClipboard(value)
   const [isPreviewVisible, setPreviewVisible] = useState(false)
@@ -70,7 +78,7 @@ export const EmbedModal = ({ nftModel, nft, disclosure }: NftModalProps) => {
                   h="350px"
                   w="full"
                   as="iframe"
-                  src={`http://${process.env.NEXT_PUBLIC_VERCEL_URL}/app/collection/embed/${
+                  src={`${protocol}//${process.env.NEXT_PUBLIC_VERCEL_URL}/app/collection/embed/${
                     nftModel.id
                   }${nft ? `?nftId=${nft.id}` : ""}`}
                 />

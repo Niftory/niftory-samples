@@ -1,7 +1,7 @@
 import { Box, Stack, Image, Flex, Heading, Text, Button } from "@chakra-ui/react"
 import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   NftModel,
   NftModelQuery,
@@ -24,12 +24,20 @@ interface Props {
   host: string
 }
 
-const EmbedPage = ({ nftModel, nft, host }: Props) => {
+const EmbedPage = ({ nftModel, nft }: Props) => {
   const imageUrl = nftModel?.content?.files?.[0].contentType.startsWith("video")
     ? nftModel?.content?.poster?.url
     : nftModel?.content?.files?.[0].url
 
-  const routeLink = `http://${host}/app/collection/${nftModel.id}${nft ? `?nftId=${nft.id}` : ""}`
+  // Set protocol from client side since its not available on server
+  let protocol = "https:"
+  if (typeof window !== "undefined") {
+    protocol = window.location.protocol
+  }
+
+  const routeLink = `${protocol}//${process.env.NEXT_PUBLIC_VERCEL_URL}/app/collection/${
+    nftModel.id
+  }${nft ? `?nftId=${nft.id}` : ""}`
   return (
     <>
       <Head>
@@ -121,7 +129,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   return {
-    props: { nftModel, host: context.req.headers.host, nft },
+    props: { nftModel, nft },
   }
 }
 
