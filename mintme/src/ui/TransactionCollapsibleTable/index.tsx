@@ -30,7 +30,7 @@ interface Props extends AccordionProps {
 const TxNameTable = {
   BL_MINT_NFTS_TX: "MINT NFT",
   BL_TRANSFER_NFTS_TX: "TRANSFER NFT",
-  BL_WITHDRAW_NFTS_FROM_CUSTODIAL_WALLET: "TRANSFER NFT",
+  BL_WITHDRAW_NFTS_FROM_CUSTODIAL_WALLET_TX: "WITHDRAW NFT",
 }
 
 export const TransactionCollapsibleTable = ({
@@ -73,7 +73,7 @@ export const TransactionCollapsibleTable = ({
               rel="noreferrer"
             >
               <Image src="/flowscan-logo.svg" alt="flowscan" />
-              {TxNameTable[item.name]}
+              {TxNameTable[item.name] ?? item.name}
             </Flex>
           ))}
         </Flex>
