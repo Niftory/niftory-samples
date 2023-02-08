@@ -1,0 +1,7 @@
+mutation checkout($invoiceId: String!, $onSuccess: String!, $onError: String!) {
+  checkout(invoiceId: $invoiceId, onSuccess: $onSuccess, onError: $onError) {
+    redirectUrl
+    status
+    statusMessage
+  }
+}

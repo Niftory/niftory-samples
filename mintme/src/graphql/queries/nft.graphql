@@ -1,0 +1,24 @@
+query nft($id: ID!) {
+  nft(id: $id) {
+    blockchainId
+    blockchainState
+    metadata
+    id
+    serialNumber
+    transactions {
+      hash
+      name
+    }
+    model {
+      id
+      quantity
+      content {
+        files {
+          contentType
+          url
+        }
+      }
+    }
+    status
+  }
+}

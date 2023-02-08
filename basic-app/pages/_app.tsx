@@ -6,6 +6,7 @@ import { AuthProvider } from "../components/AuthProvider"
 import { ComponentWithAuth } from "../components/ComponentWithAuth"
 import { GraphQLClientProvider } from "../components/GraphQLClientProvider"
 import { ReactQueryClientProvider } from "../components/ReactQueryClientProvider"
+import { MetaMaskProvider } from "metamask-react"
 
 type AppProps<P = {}> = NextAppProps<P> & {
   Component: ComponentWithAuth
@@ -18,7 +19,10 @@ const App = ({ Component, pageProps: { session, auth, ...pageProps } }: AppProps
       <ReactQueryClientProvider>
         <GraphQLClientProvider>
           <ChakraProvider>
-            <Component {...pageProps} />
+            {/* This is for Polygon/Eth blockchains only. This component is a no-op for the Flow blockchain */}
+            <MetaMaskProvider>
+              <Component {...pageProps} />
+            </MetaMaskProvider>
           </ChakraProvider>
         </GraphQLClientProvider>
       </ReactQueryClientProvider>

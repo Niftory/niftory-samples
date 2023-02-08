@@ -1,9 +1,9 @@
-import MetadataViews from "../../contracts/MetadataViews.cdc"
+import MetadataViews from 0x1d7e57aa55817448
 
-import DapperUtilityCoin from "../../contracts/DapperUtilityCoin.cdc"
+import DapperUtilityCoin from 0xead892083b3e2c6c
 
-import NiftoryNonFungibleToken from "../../contracts/NiftoryNonFungibleToken.cdc"
-import NiftoryNFTRegistry from "../../contracts/NiftoryNFTRegistry.cdc"
+import NiftoryNonFungibleToken from 0x7ec1f607f0872a9e
+import NiftoryNFTRegistry from 0x7ec1f607f0872a9e
 
 pub struct PurchaseData {
   pub let id: UInt64
@@ -51,7 +51,16 @@ pub fun main(
     .get() as! {String: String}
   let name = template["title"]!
   let description = template["description"]!
-  var imageURL = template["mediaUrl"]!
+  var imageURL = ""
+  let posterURL = template["posterUrl"]
+  var mediaURL = template["mediaUrl"]
+
+  if (posterUrl != nil ) {
+    imageURL = posterURL
+  } else {
+    imageURL = mediaURL!
+  }
+
   if imageURL.slice(from: 0, upTo: 7) == "ipfs://" {
     imageURL = "https://gateway.ipfs.io/ipfs/".concat(
       imageURL.slice(

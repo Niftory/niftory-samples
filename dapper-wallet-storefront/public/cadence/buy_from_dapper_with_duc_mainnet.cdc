@@ -1,15 +1,15 @@
-import FungibleToken from "../../contracts/FungibleToken.cdc"
-import FlowToken from "../../contracts/FlowToken.cdc"
-import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
-import MetadataViews from "../../contracts/MetadataViews.cdc"
+import FungibleToken from 0xf233dcee88fe0abe
+import FlowToken from 0x1654653399040a61
+import NonFungibleToken from 0x1d7e57aa55817448
+import MetadataViews from 0x1d7e57aa55817448
 
-import NFTStorefrontV2 from "../../contracts/NFTStorefrontV2.cdc"
-import TokenForwarding from "../../contracts/TokenForwarding.cdc"
-import DapperUtilityCoin from "../../contracts/DapperUtilityCoin.cdc"
+import NFTStorefrontV2 from 0x4eb8a10cb9f87357
+import TokenForwarding from 0xe544175ee0461c4b
+import DapperUtilityCoin from 0xead892083b3e2c6c
 
-import NiftoryNonFungibleToken from "../../contracts/NiftoryNonFungibleToken.cdc"
-import NiftoryNFTRegistry from "../../contracts/NiftoryNFTRegistry.cdc"
-import NiftoryNonFungibleTokenProxy from "../../contracts/NiftoryNonFungibleTokenProxy.cdc"
+import NiftoryNonFungibleToken from 0x7ec1f607f0872a9e
+import NiftoryNFTRegistry from 0x7ec1f607f0872a9e
+import NiftoryNonFungibleTokenProxy from 0x7ec1f607f0872a9e
 
 transaction(
   merchantAccountAddress: Address,

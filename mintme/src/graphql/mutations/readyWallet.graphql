@@ -1,0 +1,7 @@
+mutation readyWallet($address: String!) {
+  readyWallet(address: $address) {
+    id
+    address
+    state
+  }
+}
