@@ -1,82 +1,31 @@
 import { gql } from "graphql-request"
 import { useGraphQLQuery } from "graphql/useGraphQLQuery"
-import { ContractQuery, ContractQueryVariables, ContractDocument } from "../../generated/graphql"
+import { ContractDocument, ContractQuery, ContractQueryVariables } from "../../generated/graphql"
 
 const nonFungibleTokenAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS
-const metadataViewsAddress = process.env.NEXT_PUBLIC_METADATA_VIEWS_ADDRESS
+const metadataViewsAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS
 const niftoryAddress = process.env.NEXT_PUBLIC_NIFTORY_ADDRESS
 const registryAddress = process.env.NEXT_PUBLIC_REGISTRY_ADDRESS
 const clientId = process.env.NEXT_PUBLIC_CLIENT_ID
-const contractVersion = process.env.NEXT_PUBLIC_CONTRACT_VERSION
-const IS_ACCOUNT_CONFIGURED__SCRIPT = `
-    import {contractName} from {contractAddress}
-    import NonFungibleToken from ${nonFungibleTokenAddress}
 
-    pub fun main(account: Address): Bool {
-
-        let acct = getAccount(account)
-
-        return acct.getCapability<&{{contractName}.{contractName}CollectionPublic}>({contractName}.CollectionPublicPath).check()
-
-    }`
-
-const IS_ACCOUNT_CONFIGURED_V2__SCRIPT = `
+const IS_ACCOUNT_CONFIGURED_SCRIPT = `
     import NonFungibleToken from ${nonFungibleTokenAddress}
     import MetadataViews from ${metadataViewsAddress}
     import NiftoryNonFungibleToken from ${niftoryAddress}
     import NiftoryNFTRegistry from ${niftoryAddress}
     import {contractName} from {contractAddress}
-
     pub fun main(account: Address): Bool {
-
         let paths = NiftoryNFTRegistry.getCollectionPaths(${registryAddress}, "${clientId}_{contractName}")
-
         let acct = getAccount(account)
-
         return acct.getCapability<&{
             NonFungibleToken.Receiver,
             NonFungibleToken.CollectionPublic,
             MetadataViews.ResolverCollection,
             NiftoryNonFungibleToken.CollectionPublic
         }>(paths.public).check()
-
     }`
 
-const CONFIGURE_ACCOUNT__TRANSACTION = `
-    import {contractName} from {contractAddress}
-    import NonFungibleToken from ${nonFungibleTokenAddress}
-    import MetadataViews from ${nonFungibleTokenAddress}
-
-    // This transaction sets up an account to collect Collectibles
-    // by storing an empty collectible collection and creating
-    // a public capability for it
-
-    transaction {
-
-        prepare(acct: AuthAccount) {
-
-            // First, check to see if a collectible collection already exists
-            if acct.borrow<&{contractName}.Collection>(from: {contractName}.CollectionStoragePath) == nil {
-
-                // create a new {contractName} Collection
-                let collection <- {contractName}.createEmptyCollection() as! @{contractName}.Collection
-
-                // Put the new Collection in storage
-                acct.save(<-collection, to: {contractName}.CollectionStoragePath)
-            }
-
-            // create a public capability for the collection
-            acct.unlink({contractName}.CollectionPublicPath)
-            acct.link<&{
-                {contractName}.{contractName}CollectionPublic,
-                NonFungibleToken.Receiver,
-                NonFungibleToken.CollectionPublic,
-                MetadataViews.ResolverCollection
-            }>({contractName}.CollectionPublicPath, target: {contractName}.CollectionStoragePath)
-        }
-    }`
-
-const CONFIGURE_ACCOUNT_V2__TRANSACTION = `
+const CONFIGURE_ACCOUNT_TRANSACTION = `
     import NonFungibleToken from ${nonFungibleTokenAddress}
     import MetadataViews from ${metadataViewsAddress}
     import NiftoryNonFungibleToken from ${niftoryAddress}
@@ -120,21 +69,12 @@ export function useContractCadence() {
 
   let isAccountConfigured_script: string
   let configureAccount_transaction: string
-
   if (contract && !fetching) {
     const { name, address } = contract
 
-    isAccountConfigured_script = prepareCadence(
-      contractVersion === "V2" ? IS_ACCOUNT_CONFIGURED_V2__SCRIPT : IS_ACCOUNT_CONFIGURED__SCRIPT,
-      name,
-      address
-    )
+    isAccountConfigured_script = prepareCadence(IS_ACCOUNT_CONFIGURED_SCRIPT, name, address)
 
-    configureAccount_transaction = prepareCadence(
-      contractVersion === "V2" ? CONFIGURE_ACCOUNT_V2__TRANSACTION : CONFIGURE_ACCOUNT__TRANSACTION,
-      name,
-      address
-    )
+    configureAccount_transaction = prepareCadence(CONFIGURE_ACCOUNT_TRANSACTION, name, address)
   }
 
   return {
