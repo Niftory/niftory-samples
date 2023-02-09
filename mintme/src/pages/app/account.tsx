@@ -1,7 +1,13 @@
 import React from "react"
 import { Flex } from "@chakra-ui/react"
 import { useGraphQLQuery } from "../../graphql/useGraphQLQuery"
-import { WalletDocument, WalletQuery } from "../../../generated/graphql"
+import {
+  UserNftsDocument,
+  UserNftsQuery,
+  UserNftsQueryVariables,
+  WalletDocument,
+  WalletQuery,
+} from "../../../generated/graphql"
 import { Logout } from "../../components/Logout"
 import AppLayout from "../../components/AppLayout"
 import { useAuthContext } from "../../hooks/useAuthContext"
@@ -14,6 +20,7 @@ const AccountPage = () => {
     query: WalletDocument,
     pause: isLoading,
   })
+
   const fetching = walletFetching || isLoading
   return (
     <AppLayout title="Account | MintMe ">

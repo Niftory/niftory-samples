@@ -1,7 +1,7 @@
 import { BoxProps, HStack, Icon, Text, Tooltip } from "@chakra-ui/react"
 
 interface Props extends BoxProps {
-  description: string
+  description: React.ReactNode
   title: string
   icon: any
   suffix?: React.ReactNode
@@ -19,7 +19,7 @@ export const WalletGridBox = ({
 }: Props) => {
   return (
     <HStack
-      spacing="10"
+      spacing="4"
       p={{ base: "1rem", md: "2rem 3.5rem" }}
       shadow="base"
       flex="50%"

@@ -4,12 +4,23 @@ import { retryExchange } from "@urql/exchange-retry"
 import axios from "axios"
 
 import { useAuthContext } from "../hooks/useAuthContext"
-import { Provider, cacheExchange, createClient, dedupExchange, fetchExchange } from "urql"
+import { Provider, createClient, dedupExchange, fetchExchange } from "urql"
+import { cacheExchange, Cache } from "@urql/exchange-graphcache"
 
 export const GraphQLClientProvider = ({ children }) => {
   const client = useGraphQLClient()
   return <Provider value={client}>{children}</Provider>
 }
+
+const invalidateCache = (cache: Cache, name: string, args?: { input: { id: any } }) =>
+  args
+    ? cache.invalidate({ __typename: name, id: args.input.id })
+    : cache
+        .inspectFields("Query")
+        .filter((field) => field.fieldName === name)
+        .forEach((field) => {
+          cache.invalidate("Query", field.fieldKey)
+        })
 
 const getGraphQLClient = (headers: HeadersInit) => {
   const url = process.env.NEXT_PUBLIC_API_PATH
@@ -20,7 +31,16 @@ const getGraphQLClient = (headers: HeadersInit) => {
     },
     exchanges: [
       dedupExchange,
-      cacheExchange,
+      cacheExchange({
+        updates: {
+          Mutation: {
+            // Whenever we withdraw invalidate nfts
+            withdraw: (_parent, _args, cache, _info) => {
+              invalidateCache(cache, "nfts")
+            },
+          },
+        },
+      }),
       retryExchange({ maxNumberAttempts: 3 }),
       fetchExchange,
     ],

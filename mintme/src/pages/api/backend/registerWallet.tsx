@@ -2,7 +2,13 @@ import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
 import { getClientForServer } from "../../../graphql/getClientForServer"
-import { CreateNiftoryWalletDocument } from "../../../../generated/graphql"
+import {
+  CreateNiftoryWalletDocument,
+  RegisterWalletDocument,
+  RegisterWalletInput,
+  RegisterWalletMutation,
+  RegisterWalletMutationVariables,
+} from "../../../../generated/graphql"
 import posthog from "posthog-js"
 
 const handler: NextApiHandler = async (req, res) => {
@@ -14,16 +20,21 @@ const handler: NextApiHandler = async (req, res) => {
       return
     }
     const requestMethod = req.method
-    const userId = session.userId as string
+    const variables = req.body
+
     const serverSideBackendClient = await getClientForServer()
 
-    if (requestMethod === "POST") {
-      const postData = await serverSideBackendClient.request(CreateNiftoryWalletDocument, {
-        userId,
-      })
+    if (!variables?.address) {
+      res.status(400).send("Address is required but was undefined")
+      return
+    }
 
-      serverSideBackendClient.request(CreateNiftoryWalletDocument, {
-        userId,
+    if (requestMethod === "POST") {
+      const postData = await serverSideBackendClient.request<
+        RegisterWalletMutation,
+        RegisterWalletMutationVariables
+      >(RegisterWalletDocument, {
+        address: variables?.address,
       })
       res.status(200).json(postData)
     } else {
@@ -31,7 +42,7 @@ const handler: NextApiHandler = async (req, res) => {
     }
   } catch (e) {
     res.status(500).json(e)
-    posthog.capture("ERROR_CREATEWALLET_API", e)
+    posthog.capture("ERROR_REGISTERWALLET_API", e)
   }
 }
 

@@ -1,17 +1,24 @@
 import React from "react"
-import { SimpleGrid, Spinner, Button, Tooltip, Box, Center } from "@chakra-ui/react"
+import { SimpleGrid, Spinner, Button, Tooltip, Box, Center, useDisclosure } from "@chakra-ui/react"
 import {
   FiTool as WalletStatusIcon,
   FiPackage as WalletItemsIcon,
   FiAlertCircle as WalletDetailsIcon,
   FiUserCheck as WalletOwnerIcon,
 } from "react-icons/fi"
-import { WalletState } from "../../../generated/graphql"
+import {
+  UserNftsDocument,
+  UserNftsQuery,
+  UserNftsQueryVariables,
+  WalletState,
+} from "../../../generated/graphql"
 import toast from "react-hot-toast"
 import { backendClient } from "../../graphql/backendClient"
 import { WalletGridBox } from "./WalletGridBox"
 import { useRouter } from "next/router"
 import posthog from "posthog-js"
+import { WalletSwitcherModal } from "ui/Modal/WalletSwitcherModal"
+import { useGraphQLQuery } from "graphql/useGraphQLQuery"
 
 export interface WalletDetailsProps {
   walletAddress: string
@@ -24,6 +31,10 @@ export interface WalletDetailsProps {
 export const WalletDetails = (props: WalletDetailsProps) => {
   const { walletAddress, walletStatus, walletItems, walletOwnerEmail, isLoading = false } = props
   const router = useRouter()
+  const disclosure = useDisclosure()
+  const { nfts } = useGraphQLQuery<UserNftsQuery, UserNftsQueryVariables>({
+    query: UserNftsDocument,
+  })
 
   if (walletStatus == WalletState.CreationFailed) {
     toast.error(
@@ -34,9 +45,12 @@ export const WalletDetails = (props: WalletDetailsProps) => {
   return (
     <>
       {isLoading ? (
-        <Spinner size="lg" />
+        <Center w="full">
+          <Spinner size="lg" />
+        </Center>
       ) : (
         <>
+          <WalletSwitcherModal disclosure={disclosure} />
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4" minW={"280px"} p="1rem">
             <Tooltip label="View wallet on flowscan" hasArrow placement="top">
               <Box cursor="pointer">
@@ -59,7 +73,7 @@ export const WalletDetails = (props: WalletDetailsProps) => {
             <Tooltip label="View your nfts" hasArrow placement="top">
               <Box cursor="pointer">
                 <WalletGridBox
-                  description={walletItems?.toString()}
+                  description={nfts?.items?.length ?? ""}
                   icon={WalletItemsIcon}
                   title={"Number of Items"}
                   onClick={() => router.push("/app/collection")}
@@ -74,6 +88,17 @@ export const WalletDetails = (props: WalletDetailsProps) => {
               showTooltop
             />
           </SimpleGrid>
+          <Box>
+            <Button
+              backgroundColor="brand.400"
+              onClick={(e) => {
+                disclosure.onOpen()
+              }}
+            >
+              Switch or Add Wallet
+            </Button>
+          </Box>
+
           {walletStatus != WalletState.Ready ? (
             <Center>
               <Button
