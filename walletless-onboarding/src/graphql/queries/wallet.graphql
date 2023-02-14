@@ -1,0 +1,15 @@
+query wallet {
+  wallet {
+    nfts {
+      id
+    }
+    attributes
+    id
+    address
+    state
+    verificationCode
+    appUser {
+      email
+    }
+  }
+}
