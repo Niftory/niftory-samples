@@ -9,6 +9,10 @@ query nft($id: ID!) {
       hash
       name
     }
+    wallet {
+      address
+      walletType
+    }
     model {
       id
       quantity

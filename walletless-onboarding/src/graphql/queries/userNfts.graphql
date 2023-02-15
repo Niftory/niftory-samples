@@ -1,0 +1,17 @@
+query userNfts($id: ID) {
+  nfts(userId: $id) {
+    items {
+      blockchainId
+      blockchainState
+      metadata
+      id
+      serialNumber
+      wallet {
+        address
+        walletType
+      }
+      status
+    }
+    cursor
+  }
+}

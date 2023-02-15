@@ -21,6 +21,10 @@ const handler: NextApiHandler = async (req, res) => {
       const postData = await serverSideBackendClient.request(CreateNiftoryWalletDocument, {
         userId,
       })
+
+      serverSideBackendClient.request(CreateNiftoryWalletDocument, {
+        userId,
+      })
       res.status(200).json(postData)
     } else {
       res.status(405).end("Method not allowed, this endpoint only supports POST")

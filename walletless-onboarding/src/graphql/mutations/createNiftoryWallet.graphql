@@ -1,0 +1,8 @@
+mutation CreateNiftoryWallet($userId: ID) {
+  createNiftoryWallet(userId: $userId) {
+    attributes
+    id
+    address
+    state
+  }
+}
