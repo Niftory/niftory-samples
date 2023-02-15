@@ -1,0 +1,7 @@
+mutation verifyWallet($address: String!, $signedVerificationCode: JSON!) {
+  verifyWallet(address: $address, signedVerificationCode: $signedVerificationCode) {
+    id
+    address
+    state
+  }
+}
