@@ -21,8 +21,7 @@
     "@emotion/styled": "^11",
     "@fontsource/inter": "^4.5.14",
     "@fontsource/roboto": "^4.5.0",
-    "@onflow/fcl": "1.0.2",
-    "@onflow/transport-grpc": "1.0.1",
+    "@onflow/fcl": "1.3.2",
     "@urql/core": "^3.0.3",
     "@urql/exchange-graphcache": "^5.0.8",
     "@urql/exchange-retry": "^1.0.0",
@@ -47,10 +46,6 @@
     "swr": "^1.3.0",
     "url-join": "^5.0.0",
     "urql": "^3.0.3"
-  },
-  "resolutions": {
-    "@onflow/sdk": "1.0.1",
-    "@onflow/types": "1.0.1"
   },
   "devDependencies": {
     "@apollo/rover": "^0.8.1",
