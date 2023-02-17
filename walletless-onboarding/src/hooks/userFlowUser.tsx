@@ -8,7 +8,6 @@ export function useFlowUser() {
   useMemo(() => {
     fcl
       .config()
-      .put("sdk.transport", grpcSend)
       .put("accessNode.api", process.env.NEXT_PUBLIC_FLOW_ACCESS_API) // connect to Flow
       .put("discovery.wallet", process.env.NEXT_PUBLIC_WALLET_API) // use Blocto wallet
 
