@@ -113,19 +113,19 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
     } finally {
       setCheckoutStatusIndex(0)
     }
-  }, [currentUser?.addr, id, router, signTransaction])
+  }, [id, router, signTransaction])
 
   const handleClaim = useCallback(async () => {
 
     setCheckoutStatusIndex(4)
     axios
-      .post(`/api/nftModel/${id}/claim`, { walletAddress: currentUser?.addr })
+      .post(`/api/nftModel/${id}/claim`)
       .then(({ data }) => router.push(`/app/collection/${data.transfer.id}`))
       .catch((error) => {
         console.error(error)
       })
       .finally(() => setCheckoutStatusIndex(5))
-  }, [])
+  }, [id, router])
 
 
   return (

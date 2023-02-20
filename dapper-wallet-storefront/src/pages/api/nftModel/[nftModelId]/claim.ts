@@ -2,6 +2,7 @@ import { NextApiHandler } from "next"
 import { gql } from "graphql-request"
 import { getBackendGraphQLClient } from "../../../../lib/BackendGraphQLClient"
 import { NftModelDocument, TransferNftToWalletDocument } from "../../../../../generated/graphql"
+import { getAddressFromCookie } from "../../../../lib/cookieUtils"
 
 gql`
   query nftModel($id: ID!, $nftModelId: ID!) {
@@ -28,18 +29,18 @@ const handler: NextApiHandler = async (req, res) => {
     return
   }
 
+  const address = getAddressFromCookie(req, res)
+  if (!address) {
+    res.status(401).send("Must be signed in to purchase NFTs.")
+    return
+  }
+
+
   const { nftModelId } = req.query
 
   if (!nftModelId) {
     res.status(400).send("nftModelId is required")
     return
-  }
-
-  const requestMethod = req.method
-  const variables = req.body
-
-  if (variables?.walletAddress == null) {
-    res.status(400).end("'walletAddress' isn't specified in the request body")
   }
 
   const backendGQLClient = await getBackendGraphQLClient()
@@ -50,7 +51,7 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const transferResponse = await backendGQLClient.request(TransferNftToWalletDocument, 
-    {nftModelId, address: variables.walletAddress})
+    {nftModelId: nftModelId, address})
 
   res.status(200).json(transferResponse)
 }
