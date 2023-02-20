@@ -30,12 +30,15 @@ const NFTModelDetailPage = () => {
       },
     ],
   }
+  
+
+  const attributes = nftModel?.attributes
 
   return (
     <AppLayout>
       <Skeleton isLoaded={!nftModelResponse.fetching}>
         <Box maxW="7xl" mx="auto" mt="12">
-          <NFTModelDetail id={nftModelId} metadata={metadata} />
+          <NFTModelDetail id={nftModelId} metadata={metadata} attributes={attributes} />
         </Box>
       </Skeleton>
     </AppLayout>

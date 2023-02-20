@@ -21,6 +21,7 @@ type NFTModelDetailProps = {
       alt: string
     }[]
   }
+  attributes: any
 }
 
 const checkoutStatusMessages = [
@@ -32,9 +33,10 @@ const checkoutStatusMessages = [
   "Purchase complete! Redirecting...",
 ]
 
-export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
+export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps) => {
   const router = useRouter()
   const [checkoutStatusIndex, setCheckoutStatusIndex] = useState(0)
+  const claimable = attributes?.claimable ?? false
 
   const { currentUser } = useWalletContext()
 
@@ -113,6 +115,19 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
     }
   }, [currentUser?.addr, id, router, signTransaction])
 
+  const handleClaim = useCallback(async () => {
+
+    setCheckoutStatusIndex(4)
+    axios
+      .post(`/api/nftModel/${id}/claim`, { walletAddress: currentUser?.addr })
+      .then(({ data }) => router.push(`/app/collection/${data.transfer.id}`))
+      .catch((error) => {
+        console.error(error)
+      })
+      .finally(() => setCheckoutStatusIndex(5))
+  }, [])
+
+
   return (
     <Stack direction={{ base: "column-reverse", lg: "row" }}>
       <Stack
@@ -133,7 +148,7 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
           <Text color="page.text">{metadata.description}</Text>
           <Text color="page.text">{metadata.amount} Total Available </Text>
         </Stack>
-        <Button
+        {!claimable && <Button
           isLoading={!currentUser?.addr || checkoutStatusIndex > 0}
           loadingText={checkoutStatusMessages[checkoutStatusIndex]}
           onClick={handleCheckout}
@@ -141,7 +156,18 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
           p="8"
         >
           <Text>Checkout</Text>
-        </Button>
+        </Button>}
+
+        {claimable &&
+          <Button
+            isLoading={!currentUser?.addr || checkoutStatusIndex > 0}
+            loadingText={checkoutStatusMessages[checkoutStatusIndex]}
+            onClick={handleClaim}
+            my="auto"
+            p="8"
+          >
+            <Text>Claim This NFT</Text>
+          </Button>}
       </Stack>
       <Gallery rootProps={{ overflow: "hidden", flex: "1" }} content={metadata.content} />
     </Stack>
