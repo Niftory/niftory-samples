@@ -37,7 +37,7 @@
     "intro.js-react": "^0.7.0",
     "jose": "^4.10.4",
     "next": "12.2.0",
-    "next-auth": "^4.10.3",
+    "next-auth": "^4.20.1",
     "openid-client": "5.1.7",
     "posthog-js": "^1.35.0",
     "react": "18.2.0",
