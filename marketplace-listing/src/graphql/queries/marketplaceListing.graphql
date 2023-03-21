@@ -1,0 +1,45 @@
+query MarketplaceListing($nftId: ID, $id: ID) {
+  marketplaceListing(nftId: $nftId, id: $id) {
+    id
+    listingResourceId
+    transactionIds
+    state
+    wallet {
+      address
+    }
+    pricing {
+      price
+      currency
+    }
+    nft {
+      id
+      blockchainId
+      serialNumber
+      blockchainState
+
+      model {
+        id
+        title
+        description
+        rarity
+        content {
+          id
+          poster {
+            url
+            state
+            contentType
+            id
+          }
+          files {
+            url
+            id
+            state
+            contentType
+          }
+        }
+      }
+
+      status
+    }
+  }
+}
