@@ -3,40 +3,35 @@ import { useQuery } from "urql"
 
 import AppLayout from "../../../components/AppLayout"
 import {
-  MarketplaceListing,
-  MarketplaceListingsDocument,
-  MarketplaceListingsQuery,
-  Nft,
-  NftsByWalletDocument,
-  NftsByWalletQuery,
+  NftModelsDocument,
+  NftModelsQuery,
+  NftModelsQueryVariables,
 } from "../../../../generated/graphql"
-import { CollectionGrid } from "../../../components/collection/CollectionGrid"
-import { Subset } from "../../../lib/types"
 import { SectionHeader } from "../../../ui/SectionHeader"
 import { useWalletContext } from "../../../hooks/useWalletContext"
-import { MarketplaceListingsGrid } from "../../../components/marketplace/MarketplaceListingsGrid"
+import { NFTModelsGrid } from "../../../components/drops/NFTModelsGrid"
 
 const MarketplacePage = () => {
   const { currentUser } = useWalletContext()
 
-  const [marketplaceListingsResponse] = useQuery<MarketplaceListingsQuery>({
-    query: MarketplaceListingsDocument,
-    variables: {},
-    pause: !currentUser?.addr,
+  const [result] = useQuery<NftModelsQuery, NftModelsQueryVariables>({
+    query: NftModelsDocument,
+    variables: {
+      appId: process.env.NEXT_PUBLIC_CLIENT_ID,
+      filter: { hasMarketplaceListing: true },
+    },
 
-    // refetch in the background in case the user has purchased something
+    pause: !currentUser?.addr,
     requestPolicy: "cache-and-network",
   })
 
-  const { data: listingsData, fetching } = marketplaceListingsResponse
-
-  const listings: Subset<MarketplaceListing>[] = listingsData?.marketplaceListings?.items
+  const nftModels = result?.data?.nftModels?.items
 
   return (
     <AppLayout>
       <Box maxW="7xl" mx="auto">
         <SectionHeader text="Marketplace" />
-        {listings && <MarketplaceListingsGrid listings={listings} isLoading={fetching} />}
+        {nftModels && <NFTModelsGrid nftModels={nftModels} />}
       </Box>
     </AppLayout>
   )

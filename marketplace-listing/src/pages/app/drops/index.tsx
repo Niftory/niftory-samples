@@ -4,6 +4,7 @@ import { useQuery } from "urql"
 
 import { NftModelsDocument, NftModelsQuery } from "../../../../generated/graphql"
 import AppLayout from "../../../components/AppLayout"
+import { DropsGrid } from "../../../components/drops/DropsGrid"
 import { NFTModelsGrid } from "../../../components/drops/NFTModelsGrid"
 import { SectionHeader } from "../../../ui/SectionHeader"
 
@@ -19,7 +20,7 @@ export const NFTModelsPage = () => {
     <AppLayout>
       <Box maxW="7xl" mx="auto">
         <SectionHeader text="Get A Drop" />
-        {nftModels && <NFTModelsGrid nftModels={nftModels} />}
+        {nftModels && <DropsGrid nftModels={nftModels} />}
       </Box>
     </AppLayout>
   )

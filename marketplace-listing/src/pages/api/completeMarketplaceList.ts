@@ -19,7 +19,7 @@ const handler: NextApiHandler = async (req, res) => {
     res.status(401).send("Must be signed in to complete marketplace purchase")
   }
 
-  const { nftId, transactionId, price, currency } = req.body
+  const { nftId, transactionId } = req.body
 
   const response = await backendGQLClient.request(CompleteMarketplaceListDocument, {
     nftId,

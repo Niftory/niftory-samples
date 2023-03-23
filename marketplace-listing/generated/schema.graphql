@@ -237,6 +237,21 @@ interface Contract implements Identifiable {
 
   """The name of this contract."""
   name: String
+
+  """The state of this contract."""
+  state: ContractState
+}
+
+"""The state of a contract on the blockchain"""
+enum ContractState {
+  """The contract has been created but deployment hasn't started yet."""
+  CREATED
+
+  """The contract is being deployed."""
+  DEPLOYING
+
+  """The contract has been deployed."""
+  READY
 }
 
 input CreateFileOptionsInput {
@@ -284,8 +299,8 @@ input CreateNiftoryWalletInput {
 
 """A currency that can be accepted for payment."""
 enum Currency {
-  """The flow token"""
-  FLOW
+  """The flow utility token"""
+  FUT
 
   """The United States dollar."""
   USD
@@ -325,6 +340,9 @@ type EvmContract implements Contract & Identifiable {
 
   """The name of this contract."""
   name: String
+
+  """The state of this contract."""
+  state: ContractState
 }
 
 """An interface containing common data about files."""
@@ -409,6 +427,9 @@ type FlowContract implements Contract & Identifiable {
 
   """Storage paths for this contract."""
   paths: FlowContractPaths
+
+  """The state of this contract."""
+  state: ContractState
 
   """
   Transactions that need to be given to Dapper Wallet for use with their platform.
@@ -547,11 +568,11 @@ type MarketplaceListing implements Identifiable {
   """The appId of the app this MarketplaceListing belongs to."""
   appId: ID!
 
+  """The blockchain resource ID of the marketplace"""
+  blockchainId: String
+
   """A unique identifier for this object in the Niftory API."""
   id: ID!
-
-  """The blockchain resource ID of the marketplace"""
-  listingResourceId: String
 
   """The NFT belonging to this listing."""
   nft: NFT!
@@ -797,6 +818,14 @@ type Mutation {
     """The ID of the NFT model to delete."""
     id: ID!
   ): NFTModel
+
+  """
+  Deletes an existing [NFTSet]({{Types.NFTSet}}). This operation will only be perfomed if no NFTs have been minted from this NFTSet
+  """
+  deleteNFTSet(
+    """The ID of the NFTSet to delete."""
+    id: ID!
+  ): NFTSet
 
   """
   Deploys the [Contract]({{Types.Contract}}) from the currently authenticated app. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/contract).
@@ -1381,6 +1410,9 @@ input NFTModelFilterInput {
   """Blockchain IDs of the [NFTModel]({{Types.NFTModel}})s to find."""
   blockchainIds: [String]
 
+  """Filter nft models that have active listings in the marketplace """
+  hasMarketplaceListing: Boolean
+
   """Database IDs of the [NFTModel]({{Types.NFTModel}})s to find."""
   ids: [ID]
 
@@ -1648,7 +1680,12 @@ type Query {
   """
   Gets the [Contract]({{Types.Contract}}) from the currently authenticated app. Read more [here](https://docs.niftory.com/home/v/api/core-concepts/contract).
   """
-  contract: Contract
+  contract(
+    """
+    The app ID of the contract to fetch. Only supported if calling with admin credentials. 
+    """
+    appId: ID
+  ): Contract
 
   """Gets a [File]({{Types.File}}) by its ID."""
   file(

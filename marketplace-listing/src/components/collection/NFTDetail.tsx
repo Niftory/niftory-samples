@@ -57,7 +57,7 @@ export const NFTDetail = (props: Props) => {
   }
 
   const handleCancelListing = async () => {
-    await cancelMarketplaceListing(activeListing.id, activeListing.listingResourceId)
+    await cancelMarketplaceListing(activeListing.id, activeListing.blockchainId)
     reExecuteQuery({ requestPolicy: "network-only" })
   }
 

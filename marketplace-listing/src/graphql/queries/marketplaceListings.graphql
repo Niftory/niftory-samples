@@ -7,7 +7,7 @@ query MarketplaceListings(
   marketplaceListings(filter: $filter, appId: $appId, maxResults: $maxResults, cursor: $cursor) {
     items {
       id
-      listingResourceId
+      blockchainId
       transactionIds
       state
       wallet {

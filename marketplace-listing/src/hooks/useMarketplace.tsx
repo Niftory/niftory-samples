@@ -357,7 +357,6 @@ const handleCreateListing = async (
     {
       nftId,
       transactionId,
-      price,
     }
   )
   return data?.completeMarketplaceList

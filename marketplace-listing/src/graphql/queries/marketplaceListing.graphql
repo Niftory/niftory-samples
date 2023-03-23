@@ -1,7 +1,7 @@
 query MarketplaceListing($nftId: ID, $id: ID) {
   marketplaceListing(nftId: $nftId, id: $id) {
     id
-    listingResourceId
+    blockchainId
     transactionIds
     state
     wallet {

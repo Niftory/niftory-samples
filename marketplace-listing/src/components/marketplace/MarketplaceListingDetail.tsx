@@ -37,12 +37,12 @@ export const MarketplaceListingDetail = (props: Props) => {
   const router = useRouter()
 
   const handlePurchaseListing = async () => {
-    await purchaseMarketplaceListing(listing.id, listing.listingResourceId, listing.wallet.address)
+    await purchaseMarketplaceListing(listing.id, listing.blockchainId, listing.wallet.address)
     reExecuteQuery({ requestPolicy: "network-only" })
     router.push(`/app/collection`)
   }
   const handleCancelListing = async () => {
-    const responseListing = await cancelMarketplaceListing(listing.id, listing.listingResourceId)
+    const responseListing = await cancelMarketplaceListing(listing.id, listing.blockchainId)
     reExecuteQuery({ requestPolicy: "network-only" })
     router.push(`/app/collection/${responseListing?.nft.id}`)
   }

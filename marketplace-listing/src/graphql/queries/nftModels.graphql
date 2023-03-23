@@ -1,5 +1,5 @@
-query nftModels($appId: ID) {
-  nftModels(appId: $appId) {
+query nftModels($filter: NFTModelFilterInput, $appId: ID) {
+  nftModels(filter: $filter, appId: $appId) {
     items {
       id
       blockchainId

@@ -36,7 +36,7 @@ query nft($id: ID!) {
     }
     marketplaceListings {
       id
-      listingResourceId
+      blockchainId
       state
     }
   }
