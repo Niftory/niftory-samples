@@ -13,8 +13,9 @@ import {
   Tag,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react"
-import * as React from "react"
+import { useState } from "react"
 
 import { Nft } from "../../../generated/graphql"
 import { useMarketplace } from "../../hooks/useMarketplace"
@@ -35,6 +36,8 @@ export const NFTDetail = (props: Props) => {
   const { currentUser } = useWalletContext()
   const { createMarketplaceListing, cancelMarketplaceListing } = useMarketplace()
 
+  const [isLoading, setLoading] = useState(false)
+
   const nftModel = nft?.model
   const poster = nftModel?.content?.poster?.url
 
@@ -52,13 +55,34 @@ export const NFTDetail = (props: Props) => {
   const activeListing = nft.marketplaceListings.find((item) => item.state === "AVAILABLE")
 
   const handleCreateListing = async (price: string) => {
-    await createMarketplaceListing(nft.id, nft.blockchainId, price)
-    reExecuteQuery({ requestPolicy: "network-only" })
+    try {
+      await createMarketplaceListing(nft.id, nft.blockchainId, price)
+      reExecuteQuery({ requestPolicy: "network-only" })
+    } catch (e) {
+      console.error(e)
+      toast({
+        title: "Create listing failed.",
+        status: "error",
+      })
+    }
   }
 
+  const toast = useToast()
+
   const handleCancelListing = async () => {
-    await cancelMarketplaceListing(activeListing.id, activeListing.blockchainId)
-    reExecuteQuery({ requestPolicy: "network-only" })
+    try {
+      setLoading(true)
+      await cancelMarketplaceListing(activeListing.id, activeListing.blockchainId)
+      reExecuteQuery({ requestPolicy: "network-only" })
+    } catch (e) {
+      console.error(e)
+      toast({
+        title: "Cancel listing failed.",
+        status: "error",
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   const canCancel = activeListing && nft.wallet.address === currentUser.addr
@@ -140,7 +164,7 @@ export const NFTDetail = (props: Props) => {
             )}
 
             {canCancel && (
-              <Button p="6" size="sm" onClick={handleCancelListing}>
+              <Button p="6" size="sm" onClick={handleCancelListing} isLoading={isLoading}>
                 <Text>Cancel marketplace listing</Text>
               </Button>
             )}

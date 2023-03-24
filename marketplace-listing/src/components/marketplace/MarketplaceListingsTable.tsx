@@ -11,6 +11,7 @@ import {
   Text,
   Button,
   Td,
+  useToast,
 } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -30,6 +31,8 @@ import { MarketplaceListingsTablePage } from "./MarketplaceListingsTablePage"
 
 export const MarketplaceListingsTable = () => {
   const [activeListing, setActiveListing] = useState<Subset<MarketplaceListing>>()
+
+  const [isLoading, setLoading] = useState(false)
 
   const router = useRouter()
   const id: string = router.query["id"]?.toString()
@@ -75,15 +78,27 @@ export const MarketplaceListingsTable = () => {
   const { purchaseMarketplaceListing } = useMarketplace()
 
   const { currentUser } = useWalletContext()
+  const toast = useToast()
 
   const handlePurchaseListing = async () => {
-    if (!activeListing) return
-    await purchaseMarketplaceListing(
-      activeListing.id,
-      activeListing.blockchainId,
-      activeListing.wallet.address
-    )
-    router.push(`/app/collection`)
+    try {
+      setLoading(true)
+      if (!activeListing) return
+      await purchaseMarketplaceListing(
+        activeListing.id,
+        activeListing.blockchainId,
+        activeListing.wallet.address
+      )
+      router.push(`/app/collection`)
+    } catch (e) {
+      console.error(e)
+      toast({
+        title: "Purchase listing failed.",
+        status: "error",
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   const canPurchase =
@@ -146,6 +161,7 @@ export const MarketplaceListingsTable = () => {
                     disabled={!canPurchase}
                     onClick={handlePurchaseListing}
                     color="black"
+                    isLoading={isLoading}
                   >
                     <Text>Purchase marketplace item</Text>
                   </Button>

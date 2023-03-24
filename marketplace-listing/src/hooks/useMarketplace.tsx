@@ -352,6 +352,7 @@ const handleCreateListing = async (
     limit: 9999,
   })
 
+  await fcl.tx(transactionId).onceSealed()
   const { data } = await axios.post<{ completeMarketplaceList: MarketplaceListing }>(
     "/api/completeMarketplaceList",
     {
@@ -377,6 +378,8 @@ const handlePurchaseListing = async (
     ],
     limit: 9999,
   })
+
+  await fcl.tx(transactionId).onceSealed()
   const { data } = await axios.post<{ completeMarketplacePurchase: MarketplaceListing }>(
     "/api/completeMarketplacePurchase",
     {
@@ -397,6 +400,8 @@ const handleCancelListing = async (
     args: (arg, t) => [arg(listingResourceID, t.UInt64)],
     limit: 9999,
   })
+
+  await fcl.tx(transactionId).onceSealed()
   const { data } = await axios.post<{ completeMarketplaceCancel: MarketplaceListing }>(
     "/api/completeMarketplaceCancel",
     {
