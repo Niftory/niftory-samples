@@ -29,6 +29,8 @@ import { useWalletContext } from "../../hooks/useWalletContext"
 import { Subset } from "../../lib/types"
 import { MarketplaceListingsTablePage } from "./MarketplaceListingsTablePage"
 
+const ITEMS_PER_PAGE = 1
+
 export const MarketplaceListingsTable = () => {
   const [activeListing, setActiveListing] = useState<Subset<MarketplaceListing>>()
 
@@ -56,7 +58,7 @@ export const MarketplaceListingsTable = () => {
           nftModelIds: id ? [id] : undefined,
         },
         appId: process.env.NEXT_PUBLIC_CLIENT_ID,
-        maxResults: 10,
+        maxResults: ITEMS_PER_PAGE,
       },
     ])
   }, [id])
@@ -69,7 +71,7 @@ export const MarketplaceListingsTable = () => {
           nftModelIds: id ? [id] : undefined,
         },
         appId: process.env.NEXT_PUBLIC_CLIENT_ID,
-        maxResults: 10,
+        maxResults: ITEMS_PER_PAGE,
         cursor,
       },
     ])
@@ -108,7 +110,6 @@ export const MarketplaceListingsTable = () => {
     <Box>
       <Flex direction="column" color="white" gap="1rem">
         <Heading size="lg">Purchase NFT Listing</Heading>
-
         <Flex w="full" gap="2rem">
           <TableContainer bgColor="gray.900" flex="1" height="fit-content" p="0.1rem">
             <Table variant="unstyled">
@@ -125,7 +126,7 @@ export const MarketplaceListingsTable = () => {
               <Tbody>
                 {pageVariables.map((variables, index) => (
                   <MarketplaceListingsTablePage
-                    key={variables.cursor}
+                    key={variables.filter?.nftModelIds?.[0]}
                     activeListing={activeListing}
                     setActiveListing={setActiveListing}
                     variables={variables}

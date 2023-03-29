@@ -1,33 +1,12 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Spinner,
-  Table,
-  TableContainer,
-  Tbody,
-  Th,
-  Thead,
-  Image,
-  Tr,
-  Text,
-  Button,
-  Td,
-} from "@chakra-ui/react"
-import { id } from "date-fns/locale"
-import { useRouter } from "next/router"
-import { useState } from "react"
+import { Box, Spinner, Tr, Td, Center } from "@chakra-ui/react"
 import { useQuery } from "urql"
 
 import {
   MarketplaceListing,
-  MarketplaceListingList,
   MarketplaceListingsDocument,
   MarketplaceListingsQuery,
   MarketplaceListingsQueryVariables,
 } from "../../../generated/graphql"
-import { useMarketplace } from "../../hooks/useMarketplace"
-import { useWalletContext } from "../../hooks/useWalletContext"
 import { Subset } from "../../lib/types"
 import { MarketplaceListingsTableRow } from "./MarketplaceListingsTableRow"
 
@@ -57,6 +36,18 @@ export const MarketplaceListingsTablePage = ({
   })
 
   const marketplaceListings = marketplaceListingsResponse?.data?.marketplaceListings
+
+  if (marketplaceListingsResponse.fetching) {
+    return (
+      <Tr>
+        <Td colSpan={5}>
+          <Center>
+            <Spinner />
+          </Center>
+        </Td>
+      </Tr>
+    )
+  }
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { Box, SimpleGrid, Spinner } from "@chakra-ui/react"
+import { Box, Center, SimpleGrid, Spinner } from "@chakra-ui/react"
 import * as React from "react"
 
 import { Nft, NftBlockchainState } from "../../../generated/graphql"
@@ -13,7 +13,11 @@ interface CollectionProps {
 
 export const CollectionGrid = ({ isLoading, nfts }: CollectionProps) => {
   if (isLoading) {
-    return <Spinner />
+    return (
+      <Center minH="10rem">
+        <Spinner color="white" size="xl" />
+      </Center>
+    )
   }
 
   const noNfts = !nfts?.length

@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react"
+import { Box, Center, Spinner } from "@chakra-ui/react"
 import { useQuery } from "urql"
 
 import AppLayout from "../../../components/AppLayout"
@@ -31,7 +31,7 @@ const MarketplacePage = () => {
     <AppLayout>
       <Box maxW="7xl" mx="auto">
         <SectionHeader text="Marketplace" />
-        {nftModels && <NFTModelsGrid nftModels={nftModels} />}
+        {nftModels && <NFTModelsGrid nftModels={nftModels} isLoading={result.fetching} />}
       </Box>
     </AppLayout>
   )

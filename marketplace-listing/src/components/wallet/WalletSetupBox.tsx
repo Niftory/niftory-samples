@@ -1,4 +1,4 @@
-import { Box, Button, Spinner } from "@chakra-ui/react"
+import { Box, Button, Center, Spinner } from "@chakra-ui/react"
 import { useMemo } from "react"
 
 type WalletSetupBoxProps = {
@@ -18,7 +18,11 @@ export const WalletSetupBox = ({
   useMemo(() => error && console.error(error), [error])
 
   if (isLoading) {
-    return <Spinner color="white" />
+    return (
+      <Center minH="10rem">
+        <Spinner color="white" size="xl" />
+      </Center>
+    )
   }
 
   if (error) {
