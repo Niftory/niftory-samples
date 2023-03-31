@@ -59,6 +59,8 @@ export type App = Identifiable & {
   dapperMerchantAccountAddress?: Maybe<Scalars['String']>;
   /** A unique identifier for this object in the Niftory API. */
   id: Scalars['ID'];
+  /** The keys for this app. */
+  keys?: Maybe<Keys>;
   /** The name for this app. */
   name?: Maybe<Scalars['String']>;
 };
@@ -251,6 +253,10 @@ export type CreateNiftoryWalletInput = {
 
 /** A currency that can be accepted for payment. */
 export enum Currency {
+  /** The dapper utility token */
+  Duc = 'DUC',
+  /** The flow token */
+  Flow = 'FLOW',
   /** The flow utility token */
   Fut = 'FUT',
   /** The United States dollar. */
@@ -432,6 +438,17 @@ export enum InvoiceState {
   Pending = 'PENDING'
 }
 
+/** The keys for an application in the Niftory platform */
+export type Keys = {
+  __typename?: 'Keys';
+  /** The public API key. */
+  apiKey?: Maybe<Scalars['String']>;
+  /** The public Client ID. */
+  clientId?: Maybe<Scalars['String']>;
+  /** The public Client Secret. */
+  clientSecret?: Maybe<Scalars['String']>;
+};
+
 /** The state of a listing. */
 export enum ListingState {
   /**
@@ -484,7 +501,7 @@ export type MarketplaceListing = Identifiable & {
 export type MarketplaceListingFilterInput = {
   /** Database IDs of the [MarketplaceListing]({{Types.MarketplaceListing}})s to find. */
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** The IDs of the [NFTModel]({{Types.NFTModel}}) to filter by  */
+  /** The IDs of the [NFTModel]({{Types.NFTModel}}) to filter by */
   nftModelIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** The IDs of the [AppUser]({{Types.AppUser}}) to filter by */
   userIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -562,6 +579,8 @@ export type Mutation = {
   reserve?: Maybe<Invoice>;
   /** Sets the primary [Wallet]({{Types.Wallet}}) for the currently signed in user. */
   setPrimaryWallet?: Maybe<Wallet>;
+  /** Signs a transaction for a Niftory wallet. */
+  signTransaction?: Maybe<Scalars['String']>;
   /** Signs a transaction for Dapper Wallet. */
   signTransactionForDapperWallet?: Maybe<Scalars['String']>;
   /** Initiates the transfer of an [NFT]({{Types.NFT}}) to the currently-logged in [AppUser]({{Types.AppUser}}). The NFT is reserved for the user in database, and you can use the NFT.status field to check on the transfer progress. */
@@ -728,6 +747,15 @@ export type MutationReserveArgs = {
 export type MutationSetPrimaryWalletArgs = {
   address?: InputMaybe<Scalars['String']>;
   walletId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationSignTransactionArgs = {
+  address?: InputMaybe<Scalars['String']>;
+  appId?: InputMaybe<Scalars['ID']>;
+  transaction: Scalars['String'];
+  userId?: InputMaybe<Scalars['ID']>;
+  walletId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -1037,7 +1065,7 @@ export type NftModelCreateInput = {
 export type NftModelFilterInput = {
   /** Blockchain IDs of the [NFTModel]({{Types.NFTModel}})s to find. */
   blockchainIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Filter nft models that have active listings in the marketplace  */
+  /** Filter nft models that have active listings in the marketplace */
   hasMarketplaceListing?: InputMaybe<Scalars['Boolean']>;
   /** Database IDs of the [NFTModel]({{Types.NFTModel}})s to find. */
   ids?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -1238,7 +1266,7 @@ export type Query = {
 
 
 export type QueryAppByIdArgs = {
-  id?: InputMaybe<Scalars['ID']>;
+  id: Scalars['ID'];
 };
 
 

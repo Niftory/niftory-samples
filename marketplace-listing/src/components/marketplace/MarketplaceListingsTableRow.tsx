@@ -1,28 +1,9 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Radio,
-  RadioGroup,
-  SimpleGrid,
-  Spinner,
-  Stack,
-  Table,
-  TableCaption,
-  TableContainer,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react"
+import { Radio, Td, Tr } from "@chakra-ui/react"
 import * as React from "react"
 
-import { MarketplaceListing, Nft, NftBlockchainState } from "../../../generated/graphql"
+import { MarketplaceListing } from "../../../generated/graphql"
 import { useWalletContext } from "../../hooks/useWalletContext"
 import { Subset } from "../../lib/types"
-import { NFTCard } from "../collection/NFTCard"
 
 interface Props {
   listing: Subset<MarketplaceListing>
@@ -46,7 +27,9 @@ export const MarketplaceListingsTableRow = ({ listing, activeListing, onClick }:
       <Td>
         <Radio isChecked={activeListing?.id === listing.id} size="lg"></Radio>
       </Td>
-      <Td>{listing.pricing.price} Flow</Td>
+      <Td>
+        {listing.pricing.price} {listing.pricing.currency}
+      </Td>
       <Td>{listing.nft.serialNumber}</Td>
       <Td>{listing.nft.blockchainId}</Td>
       <Td>

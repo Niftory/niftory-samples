@@ -12,12 +12,15 @@ import {
   Button,
   Td,
   useToast,
+  Center,
+  Spinner,
 } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { useQuery } from "urql"
 
 import {
+  Currency,
   MarketplaceListing,
   MarketplaceListingsQueryVariables,
   NftModelDocument,
@@ -29,7 +32,7 @@ import { useWalletContext } from "../../hooks/useWalletContext"
 import { Subset } from "../../lib/types"
 import { MarketplaceListingsTablePage } from "./MarketplaceListingsTablePage"
 
-const ITEMS_PER_PAGE = 1
+const ITEMS_PER_PAGE = 10
 
 export const MarketplaceListingsTable = () => {
   const [activeListing, setActiveListing] = useState<Subset<MarketplaceListing>>()
@@ -77,20 +80,35 @@ export const MarketplaceListingsTable = () => {
     ])
   }
 
-  const { purchaseMarketplaceListing } = useMarketplace()
+  const {
+    purchaseMarketplaceListing,
+    purchaseDapperMarketplaceListing,
+    loading: isMarketplaceLoading,
+  } = useMarketplace()
 
-  const { currentUser } = useWalletContext()
+  const { currentUser, isDapper } = useWalletContext()
   const toast = useToast()
 
   const handlePurchaseListing = async () => {
     try {
-      setLoading(true)
       if (!activeListing) return
-      await purchaseMarketplaceListing(
-        activeListing.id,
-        activeListing.blockchainId,
-        activeListing.wallet.address
-      )
+
+      setLoading(true)
+      if (isDapper) {
+        await purchaseDapperMarketplaceListing(
+          activeListing.id,
+          activeListing.blockchainId,
+          activeListing.wallet.address,
+          activeListing.pricing.price
+        )
+      } else {
+        await purchaseMarketplaceListing(
+          activeListing.id,
+          activeListing.blockchainId,
+          activeListing.wallet.address
+        )
+      }
+
       router.push(`/app/collection`)
     } catch (e) {
       console.error(e)
@@ -105,6 +123,14 @@ export const MarketplaceListingsTable = () => {
 
   const canPurchase =
     activeListing?.state === "AVAILABLE" && activeListing.wallet.address != currentUser.addr
+
+  if (isMarketplaceLoading) {
+    return (
+      <Center minH="10rem">
+        <Spinner color="white" size="xl" />
+      </Center>
+    )
+  }
 
   return (
     <Box>

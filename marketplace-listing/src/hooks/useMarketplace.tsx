@@ -1,14 +1,20 @@
 import axios from "axios"
 import { gql } from "graphql-request"
 import { useQuery } from "urql"
-import { ContractDocument, ContractQuery, MarketplaceListing } from "../../generated/graphql"
+import {
+  ContractDocument,
+  ContractQuery,
+  Currency,
+  MarketplaceListing,
+} from "../../generated/graphql"
 import * as fcl from "@onflow/fcl"
 import {
   CREATE_MARKETPLACE_LISTING_SCRIPT,
   PURCHASE_MARKETPLACE_LISTING_SCRIPT,
   CANCEL_MARKETPLACE_LISTING_SCRIPT,
+  DAPPER_CREATE_DUC_LISTING_SCRIPT,
+  DAPPER_PURCHASE_DUC_LISTING_SCRIPT,
 } from "../cadence/scripts"
-import { useWalletContext } from "./useWalletContext"
 
 gql`
   query contract {
@@ -33,10 +39,22 @@ export function useMarketplace() {
     blockchainId: string,
     price: string
   ) => Promise<MarketplaceListing>
+  let createDapperMarketplaceListing: (
+    nftId: string,
+    blockchainId: string,
+    price: string,
+    currency: Currency
+  ) => Promise<MarketplaceListing>
+  let purchaseDapperMarketplaceListing: (
+    listingId: string,
+    listingResourceID: string,
+    listingAddress: string,
+    expectedPrice: string
+  ) => Promise<MarketplaceListing>
   let purchaseMarketplaceListing: (
     listingId: string,
     listingResourceID: string,
-    listingAddress: any
+    listingAddress: string
   ) => Promise<MarketplaceListing>
   let cancelMarketplaceListing: (
     listingId: string,
@@ -53,7 +71,29 @@ export function useMarketplace() {
     )
 
     createMarketplaceListing = async (nftId, blockchainId, price) => {
-      return handleCreateListing(createMarketplaceListingScript, nftId, blockchainId, price)
+      return handleCreateListing(
+        createMarketplaceListingScript,
+        nftId,
+        blockchainId,
+        price,
+        /*isDapper*/ false
+      )
+    }
+
+    const createDapperMarketplaceListingDUCScript = prepareCadence(
+      DAPPER_CREATE_DUC_LISTING_SCRIPT,
+      name,
+      address
+    )
+
+    createDapperMarketplaceListing = async (nftId, blockchainId, price, currency) => {
+      return handleCreateListing(
+        createDapperMarketplaceListingDUCScript,
+        nftId,
+        blockchainId,
+        price,
+        /*isDapper*/ true
+      )
     }
 
     const purchaseMarketplaceListingScript = prepareCadence(
@@ -61,6 +101,34 @@ export function useMarketplace() {
       name,
       address
     )
+
+    purchaseMarketplaceListing = (listingId, listingResourceID, listingAddress) =>
+      handlePurchaseListing(
+        purchaseMarketplaceListingScript,
+        listingId,
+        listingResourceID,
+        listingAddress
+      )
+
+    const purchaseDapperMarketplaceListingDUCScript = prepareCadence(
+      DAPPER_PURCHASE_DUC_LISTING_SCRIPT,
+      name,
+      address
+    )
+
+    purchaseDapperMarketplaceListing = async (
+      listingId,
+      listingResourceID,
+      listingAddress,
+      expectedPrice
+    ) =>
+      handleDapperPurchaseListing(
+        purchaseDapperMarketplaceListingDUCScript,
+        listingId,
+        listingResourceID,
+        listingAddress,
+        expectedPrice
+      )
 
     purchaseMarketplaceListing = (listingId, listingResourceID, listingAddress) =>
       handlePurchaseListing(
@@ -82,7 +150,9 @@ export function useMarketplace() {
 
   return {
     createMarketplaceListing,
+    createDapperMarketplaceListing,
     purchaseMarketplaceListing,
+    purchaseDapperMarketplaceListing,
     cancelMarketplaceListing,
     loading: !isFetched,
   }
@@ -92,26 +162,46 @@ const handleCreateListing = async (
   cadence: string,
   nftId: string,
   blockchainId: string,
-  price: string
+  price: string,
+  isDapper: boolean
 ) => {
   const year = 1
   const expiryDate = new Date()
   expiryDate.setFullYear(new Date().getFullYear() + year)
   const unixExpiryDate = (expiryDate.getTime() / 1000).toFixed(0).toString()
 
-  const transactionId = await fcl.mutate({
-    cadence,
-    args: (arg, t) => [
-      arg(blockchainId, t.UInt64),
-      arg(price, t.UFix64),
-      arg("", t.String),
-      arg("0.0", t.UFix64),
-      arg(unixExpiryDate, t.UInt64),
-      arg([], t.Array(t.Address)),
-    ],
+  console.log(cadence)
 
-    limit: 9999,
-  })
+  let transactionId
+  if (isDapper) {
+    transactionId = await fcl.mutate({
+      cadence,
+      args: (arg, t) => [
+        arg(blockchainId, t.UInt64),
+        arg(price, t.UFix64),
+        arg("0.0", t.UFix64),
+        arg([], t.Array(t.Address)),
+        arg(unixExpiryDate, t.UInt64),
+        arg("", t.String),
+      ],
+
+      limit: 9999,
+    })
+  } else {
+    transactionId = await fcl.mutate({
+      cadence,
+      args: (arg, t) => [
+        arg(blockchainId, t.UInt64),
+        arg(price, t.UFix64),
+        arg("", t.String),
+        arg("0.0", t.UFix64),
+        arg(unixExpiryDate, t.UInt64),
+        arg([], t.Array(t.Address)),
+      ],
+
+      limit: 9999,
+    })
+  }
 
   await fcl.tx(transactionId).onceSealed()
   const { data } = await axios.post<{ completeMarketplaceList: MarketplaceListing }>(
@@ -128,13 +218,56 @@ const handlePurchaseListing = async (
   cadence: string,
   listingId: string,
   listingResourceID: string,
-  listingAddress: string
+  listingAddress: string,
+  isDapper: boolean = false
+) => {
+  let transactionId
+  if (isDapper) {
+    transactionId = await fcl.mutate({
+      cadence,
+      args: (arg, t) => [
+        arg(listingAddress, t.Address),
+        arg(listingResourceID, t.UInt64),
+        arg(listingAddress, t.Optional(t.Address)),
+      ],
+      limit: 9999,
+    })
+  } else {
+    transactionId = await fcl.mutate({
+      cadence,
+      args: (arg, t) => [
+        arg(listingResourceID, t.UInt64),
+        arg(listingAddress, t.Address),
+        arg(listingAddress, t.Optional(t.Address)),
+      ],
+      limit: 9999,
+    })
+  }
+
+  await fcl.tx(transactionId).onceSealed()
+  const { data } = await axios.post<{ completeMarketplacePurchase: MarketplaceListing }>(
+    "/api/completeMarketplacePurchase",
+    {
+      id: listingId,
+      transactionId,
+    }
+  )
+  return data?.completeMarketplacePurchase
+}
+
+const handleDapperPurchaseListing = async (
+  cadence: string,
+  listingId: string,
+  listingResourceID: string,
+  listingAddress: string,
+  price: string
 ) => {
   const transactionId = await fcl.mutate({
     cadence,
     args: (arg, t) => [
-      arg(listingResourceID, t.UInt64),
       arg(listingAddress, t.Address),
+      arg(listingResourceID, t.UInt64),
+      arg(price, t.UFix64),
       arg(listingAddress, t.Optional(t.Address)),
     ],
     limit: 9999,

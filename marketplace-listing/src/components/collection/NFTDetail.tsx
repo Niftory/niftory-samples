@@ -1,23 +1,25 @@
 import {
   Box,
   Button,
+  Center,
   Flex,
   FormControl,
   Heading,
   HStack,
-  Input,
+  InputGroup,
+  InputRightAddon,
   NumberInput,
   NumberInputField,
   Spacer,
+  Spinner,
   Stack,
   Tag,
   Text,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react"
 import { useState } from "react"
 
-import { Nft } from "../../../generated/graphql"
+import { Currency, Nft } from "../../../generated/graphql"
 import { useMarketplace } from "../../hooks/useMarketplace"
 import { Subset } from "../../lib/types"
 import { Gallery } from "../../ui/Content/Gallery/Gallery"
@@ -33,8 +35,13 @@ interface Props {
 
 export const NFTDetail = (props: Props) => {
   const { nft, reExecuteQuery } = props
-  const { currentUser } = useWalletContext()
-  const { createMarketplaceListing, cancelMarketplaceListing } = useMarketplace()
+  const { currentUser, isDapper } = useWalletContext()
+  const {
+    createMarketplaceListing,
+    createDapperMarketplaceListing,
+    cancelMarketplaceListing,
+    loading: isMarketplaceLoading,
+  } = useMarketplace()
 
   const [isLoading, setLoading] = useState(false)
 
@@ -54,9 +61,14 @@ export const NFTDetail = (props: Props) => {
 
   const activeListing = nft.marketplaceListings.find((item) => item.state === "AVAILABLE")
 
-  const handleCreateListing = async (price: string) => {
+  const handleCreateListing = async (price: string, currency: Currency) => {
     try {
-      await createMarketplaceListing(nft.id, nft.blockchainId, price)
+      if (isDapper) {
+        await createDapperMarketplaceListing(nft.id, nft.blockchainId, price, Currency.Duc)
+      } else {
+        await createMarketplaceListing(nft.id, nft.blockchainId, price)
+      }
+
       reExecuteQuery({ requestPolicy: "network-only" })
     } catch (e) {
       console.error(e)
@@ -87,6 +99,14 @@ export const NFTDetail = (props: Props) => {
 
   const canCancel = activeListing && nft.wallet.address === currentUser.addr
   const canList = !activeListing && nft.wallet.address === currentUser.addr && nft?.blockchainId
+
+  if (isMarketplaceLoading) {
+    return (
+      <Center minH="10rem">
+        <Spinner color="white" size="xl" />
+      </Center>
+    )
+  }
 
   return (
     <Box p="8">
@@ -122,30 +142,38 @@ export const NFTDetail = (props: Props) => {
             {canList && (
               <Stack>
                 <Formik
-                  initialValues={{ price: "" }}
+                  initialValues={{ price: "", currency: "FLOW" }}
                   onSubmit={async (values, actions) => {
-                    await handleCreateListing(values.price)
+                    await handleCreateListing(values.price, values.currency as Currency)
                     actions.setSubmitting(false)
                   }}
                 >
                   {(props) => (
                     <Form>
-                      <Field name="price">
-                        {({ field, form }) => (
-                          <FormControl
-                            isInvalid={form.errors.price && form.touched.price}
-                            isRequired
-                          >
-                            <NumberInput
-                              onChange={(val) => form.setFieldValue(field.name, val)}
-                              max={100}
-                              color="white"
+                      <Flex gap="1rem" color="white">
+                        <Field name="price">
+                          {({ field, form }) => (
+                            <FormControl
+                              isInvalid={form.errors.price && form.touched.price}
+                              isRequired
                             >
-                              <NumberInputField placeholder="Enter price (in Flow)" />
-                            </NumberInput>
-                          </FormControl>
-                        )}
-                      </Field>
+                              <InputGroup>
+                                <NumberInput
+                                  onChange={(val) => form.setFieldValue(field.name, val)}
+                                  max={100}
+                                  color="white"
+                                  w="100%"
+                                >
+                                  <NumberInputField placeholder="Enter price" roundedRight="none" />
+                                </NumberInput>
+                                <InputRightAddon color="black">
+                                  {isDapper ? "USD" : "Flow"}
+                                </InputRightAddon>
+                              </InputGroup>
+                            </FormControl>
+                          )}
+                        </Field>
+                      </Flex>
 
                       <Button
                         p="1rem 2rem"
