@@ -95,11 +95,17 @@ export const MarketplaceListingsTable = () => {
 
       setLoading(true)
       if (isDapper) {
+        console.log(
+          activeListing.id,
+          activeListing.blockchainId,
+          activeListing.wallet.address,
+          activeListing.pricing.price?.toFixed(2)
+        )
         await purchaseDapperMarketplaceListing(
           activeListing.id,
           activeListing.blockchainId,
           activeListing.wallet.address,
-          activeListing.pricing.price
+          activeListing.pricing.price?.toFixed(2)
         )
       } else {
         await purchaseMarketplaceListing(

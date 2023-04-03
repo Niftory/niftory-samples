@@ -159,7 +159,9 @@ export const NFTDetail = (props: Props) => {
                             >
                               <InputGroup>
                                 <NumberInput
-                                  onChange={(val) => form.setFieldValue(field.name, val)}
+                                  onChange={(_, valAsNumber) =>
+                                    form.setFieldValue(field.name, valAsNumber.toFixed(8))
+                                  }
                                   max={100}
                                   color="white"
                                   w="100%"
@@ -167,7 +169,7 @@ export const NFTDetail = (props: Props) => {
                                   <NumberInputField placeholder="Enter price" roundedRight="none" />
                                 </NumberInput>
                                 <InputRightAddon color="black">
-                                  {isDapper ? "USD" : "Flow"}
+                                  {isDapper ? "DUC" : "Flow"}
                                 </InputRightAddon>
                               </InputGroup>
                             </FormControl>
