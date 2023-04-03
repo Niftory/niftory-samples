@@ -14,6 +14,8 @@ import {
   CANCEL_MARKETPLACE_LISTING_SCRIPT,
   DAPPER_CREATE_DUC_LISTING_SCRIPT,
   DAPPER_PURCHASE_DUC_LISTING_SCRIPT,
+  DAPPER_CREATE_FUT_LISTING_SCRIPT,
+  DAPPER_PURCHASE_FUT_LISTING_SCRIPT,
 } from "../cadence/scripts"
 
 gql`
@@ -49,7 +51,8 @@ export function useMarketplace() {
     listingId: string,
     listingResourceID: string,
     listingAddress: string,
-    expectedPrice: string
+    expectedPrice: string,
+    currency: Currency
   ) => Promise<MarketplaceListing>
   let purchaseMarketplaceListing: (
     listingId: string,
@@ -80,6 +83,11 @@ export function useMarketplace() {
       )
     }
 
+    const createDapperMarketplaceListingFUTScript = prepareCadence(
+      DAPPER_CREATE_FUT_LISTING_SCRIPT,
+      name,
+      address
+    )
     const createDapperMarketplaceListingDUCScript = prepareCadence(
       DAPPER_CREATE_DUC_LISTING_SCRIPT,
       name,
@@ -87,13 +95,24 @@ export function useMarketplace() {
     )
 
     createDapperMarketplaceListing = async (nftId, blockchainId, price, currency) => {
-      return handleCreateListing(
-        createDapperMarketplaceListingDUCScript,
-        nftId,
-        blockchainId,
-        price,
-        /*isDapper*/ true
-      )
+      switch (currency) {
+        case Currency.Duc:
+          return handleCreateListing(
+            createDapperMarketplaceListingDUCScript,
+            nftId,
+            blockchainId,
+            price,
+            /*isDapper*/ true
+          )
+        case Currency.Fut:
+          return handleCreateListing(
+            createDapperMarketplaceListingFUTScript,
+            nftId,
+            blockchainId,
+            price,
+            /*isDapper*/ true
+          )
+      }
     }
 
     const purchaseMarketplaceListingScript = prepareCadence(
@@ -115,20 +134,38 @@ export function useMarketplace() {
       name,
       address
     )
+    const purchaseDapperMarketplaceListingFUTScript = prepareCadence(
+      DAPPER_PURCHASE_FUT_LISTING_SCRIPT,
+      name,
+      address
+    )
 
     purchaseDapperMarketplaceListing = async (
       listingId,
       listingResourceID,
       listingAddress,
-      expectedPrice
-    ) =>
-      handleDapperPurchaseListing(
-        purchaseDapperMarketplaceListingDUCScript,
-        listingId,
-        listingResourceID,
-        listingAddress,
-        expectedPrice
-      )
+      expectedPrice,
+      currency
+    ) => {
+      switch (currency) {
+        case Currency.Duc:
+          return handleDapperPurchaseListing(
+            purchaseDapperMarketplaceListingDUCScript,
+            listingId,
+            listingResourceID,
+            listingAddress,
+            expectedPrice
+          )
+        case Currency.Fut:
+          return handleDapperPurchaseListing(
+            purchaseDapperMarketplaceListingFUTScript,
+            listingId,
+            listingResourceID,
+            listingAddress,
+            expectedPrice
+          )
+      }
+    }
 
     purchaseMarketplaceListing = (listingId, listingResourceID, listingAddress) =>
       handlePurchaseListing(
@@ -169,8 +206,6 @@ const handleCreateListing = async (
   const expiryDate = new Date()
   expiryDate.setFullYear(new Date().getFullYear() + year)
   const unixExpiryDate = (expiryDate.getTime() / 1000).toFixed(0).toString()
-
-  console.log(cadence)
 
   let transactionId
   if (isDapper) {

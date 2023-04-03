@@ -10,6 +10,7 @@ import {
   InputRightAddon,
   NumberInput,
   NumberInputField,
+  Select,
   Spacer,
   Spinner,
   Stack,
@@ -35,7 +36,7 @@ interface Props {
 
 export const NFTDetail = (props: Props) => {
   const { nft, reExecuteQuery } = props
-  const { currentUser, isDapper } = useWalletContext()
+  const { currentUser, isDapper, walletProvider } = useWalletContext()
   const {
     createMarketplaceListing,
     createDapperMarketplaceListing,
@@ -64,11 +65,10 @@ export const NFTDetail = (props: Props) => {
   const handleCreateListing = async (price: string, currency: Currency) => {
     try {
       if (isDapper) {
-        await createDapperMarketplaceListing(nft.id, nft.blockchainId, price, Currency.Duc)
+        await createDapperMarketplaceListing(nft.id, nft.blockchainId, price, currency)
       } else {
         await createMarketplaceListing(nft.id, nft.blockchainId, price)
       }
-
       reExecuteQuery({ requestPolicy: "network-only" })
     } catch (e) {
       console.error(e)
@@ -100,7 +100,7 @@ export const NFTDetail = (props: Props) => {
   const canCancel = activeListing && nft.wallet.address === currentUser.addr
   const canList = !activeListing && nft.wallet.address === currentUser.addr && nft?.blockchainId
 
-  if (isMarketplaceLoading) {
+  if (isMarketplaceLoading && !walletProvider) {
     return (
       <Center minH="10rem">
         <Spinner color="white" size="xl" />
@@ -142,11 +142,12 @@ export const NFTDetail = (props: Props) => {
             {canList && (
               <Stack>
                 <Formik
-                  initialValues={{ price: "", currency: "FLOW" }}
+                  initialValues={{ price: "", currency: isDapper ? "FUT" : "FLOW" }}
                   onSubmit={async (values, actions) => {
                     await handleCreateListing(values.price, values.currency as Currency)
                     actions.setSubmitting(false)
                   }}
+                  enableReinitialize
                 >
                   {(props) => (
                     <Form>
@@ -168,8 +169,21 @@ export const NFTDetail = (props: Props) => {
                                 >
                                   <NumberInputField placeholder="Enter price" roundedRight="none" />
                                 </NumberInput>
-                                <InputRightAddon color="black">
-                                  {isDapper ? "DUC" : "Flow"}
+
+                                <InputRightAddon color="black" padding={isDapper ? 0 : undefined}>
+                                  {isDapper ? (
+                                    <Select
+                                      name="currency"
+                                      onChange={(e) =>
+                                        form.setFieldValue("currency", e.target.value)
+                                      }
+                                    >
+                                      <option value="FUT">Flow</option>
+                                      <option value="DUC">USD</option>
+                                    </Select>
+                                  ) : (
+                                    "Flow"
+                                  )}
                                 </InputRightAddon>
                               </InputGroup>
                             </FormControl>

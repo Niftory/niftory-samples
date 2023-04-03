@@ -99,7 +99,8 @@ export const MarketplaceListingsTable = () => {
           activeListing.id,
           activeListing.blockchainId,
           activeListing.wallet.address,
-          activeListing.pricing.price?.toFixed(2)
+          activeListing.pricing.price?.toFixed(2),
+          activeListing.pricing.currency
         )
       } else {
         await purchaseMarketplaceListing(
