@@ -51,32 +51,25 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
       const initiateCheckoutResponse = await axios.post(`/api/nftModel/${id}/initiateCheckout`)
       const {
         cadence,
-        registryAddress,
-        brand,
         nftId,
         nftDatabaseId,
-        nftTypeRef,
         setId,
         templateId,
         price,
-        expiry,
         signerKeyId,
         signerAddress,
       } = initiateCheckoutResponse.data
 
+      console.log(cadence)
       setCheckoutStatusIndex(2)
       const tx = await fcl.mutate({
         cadence,
         args: (arg, t) => [
           arg(process.env.NEXT_PUBLIC_MERCHANT_ACCOUNT_ADDRESS, t.Address),
-          arg(registryAddress, t.Address),
-          arg(brand, t.String),
           arg(nftId, t.Optional(t.UInt64)),
-          arg(nftTypeRef, t.String),
           arg(setId, t.Optional(t.Int)),
           arg(templateId, t.Optional(t.Int)),
           arg(price, t.UFix64),
-          arg(expiry, t.UInt64),
         ],
         authorizations: [
           async (account) => ({
@@ -168,6 +161,7 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
           >
             <Text>Claim This NFT</Text>
           </Button>}
+
       </Stack>
       <Gallery rootProps={{ overflow: "hidden", flex: "1" }} content={metadata.content} />
     </Stack>
