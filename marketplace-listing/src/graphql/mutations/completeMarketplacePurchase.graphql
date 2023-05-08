@@ -1,0 +1,9 @@
+mutation CompleteMarketplacePurchase($id: ID!, $transactionId: String!) {
+  completeMarketplacePurchase(id: $id, transactionId: $transactionId) {
+    state
+    id
+    nft {
+      id
+    }
+  }
+}

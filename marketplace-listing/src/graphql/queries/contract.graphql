@@ -1,0 +1,6 @@
+query contract {
+  contract {
+    name
+    address
+  }
+}
