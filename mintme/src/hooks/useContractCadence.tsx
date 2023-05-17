@@ -1,6 +1,4 @@
-import { gql } from "graphql-request"
-import { useGraphQLQuery } from "graphql/useGraphQLQuery"
-import { ContractDocument, ContractQuery, ContractQueryVariables } from "../../generated/graphql"
+import { useContractQuery } from "@niftory/sdk"
 
 const nonFungibleTokenAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS
 const metadataViewsAddress = process.env.NEXT_PUBLIC_NFT_ADDRESS
@@ -63,9 +61,9 @@ function prepareCadence(script: string, contractName: string, address: string) {
 }
 
 export function useContractCadence() {
-  const { contract, fetching } = useGraphQLQuery<ContractQuery, ContractQueryVariables>({
-    query: ContractDocument,
-  })
+  const [{ data, fetching }] = useContractQuery()
+
+  const contract = data?.contract
 
   let isAccountConfigured_script: string
   let configureAccount_transaction: string

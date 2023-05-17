@@ -2,12 +2,7 @@ import { backOff } from "exponential-backoff"
 import { Session } from "next-auth"
 import { useState } from "react"
 import toast from "react-hot-toast"
-import {
-  WalletDocument,
-  WalletState,
-  TransferMutation,
-  TransferMutationVariables,
-} from "../../generated/graphql"
+import { WalletDocument, WalletState, TransferMutationVariables, Nft } from "@niftory/sdk"
 import { backendClient } from "../graphql/backendClient"
 import { getClientFromSession } from "../graphql/getClientFromSession"
 import posthog from "posthog-js"
@@ -41,12 +36,9 @@ const transferNFTModel = async (
   try {
     toastId = toast.loading("Minting your NFTs...")
     await readyWallet(session)
-    const { transfer } = await backendClient<TransferMutation, TransferMutationVariables>(
-      "transferNFTModel",
-      {
-        nftModelId,
-      }
-    )
+    const transfer = await backendClient<Nft, TransferMutationVariables>("transferNFTModel", {
+      nftModelId,
+    })
     toast.success("Successfully minted your NFTs to your Niftory Wallet", { id: toastId })
     onTransferEnd?.()
     return transfer

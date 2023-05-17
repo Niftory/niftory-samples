@@ -1,15 +1,9 @@
 import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
-import { getClientForServer } from "../../../graphql/getClientForServer"
-import {
-  TransferDocument,
-  UserNftsDocument,
-  UserNftsQuery,
-  UserNftsQueryVariables,
-} from "../../../../generated/graphql"
 import * as jose from "jose"
 import posthog from "posthog-js"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -21,7 +15,6 @@ const handler: NextApiHandler = async (req, res) => {
     const requestMethod = req.method
     const userId = session.userId as string
     const variables = req.body
-    const serverSideBackendClient = await getClientForServer()
 
     if (requestMethod === "POST") {
       if (!variables.token) {
@@ -34,10 +27,9 @@ const handler: NextApiHandler = async (req, res) => {
 
       const nftModelId = payload.nftModelId.toString()
 
-      const { nfts } = await serverSideBackendClient.request<UserNftsQuery, UserNftsQueryVariables>(
-        UserNftsDocument,
-        { id: userId }
-      )
+      const niftoryClient = getNiftoryClientForServer()
+
+      const nfts = await niftoryClient.getNfts({ userId })
 
       const hasNFT = nfts?.items?.some((item) => item.model.id === nftModelId)
       if (hasNFT) {
@@ -45,7 +37,7 @@ const handler: NextApiHandler = async (req, res) => {
         return
       }
 
-      const transferData = await serverSideBackendClient.request(TransferDocument, {
+      const transferData = await niftoryClient.transfer({
         nftModelId,
         userId,
       })

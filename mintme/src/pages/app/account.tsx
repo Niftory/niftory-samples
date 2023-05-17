@@ -1,27 +1,20 @@
 import React from "react"
 import { Flex } from "@chakra-ui/react"
-import { useGraphQLQuery } from "../../graphql/useGraphQLQuery"
-import {
-  UserNftsDocument,
-  UserNftsQuery,
-  UserNftsQueryVariables,
-  WalletDocument,
-  WalletQuery,
-} from "../../../generated/graphql"
+
 import { Logout } from "../../components/Logout"
 import AppLayout from "../../components/AppLayout"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { WalletDetails } from "../../ui/Wallet/WalletDetails"
+
+import { useWalletQuery } from "@niftory/sdk"
 const AccountPage = () => {
   const { session, isLoading } = useAuthContext()
 
-  const userId = session?.userId
-  const { wallet, fetching: walletFetching } = useGraphQLQuery<WalletQuery>({
-    query: WalletDocument,
-    pause: isLoading,
-  })
+  const [response] = useWalletQuery()
 
-  const fetching = walletFetching || isLoading
+  const fetching = response.fetching || isLoading
+
+  const wallet = response?.data?.wallet
   return (
     <AppLayout title="Account | MintMe ">
       <Flex

@@ -11,7 +11,7 @@ import {
   NftModelQueryVariables,
   NftQuery,
   NftQueryVariables,
-} from "../../../../generated/graphql"
+} from "@niftory/sdk"
 
 import AppLayout from "../../../components/AppLayout"
 import { ItemDetail } from "../../../components/collection/ItemDetail"
@@ -19,6 +19,7 @@ import {
   getClientForServer,
   getClientForServerWithoutCredentials,
 } from "../../../graphql/getClientForServer"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 
 interface Props {
   nftModel: NftModel
@@ -44,23 +45,12 @@ const ProductDropPage = ({ nftModel, host, nft }: Props) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { nftModelId, nftId } = context.query
 
-  const serverSideBackendClient = await getClientForServerWithoutCredentials()
-  const { nftModel } = await serverSideBackendClient.request<NftModelQuery, NftModelQueryVariables>(
-    NftModelDocument,
-    {
-      id: nftModelId.toString(),
-    }
-  )
+  const niftoryClient = await getNiftoryClientForServer()
+  const nftModel = await niftoryClient.getNftModel(nftModelId as string)
+
   let nft = null
   if (nftId) {
-    const response = await serverSideBackendClient.request<NftQuery, NftQueryVariables>(
-      NftDocument,
-      {
-        id: nftId?.toString(),
-      }
-    )
-
-    nft = response?.nft ?? null
+    nft = await niftoryClient.getNft(nftId?.toString())
   }
 
   return {

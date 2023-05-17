@@ -13,6 +13,7 @@ import Head from "next/head"
 import { DEFAULT_TITLE } from "../constants/title"
 import posthog from "posthog-js"
 import { useRouter } from "next/router"
+import { NiftoryClientProvider } from "graphql/niftoryClientProvider"
 
 type AppProps<P = {}> = NextAppProps<P> & {
   Component: ComponentWithAuth
@@ -58,9 +59,11 @@ const App = ({ Component, pageProps: { session, auth, ...pageProps } }: AppProps
         <AuthProvider requireAuth={Component.requireAuth}>
           <Toaster />
           <GraphQLClientProvider>
-            <ChakraProvider theme={theme}>
-              <Component {...pageProps} />
-            </ChakraProvider>
+            <NiftoryClientProvider>
+              <ChakraProvider theme={theme}>
+                <Component {...pageProps} />
+              </ChakraProvider>
+            </NiftoryClientProvider>
           </GraphQLClientProvider>
         </AuthProvider>
       </SessionProvider>

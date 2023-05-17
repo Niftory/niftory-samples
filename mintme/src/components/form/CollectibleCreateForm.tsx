@@ -5,11 +5,10 @@ import {
   CreateNftModelMutation,
   CreateNftModelMutationVariables,
   CreateNftSetMutation,
-  GetNftSetsQuery,
-  GetNftSetsQueryVariables,
   NftModel,
   NftModelCreateInput,
-} from "../../../generated/graphql"
+  NftSet,
+} from "@niftory/sdk"
 import { backendClient, useBackendClient } from "../../graphql/backendClient"
 import { Form, Formik } from "formik"
 import React, { useState, useRef, useEffect } from "react"
@@ -24,16 +23,14 @@ const createNFTModel = async (setId: string, nftModelData: NftModelCreateInput) 
   let toastId
   try {
     toastId = toast.loading("Creating your NFTs...")
-    const { createNFTModel } = await backendClient<
-      CreateNftModelMutation,
-      CreateNftModelMutationVariables
-    >("createNFTModel", {
+    const nftModel = await backendClient<NftModel>("createNFTModel", {
       setId: setId,
       data: nftModelData,
     })
     toast.success("NFT template created", { id: toastId })
-    return createNFTModel as NftModel
+    return nftModel
   } catch (e) {
+    console.error(e)
     toast.error("Uh Oh, there was an error creating your NFT template", { id: toastId })
     throw new Error("Unable to create NFTModel")
   }
@@ -56,12 +53,11 @@ export const CollectibleCreateForm = (props: StackProps) => {
 
   const { signIn } = useAuthContext()
 
-  const { sets: userSets, error } = useBackendClient<GetNftSetsQuery, GetNftSetsQueryVariables>(
-    session ? "getNFTSets" : null,
-    {
-      filter: { tags: [session?.userId as string] },
-    }
-  )
+  const response = useBackendClient<NftSet[]>(session ? "getNFTSets" : null, {
+    filter: { tags: [session?.userId as string] },
+  })
+
+  const { data: userSets, error } = response
   const { transferNFTModel } = useTransfer()
 
   useEffect(() => {

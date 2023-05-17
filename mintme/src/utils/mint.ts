@@ -1,4 +1,4 @@
-import { NftBlockchainState, NftModelBlockchainState } from "../../generated/graphql"
+import { NftBlockchainState, NftModelBlockchainState } from "@niftory/sdk"
 
 type ReadableState = "Minted" | "Minting" | "Error" | "Unminted"
 

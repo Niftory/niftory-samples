@@ -13,7 +13,7 @@ import {
   Text,
   useClipboard,
 } from "@chakra-ui/react"
-import { Nft, NftModel } from "../../../generated/graphql"
+import { Nft, NftModel } from "@niftory/sdk"
 import { FiLink as LinkIcon } from "react-icons/fi"
 import { CheckIcon } from "@chakra-ui/icons"
 import { ChangeEvent, useCallback, useEffect, useState } from "react"
@@ -78,8 +78,10 @@ export const ShareModal = ({
         case ModeTable.CLAIM:
           if (!currentToken) {
             setLoading(true)
-            const { token } = await backendClient("generateShareToken", { id: nftModel?.id })
-            setCurrentToken(token as string)
+            const { token } = await backendClient<{ token: string }>("generateShareToken", {
+              id: nftModel?.id,
+            })
+            setCurrentToken(token)
             setShareUrl(`${baseUrl}?token=${token}`)
             setLoading(false)
           } else {
@@ -107,7 +109,7 @@ export const ShareModal = ({
             claimable: true,
           },
         },
-        updateNftModelId: nftModel.id,
+        id: nftModel.id,
       })
       posthog.capture("NFT_SHARE_CLAIM_LINK", {
         posthogEventDetail: "Share claim link",

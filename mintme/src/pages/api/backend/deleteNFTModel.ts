@@ -2,8 +2,9 @@ import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
 import { getClientForServer } from "../../../graphql/getClientForServer"
-import { DeleteNftModelDocument } from "../../../../generated/graphql"
+import { DeleteNftModelDocument } from "@niftory/sdk"
 import posthog from "posthog-js"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -14,12 +15,12 @@ const handler: NextApiHandler = async (req, res) => {
       return
     }
     const requestMethod = req.method
-    const variables = req.body
+    const { id } = req.body
 
-    const serverSideBackendClient = await getClientForServer()
+    const niftoryClient = await getNiftoryClientForServer()
 
     if (requestMethod === "POST") {
-      const postData = await serverSideBackendClient.request(DeleteNftModelDocument, variables)
+      const postData = await niftoryClient.deleteNftModel(id)
       res.status(200).json(postData)
     } else {
       res.status(405).end("Method not allowed, this endpoint only supports POST")

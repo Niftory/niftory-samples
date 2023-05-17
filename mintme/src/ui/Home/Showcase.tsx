@@ -2,7 +2,7 @@ import { Box, Center, Flex, Heading, SimpleGrid, Text, VStack } from "@chakra-ui
 import { useRef } from "react"
 
 const LinkTable = {
-  test: [
+  testnet: [
     {
       url: "https://mint.test.niftory.com/app/collection/6872680e-4746-45bf-99fb-4a01b6987eb8?nftId=1381e6aa-17b4-4c1b-8436-6c92efb0751d",
       image: "/images/ai_conference.png",
@@ -17,7 +17,7 @@ const LinkTable = {
       image: "/images/painting.png",
     },
   ],
-  development: [
+  dev: [
     {
       url: "https://mint.test.niftory.com/app/collection/6872680e-4746-45bf-99fb-4a01b6987eb8?nftId=1381e6aa-17b4-4c1b-8436-6c92efb0751d",
       image: "/images/ai_conference.png",
@@ -33,7 +33,7 @@ const LinkTable = {
     },
   ],
 
-  production: [
+  mainnet: [
     {
       url: "https://mint.test.niftory.com/app/collection/6872680e-4746-45bf-99fb-4a01b6987eb8?nftId=1381e6aa-17b4-4c1b-8436-6c92efb0751d",
       image: "/images/ai_conference.png",
@@ -63,7 +63,7 @@ export const Showcase = () => {
         mt={{ base: "1rem", md: "2rem" }}
         ref={gridRef}
       >
-        {LinkTable[process.env.NEXT_PUBLIC_ENV ?? "test"].map((item) => (
+        {LinkTable[process.env.NEXT_PUBLIC_BLOCKCHAIN_ENV ?? "testnet"].map((item) => (
           <Box
             as="a"
             href={item.url}

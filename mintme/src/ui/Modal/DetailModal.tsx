@@ -16,15 +16,7 @@ import {
   useDisclosure,
   Tooltip,
 } from "@chakra-ui/react"
-import {
-  ContractDocument,
-  ContractQuery,
-  ContractQueryVariables,
-  Nft,
-  NftBlockchainState,
-  NftModel,
-  NftModelBlockchainState,
-} from "../../../generated/graphql"
+
 import { TbSend as SendIcon, TbShare as ShareIcon } from "react-icons/tb"
 import { BsFileEarmarkCode as ContractIcon } from "react-icons/bs"
 import { IconTable } from "../Card/MasonryCard"
@@ -40,11 +32,18 @@ import { useRouter } from "next/router"
 import { FileType, FileUploadField } from "../../components/form/FileUploadField"
 import { OperationContext } from "urql"
 import { AlertModal } from "./AlertModal"
-import { useGraphQLQuery } from "../../graphql/useGraphQLQuery"
 import { Step, Steps } from "intro.js-react"
 import { getContractUrl } from "../../utils/contract"
 import posthog from "posthog-js"
 import { TransactionCollapsibleTable } from "ui/TransactionCollapsibleTable"
+import {
+  Nft,
+  NftBlockchainState,
+  NftModel,
+  NftModelBlockchainState,
+  UseQueryExecute,
+  useContractQuery,
+} from "@niftory/sdk"
 
 type Disclosure = {
   isOpen: boolean
@@ -56,7 +55,7 @@ interface DetailModalProps {
 
   nftModel: NftModel
   nft?: Nft
-  reExecuteQuery?: (opts?: Partial<OperationContext>) => void
+  reExecuteQuery?: UseQueryExecute
   onShare?: (type: string) => void
   isOwner: boolean
   mintState: NftModelBlockchainState | NftBlockchainState
@@ -87,9 +86,8 @@ export const DetailModal = ({
   const { session } = useAuthContext()
   const router = useRouter()
 
-  const { contract } = useGraphQLQuery<ContractQuery, ContractQueryVariables>({
-    query: ContractDocument,
-  })
+  const [{ data }] = useContractQuery()
+  const contract = data?.contract
 
   const handleMint = async () => {
     const { id } = await transferNFTModel(nftModel.id, session)

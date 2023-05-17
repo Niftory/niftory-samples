@@ -1,21 +1,10 @@
 import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
-import {
-  getClientForServer,
-  getClientForServerWithoutCredentials,
-} from "../../../graphql/getClientForServer"
-import {
-  GetNftSetsDocument,
-  GetNftSetsQuery,
-  GetNftSetsQueryVariables,
-  TransferDocument,
-  UserNftsDocument,
-  UserNftsQuery,
-  UserNftsQueryVariables,
-  WithdrawDocument,
-} from "../../../../generated/graphql"
+import { getClientForServerWithoutCredentials } from "../../../graphql/getClientForServer"
+import { WithdrawDocument } from "@niftory/sdk"
 import posthog from "posthog-js"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -25,12 +14,12 @@ const handler: NextApiHandler = async (req, res) => {
       res.status(401).send("There must be a user signed in to use this API route")
     }
     const requestMethod = req.method
-    const userId = session.userId as string
+
     const variables = req.body
-    const serverSideBackendClient = await getClientForServerWithoutCredentials()
+    const niftoryClient = await getNiftoryClientForServer()
 
     if (requestMethod === "POST") {
-      const transferData = await serverSideBackendClient.request(WithdrawDocument, {
+      const transferData = await niftoryClient.withdraw({
         id: variables.id,
         receiverAddress: variables.receiverAddress,
       })

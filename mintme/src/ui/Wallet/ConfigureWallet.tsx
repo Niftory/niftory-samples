@@ -1,12 +1,8 @@
-import { Button, useDisclosure, Text } from "@chakra-ui/react"
-import { useGraphQLMutation } from "graphql/useGraphQLMutation"
+import { Button, useDisclosure } from "@chakra-ui/react"
+import { Wallet, useReadyWalletMutation } from "@niftory/sdk"
 import { useFlowAccountConfiguration } from "hooks/userFlowAccountConfiguration"
 import { useFlowUser } from "hooks/userFlowUser"
-import { useEffect, useState } from "react"
-import { ReadyWalletDocument, Wallet } from "../../../generated/graphql"
-import { WalletSetupBox } from "./WalletSetupBox"
-import * as fcl from "@onflow/fcl"
-import { AlertModal } from "ui/Modal/AlertModal"
+import { useEffect } from "react"
 
 interface Props {
   wallet: Wallet
@@ -16,7 +12,7 @@ interface Props {
 export function ConfigureWallet({ wallet, onReady }: Props) {
   const flowUser = useFlowUser()
 
-  const { executeMutation: readyWallet } = useGraphQLMutation(ReadyWalletDocument)
+  const [_, readyWallet] = useReadyWalletMutation()
   const { configured, configure } = useFlowAccountConfiguration()
 
   // Once the wallet is configured, call the ready mutation to tell Niftory it's ready to receive NFTs

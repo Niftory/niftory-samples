@@ -12,10 +12,7 @@ import { useCallback, useEffect, useState } from "react"
 import { Accept, useDropzone } from "react-dropzone"
 import { AiOutlineCloudUpload as UploadIcon } from "react-icons/ai"
 import axios from "axios"
-import {
-  UploadNftContentMutation,
-  UploadNftContentMutationVariables,
-} from "../../../generated/graphql"
+import { NftContent } from "@niftory/sdk"
 import { backendClient } from "../../graphql/backendClient"
 import captureVideoFrame from "capture-video-frame"
 import toast from "react-hot-toast"
@@ -69,15 +66,13 @@ export const FileUploadField = ({
         setIsUploading(true)
         setLoading(true)
 
-        const { uploadNFTContent } = await backendClient<
-          UploadNftContentMutation,
-          UploadNftContentMutationVariables
-        >("fileUpload", {
+        const uploadNFTContent = await backendClient<NftContent>("fileUpload", {
           name: file.name,
           description: "Created using Mintme by Niftory",
           contentType: file.type,
           posterContentType: file.type,
         })
+
         const content = uploadNFTContent?.files[0]
         content.contentType = file.type.split("/")[0]
         const poster = uploadNFTContent?.poster

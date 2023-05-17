@@ -1,5 +1,0 @@
-mutation reserve($id: ID!) {
-  reserve(listingId: $id) {
-    id
-  }
-}
