@@ -54,7 +54,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
     properties:
       Object.keys(nftModel?.metadata ?? {})?.map((item) => ({
         key: item,
-        value: nftModel?.metadata[item],
+        value: nftModel?.metadata?.[item],
       })) ?? [],
     attributes:
       Object.keys(nftModel?.attributes ?? {})?.map((item) => ({

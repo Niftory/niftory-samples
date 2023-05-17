@@ -185,7 +185,7 @@ export const DetailModal = ({
               metaDataList?.map((item) => {
                 return {
                   key: item,
-                  val: currentNFTModel?.metadata[item],
+                  val: currentNFTModel?.metadata?.[item],
                 }
               }) ?? [],
             quantity: currentNFTModel?.quantity,
@@ -200,7 +200,7 @@ export const DetailModal = ({
             )
             await backendClient("updateNFTModel", {
               data: updateData,
-              updateNftModelId: currentNFTModel.id,
+              id: currentNFTModel.id,
             })
 
             posthog.capture("NFT_EDIT_METADATA", {

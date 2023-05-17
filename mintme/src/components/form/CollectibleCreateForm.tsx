@@ -2,7 +2,6 @@ import toast from "react-hot-toast"
 import { Button, Flex, Stack, StackProps } from "@chakra-ui/react"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import {
-  CreateNftModelMutation,
   CreateNftModelMutationVariables,
   CreateNftSetMutation,
   NftModel,
@@ -118,7 +117,7 @@ export const CollectibleCreateForm = (props: StackProps) => {
         try {
           await backendClient("updateNFTModel", {
             data: collectibleData,
-            updateNftModelId: createNFTModelData.id,
+            id: createNFTModelData.id,
           })
           await transferNFTModel(createNFTModelData.id, session)
         } catch (e) {
@@ -147,12 +146,9 @@ export const CollectibleCreateForm = (props: StackProps) => {
       status: "DRAFT" as any,
       metadata: metadataToJson(values.metadata.filter((item) => item.key && item.val)),
     }
-    let currentSet = userSets?.[0]
+    let currentSet = undefined
     if (!currentSet) {
-      const { createNFTSet: createNFTSetData } = await backendClient<CreateNftSetMutation>(
-        "createNFTSet"
-      )
-      currentSet = createNFTSetData
+      currentSet = await backendClient<NftSet>("createNFTSet")
     }
 
     const response = await createNFTModel(currentSet?.id, collectibleData)
