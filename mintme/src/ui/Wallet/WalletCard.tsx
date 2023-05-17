@@ -2,8 +2,9 @@ import { Box, Flex, Tag, Text } from "@chakra-ui/react"
 import { useFlowUser } from "hooks/userFlowUser"
 
 import { getColorFromWalletState, getReadableWalletState } from "utils/wallet"
-import { Wallet } from "../../../generated/graphql"
+
 import { WalletSwitcherButton } from "./WalletSwitcherButton"
+import { Wallet } from "@niftory/sdk"
 
 interface Props {
   wallet: Wallet

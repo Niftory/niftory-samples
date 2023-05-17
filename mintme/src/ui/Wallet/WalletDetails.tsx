@@ -6,19 +6,14 @@ import {
   FiAlertCircle as WalletDetailsIcon,
   FiUserCheck as WalletOwnerIcon,
 } from "react-icons/fi"
-import {
-  UserNftsDocument,
-  UserNftsQuery,
-  UserNftsQueryVariables,
-  WalletState,
-} from "../../../generated/graphql"
+
 import toast from "react-hot-toast"
 import { backendClient } from "../../graphql/backendClient"
 import { WalletGridBox } from "./WalletGridBox"
 import { useRouter } from "next/router"
 import posthog from "posthog-js"
 import { WalletSwitcherModal } from "ui/Modal/WalletSwitcherModal"
-import { useGraphQLQuery } from "graphql/useGraphQLQuery"
+import { WalletState, useNftsQuery } from "@niftory/sdk"
 
 export interface WalletDetailsProps {
   walletAddress: string
@@ -32,9 +27,9 @@ export const WalletDetails = (props: WalletDetailsProps) => {
   const { walletAddress, walletStatus, walletItems, walletOwnerEmail, isLoading = false } = props
   const router = useRouter()
   const disclosure = useDisclosure()
-  const { nfts } = useGraphQLQuery<UserNftsQuery, UserNftsQueryVariables>({
-    query: UserNftsDocument,
-  })
+  const [{ data }] = useNftsQuery()
+
+  const nfts = data?.nfts
 
   if (walletStatus == WalletState.CreationFailed) {
     toast.error(

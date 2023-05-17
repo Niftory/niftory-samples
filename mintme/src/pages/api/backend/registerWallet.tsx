@@ -8,8 +8,9 @@ import {
   RegisterWalletInput,
   RegisterWalletMutation,
   RegisterWalletMutationVariables,
-} from "../../../../generated/graphql"
+} from "@niftory/sdk"
 import posthog from "posthog-js"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -20,22 +21,17 @@ const handler: NextApiHandler = async (req, res) => {
       return
     }
     const requestMethod = req.method
-    const variables = req.body
+    const { address } = req.body
 
-    const serverSideBackendClient = await getClientForServer()
+    const niftoryClient = await getNiftoryClientForServer()
 
-    if (!variables?.address) {
+    if (!address) {
       res.status(400).send("Address is required but was undefined")
       return
     }
 
     if (requestMethod === "POST") {
-      const postData = await serverSideBackendClient.request<
-        RegisterWalletMutation,
-        RegisterWalletMutationVariables
-      >(RegisterWalletDocument, {
-        address: variables?.address,
-      })
+      const postData = await niftoryClient.registerWallet(address)
       res.status(200).json(postData)
     } else {
       res.status(405).end("Method not allowed, this endpoint only supports POST")

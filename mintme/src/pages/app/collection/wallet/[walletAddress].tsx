@@ -2,45 +2,26 @@ import { Box, Heading } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import React from "react"
 import Masonry from "react-masonry-css"
-import {
-  GetNftSetsQuery,
-  NftModelsQuery,
-  NftModelsQueryVariables,
-  NftModelsDocument,
-  UserNftsQuery,
-  UserNftsQueryVariables,
-  UserNftsDocument,
-  NftModel,
-  Nft,
-  NftsByWalletQuery,
-  NftsByWalletQueryVariables,
-  NftsByWalletDocument,
-} from "../../../../../generated/graphql"
+
 import AppLayout from "../../../../components/AppLayout"
-import { useBackendClient } from "../../../../graphql/backendClient"
-import { useGraphQLQuery } from "../../../../graphql/useGraphQLQuery"
-import { useAuthContext } from "../../../../hooks/useAuthContext"
+
 import { MasonryCard } from "../../../../ui/Card/MasonryCard"
 import { LoginSkeleton } from "../../../../ui/Skeleton"
+import { Nft, NftModel, useNftsByWalletQuery } from "@niftory/sdk"
 
 const WalletCollectionPage = () => {
   const router = useRouter()
 
   const { walletAddress } = router?.query
 
-  const {
-    nftsByWallet: nftsData,
-    fetching: fetchingNfts,
-    reExecuteQuery,
-  } = useGraphQLQuery<NftsByWalletQuery, NftsByWalletQueryVariables>({
-    query: NftsByWalletDocument,
+  const [{ data, fetching: fetchingNfts }, reExecuteQuery] = useNftsByWalletQuery({
     variables: {
-      walletAddress: walletAddress?.toString(),
+      address: walletAddress?.toString(),
     },
     pause: !walletAddress,
   })
 
-  let nfts = nftsData?.items
+  let nfts = data?.nftsByWallet?.items
 
   const isPageLoading = fetchingNfts
 

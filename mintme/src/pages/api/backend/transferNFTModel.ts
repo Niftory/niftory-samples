@@ -2,16 +2,8 @@ import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
 import { getClientForServer } from "../../../graphql/getClientForServer"
-import {
-  GetNftSetsDocument,
-  GetNftSetsQuery,
-  GetNftSetsQueryVariables,
-  TransferDocument,
-  UserNftsDocument,
-  UserNftsQuery,
-  UserNftsQueryVariables,
-} from "../../../../generated/graphql"
 import posthog from "posthog-js"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -23,7 +15,8 @@ const handler: NextApiHandler = async (req, res) => {
     const requestMethod = req.method
     const userId = session.userId as string
     const variables = req.body
-    const serverSideBackendClient = await getClientForServer()
+
+    const niftoryClient = await getNiftoryClientForServer()
 
     if (requestMethod === "POST") {
       const nftModelId = variables?.nftModelId
@@ -32,14 +25,7 @@ const handler: NextApiHandler = async (req, res) => {
         return
       }
 
-      const { sets } = await serverSideBackendClient.request<
-        GetNftSetsQuery,
-        GetNftSetsQueryVariables
-      >(GetNftSetsDocument, {
-        filter: {
-          tags: [session.userId as string],
-        },
-      })
+      const sets = await niftoryClient.getSets({ tags: [session.userId as string] })
 
       const modelsId = sets
         ?.map((item) => item.models)
@@ -51,12 +37,11 @@ const handler: NextApiHandler = async (req, res) => {
         return
       }
 
-      const { nfts } = await serverSideBackendClient.request<UserNftsQuery, UserNftsQueryVariables>(
-        UserNftsDocument,
-        {
-          id: userId,
-        }
-      )
+      const nfts = await niftoryClient.getNfts({
+        filter: {
+          ids: [userId],
+        },
+      })
       const hasNFT = nfts?.items?.some((item) => item.model.id === nftModelId)
 
       if (hasNFT) {
@@ -64,16 +49,18 @@ const handler: NextApiHandler = async (req, res) => {
         return
       }
 
-      const transferData = await serverSideBackendClient.request(TransferDocument, {
+      const transferData = await niftoryClient.transfer({
         nftModelId: variables.nftModelId,
         userId,
       })
+
       res.status(200).json(transferData)
     } else {
       res.status(405).end("Method not allowed, this endpoint only supports POST")
     }
   } catch (e) {
     posthog.capture("ERROR_TRANSFERNFTMODEL_API", e)
+    console.error(e)
     res.status(500).json(e)
   }
 }

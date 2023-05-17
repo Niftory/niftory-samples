@@ -34,7 +34,6 @@ export const collectibleFormValidation = (props: collectibleFormValidationProps)
     if (Number(values.numEntities ?? 0) > 1000) {
       errors.numEntities = "Supply should not exceed 1000"
       error = errors.numEntities
-      console.log(error, errors)
     }
   }
   return { error, errors }

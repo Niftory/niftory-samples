@@ -1,5 +1,5 @@
 import { BoxProps, Image, Box } from "@chakra-ui/react"
-import { NftFile, SimpleFile } from "../../../generated/graphql"
+import { NftFile, SimpleFile } from "@niftory/sdk"
 
 interface Props extends BoxProps {
   file: Partial<NftFile>

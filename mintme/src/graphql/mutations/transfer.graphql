@@ -1,5 +1,0 @@
-mutation transfer($nftModelId: ID, $userId: ID) {
-  transfer(nftModelId: $nftModelId, userId: $userId) {
-    id
-  }
-}

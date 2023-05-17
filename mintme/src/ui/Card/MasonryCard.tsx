@@ -1,22 +1,18 @@
 import { Box, Center, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react"
 import {
-  AppUserDocument,
-  GetNftSetsQuery,
   Nft,
   NftBlockchainState,
   NftDocument,
   NftModel,
-  NftModelBlockchainState,
   NftQuery,
   NftQueryVariables,
-  TransferDocument,
-  TransferMutation,
-  TransferMutationVariables,
-  Wallet,
+  NftSet,
+  SetsQuery,
+  UseQueryExecute,
   WithdrawDocument,
   WithdrawMutation,
   WithdrawMutationVariables,
-} from "../../../generated/graphql"
+} from "@niftory/sdk"
 import { FaEllipsisH as EllipsisIcon } from "react-icons/fa"
 import { TfiReload as ReloadIcon } from "react-icons/tfi"
 import { BsCheck2 as CheckIcon } from "react-icons/bs"
@@ -32,25 +28,25 @@ import { ShareModal } from "../Modal/ShareModel"
 import { useTransfer } from "../../hooks/useTransfer"
 import { EmbedModal } from "../Modal/EmbedModal"
 import { MediaBox } from "../MediaBox"
-import { OperationContext, useMutation } from "urql"
+
 import { backOff } from "exponential-backoff"
 import { getClientFromSession } from "../../graphql/getClientFromSession"
 import { getReadableStateValue } from "utils/mint"
-import { useGraphQLMutation } from "graphql/useGraphQLMutation"
-import { useGraphQLQuery } from "graphql/useGraphQLQuery"
 import toast from "react-hot-toast"
 import { WalletSelectModal } from "ui/Modal/WalletSelectModal"
+import { Wallet, useWithdrawMutation } from "@niftory/sdk"
 
 interface MasonryCardProps {
   nftModel: NftModel
   nft?: Nft
-  reExecuteQuery?: (opts?: Partial<OperationContext>) => void
+  reExecuteQuery?: UseQueryExecute
   hidePopUp?: boolean
 }
 
 export const IconTable = {
   UNMINTED: <EditIcon size={20} />,
   MINTING: <ReloadIcon />,
+  TRANSFERRING: <ReloadIcon />,
   MINTED: <CheckIcon />,
   COMPLETED: <CheckIcon />,
   TRANSFERRED: <CheckIcon />,
@@ -73,21 +69,14 @@ export const MasonryCard = ({ nftModel, reExecuteQuery, hidePopUp, nft }: Masonr
   const { transferNFTModel } = useTransfer()
   const [shareMode, setShareMode] = useState<string>("view")
 
-  const { sets: userSets } = useBackendClient<GetNftSetsQuery>(session ? "getNFTSets" : null)
+  const setResponse = useBackendClient<NftSet[]>(session ? "getNFTSets" : null)
 
-  const setIds = userSets?.map((item) => item.id)
+  const setIds = setResponse.data?.map((item) => item.id)
   const isOwner = setIds?.includes(nftModel?.set?.id)
 
   const [mintState, setMintState] = useState(nft ? nft?.blockchainState : nftModel?.state)
 
-  const { executeMutation } = useGraphQLMutation<TransferMutation, TransferMutationVariables>(
-    TransferDocument
-  )
-
-  const { executeMutation: withdrawNFT } = useGraphQLMutation<
-    WithdrawMutation,
-    WithdrawMutationVariables
-  >(WithdrawDocument)
+  const [_, withdrawNFT] = useWithdrawMutation()
 
   const handleWithdraw = async (wallet: Wallet) => {
     const toastId = toast.loading("Withdrawing your NFT...")

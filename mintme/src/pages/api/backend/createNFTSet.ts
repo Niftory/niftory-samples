@@ -1,9 +1,9 @@
 import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
-import { getClientForServer } from "../../../graphql/getClientForServer"
-import { CreateNftSetDocument } from "../../../../generated/graphql"
+import { CreateNftSetDocument } from "@niftory/sdk"
 import posthog from "posthog-js"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -16,14 +16,12 @@ const handler: NextApiHandler = async (req, res) => {
     const requestMethod = req.method
     const userId = session.userId as string
 
-    const serverSideBackendClient = await getClientForServer()
+    const niftoryClient = await getNiftoryClientForServer()
 
     if (requestMethod === "POST") {
-      const postData = await serverSideBackendClient.request(CreateNftSetDocument, {
-        data: {
-          title: "Set for User" + userId,
-          tags: [userId],
-        },
+      const postData = await niftoryClient.createSet({
+        title: "Set for User " + userId,
+        tags: [userId],
       })
       res.status(200).json(postData)
     } else {

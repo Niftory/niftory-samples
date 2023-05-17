@@ -1,18 +1,11 @@
 import { useCallback } from "react"
 import * as fcl from "@onflow/fcl"
-import {
-  VerifyWalletDocument,
-  VerifyWalletMutation,
-  VerifyWalletMutationVariables,
-} from "../../../generated/graphql"
-import { useGraphQLMutation } from "graphql/useGraphQLMutation"
+
 import { Button } from "@chakra-ui/react"
+import { useVerifyWalletMutation } from "@niftory/sdk"
 
 export function VerifyWallet({ wallet }) {
-  const { executeMutation: verifyWallet } = useGraphQLMutation<
-    VerifyWalletMutation,
-    VerifyWalletMutationVariables
-  >(VerifyWalletDocument)
+  const [_, verifyWallet] = useVerifyWalletMutation()
 
   // On click, prompt the user to sign the verification message
   const verify = useCallback(async () => {

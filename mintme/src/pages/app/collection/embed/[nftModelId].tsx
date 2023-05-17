@@ -1,22 +1,10 @@
-import { Box, Stack, Image, Flex, Heading, Text, Button } from "@chakra-ui/react"
+import { Box, Image, Flex, Heading, Text } from "@chakra-ui/react"
 import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
-import React, { useEffect, useState } from "react"
-import {
-  NftModel,
-  NftModelQuery,
-  NftModelQueryVariables,
-  NftModelDocument,
-  Nft,
-  NftQuery,
-  NftQueryVariables,
-  NftDocument,
-} from "../../../../../generated/graphql"
-import {
-  getClientForServer,
-  getClientForServerWithoutCredentials,
-} from "../../../../graphql/getClientForServer"
+import React from "react"
+import { NftModel, Nft } from "@niftory/sdk"
 import { MediaBox } from "../../../../ui/MediaBox"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 
 interface Props {
   nftModel: NftModel
@@ -108,24 +96,13 @@ const EmbedPage = ({ nftModel, nft }: Props) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { nftModelId, nftId } = context.query
 
-  const serverSideBackendClient = await getClientForServerWithoutCredentials()
-  const { nftModel } = await serverSideBackendClient.request<NftModelQuery, NftModelQueryVariables>(
-    NftModelDocument,
-    {
-      id: nftModelId.toString(),
-    }
-  )
+  const niftoryClient = await getNiftoryClientForServer()
+
+  const nftModel = await niftoryClient.getNftModel(nftModelId.toString())
 
   let nft = null
   if (nftId) {
-    const response = await serverSideBackendClient.request<NftQuery, NftQueryVariables>(
-      NftDocument,
-      {
-        id: nftId?.toString(),
-      }
-    )
-
-    nft = response?.nft ?? null
+    nft = await niftoryClient.getNft(nftId?.toString())
   }
 
   return {
