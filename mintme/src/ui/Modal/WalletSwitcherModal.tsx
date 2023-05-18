@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react"
 import { RegisterWallet } from "ui/Wallet/RegisterWallet"
 import { useMemo } from "react"
-import { useFlowUser } from "hooks/userFlowUser"
+import { useFlowUser } from "@niftory/sdk"
 import { WalletCard } from "ui/Wallet/WalletCard"
 import { Wallet, WalletType, useAppUserQuery } from "@niftory/sdk"
 

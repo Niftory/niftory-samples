@@ -1,7 +1,7 @@
 import { Flex, Heading, Modal, ModalContent, ModalOverlay, VStack } from "@chakra-ui/react"
 
 import { useMemo } from "react"
-import { useFlowUser } from "hooks/userFlowUser"
+import { useFlowUser } from "@niftory/sdk"
 import { WalletCard } from "ui/Wallet/WalletCard"
 import { Wallet, WalletState, useAppUserQuery } from "@niftory/sdk"
 

@@ -1,7 +1,11 @@
 import { Button, useDisclosure } from "@chakra-ui/react"
-import { Wallet, useReadyWalletMutation } from "@niftory/sdk"
-import { useFlowAccountConfiguration } from "hooks/userFlowAccountConfiguration"
-import { useFlowUser } from "hooks/userFlowUser"
+import {
+  Wallet,
+  useFlowAccountConfiguration,
+  useFlowUser,
+  useReadyWalletMutation,
+} from "@niftory/sdk"
+
 import { useEffect } from "react"
 
 interface Props {
@@ -13,7 +17,12 @@ export function ConfigureWallet({ wallet, onReady }: Props) {
   const flowUser = useFlowUser()
 
   const [_, readyWallet] = useReadyWalletMutation()
-  const { configured, configure } = useFlowAccountConfiguration()
+  const { configured, configure } = useFlowAccountConfiguration({
+    clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
+    nftAddress: process.env.NEXT_PUBLIC_NFT_ADDRESS,
+    niftoryAddress: process.env.NEXT_PUBLIC_NIFTORY_ADDRESS,
+    registryAddress: process.env.NEXT_PUBLIC_REGISTRY_ADDRESS,
+  })
 
   // Once the wallet is configured, call the ready mutation to tell Niftory it's ready to receive NFTs
   useEffect(() => {
