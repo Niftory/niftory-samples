@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react"
-import { useFlowUser } from "hooks/userFlowUser"
+import { useFlowUser } from "@niftory/sdk"
 import { ConfigureWallet } from "./ConfigureWallet"
 import { VerifyWallet } from "./VerifyWallet"
 import * as fcl from "@onflow/fcl"

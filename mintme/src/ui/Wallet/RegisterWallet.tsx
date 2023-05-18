@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 
 import * as fcl from "@onflow/fcl"
-import { useFlowUser } from "hooks/userFlowUser"
+import { useFlowUser } from "@niftory/sdk"
 import { useRegisterWalletMutation } from "@niftory/sdk"
 import { Button } from "@chakra-ui/react"
 

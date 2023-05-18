@@ -1,5 +1,5 @@
 import { Box, Flex, Tag, Text } from "@chakra-ui/react"
-import { useFlowUser } from "hooks/userFlowUser"
+import { useFlowUser } from "@niftory/sdk"
 
 import { getColorFromWalletState, getReadableWalletState } from "utils/wallet"
 
