@@ -39,7 +39,7 @@
     "next": "12.2.0",
     "next-auth": "^4.10.3",
     "openid-client": "5.1.7",
-    "posthog-js": "^1.35.0",
+    "posthog-js": "^1.57.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.6.0",
