@@ -2017,17 +2017,13 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-12.2.0.tgz#9f66664f9122ca555b96a5f2fc6e2af677bf801b"
   integrity sha512-OI14ozFLThEV3ey6jE47zrzSTV/6eIMsvbwozo+XfdWqOPwQ7X00YkRx4GVMKMC0rM44oGS2gmwMKYpe4EblnA==
 
-"@niftory/sdk@^0.0.0-alpha.11":
-  version "0.0.0-alpha.11"
-  resolved "https://registry.yarnpkg.com/@niftory/sdk/-/sdk-0.0.0-alpha.11.tgz#64996b70a763fdbff23ad9bca938023f21479a63"
-  integrity sha512-kIIETuuyYqTueYwZKZ7WVTjZE6JoajE0kvDVEtbEQW2iaijLR1X61kTWqaogBTeARhiLmLsuIw2myREe9czDnw==
+"@niftory/sdk@^0.0.0-alpha.17":
+  version "0.0.0-alpha.17"
+  resolved "https://registry.yarnpkg.com/@niftory/sdk/-/sdk-0.0.0-alpha.17.tgz#2fe05b16d625e763a29015f7d6fbecd186b83b28"
+  integrity sha512-TF9II4zFgG1I175eEFmp9JrA11KFKg6V5gl9lMa46hpCS3ojoQOx76+80FYPNT4CKhnqbpDRwX21qa0h7DIdxQ==
   dependencies:
     "@onflow/fcl" "^1.3.2"
-    "@onflow/transport-grpc" "^1.1.4"
-    "@urql/exchange-auth" "^2.1.1"
-    date-fns "^2.29.3"
     graphql "^16.6.0"
-    openid-client "^5.4.0"
     urql "^4.0.1"
 
 "@nodelib/fs.scandir@2.1.5":
@@ -2106,7 +2102,7 @@
   resolved "https://registry.yarnpkg.com/@onflow/interaction/-/interaction-0.0.11.tgz#4db8f4304039e33d6fc3b14c38b392d724113374"
   integrity sha512-Xuq1Mmx6Wyba/F/L+QLQs0yJeQDsIDwy5SKk5vrCuVgIj0yD8k506g5L8ODrbM1LWll8i0tQsoOi0F85vNl5sA==
 
-"@onflow/protobuf@^1.0.0", "@onflow/protobuf@^1.1.0":
+"@onflow/protobuf@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@onflow/protobuf/-/protobuf-1.1.0.tgz#93960a50c8cc70027d853d6577a2d9898583b1b3"
   integrity sha512-tpGE/5J98S3BxThBkBkkzwKeD19qJ+kJOz22uHm62D26HakYq2SufL9lvYfFa4fGJuKhNwji0olFxy/V2TwJmQ==
@@ -2122,7 +2118,7 @@
   dependencies:
     buffer "^6.0.3"
 
-"@onflow/rlp@^1.0.2", "@onflow/rlp@^1.0.3":
+"@onflow/rlp@^1.0.2":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@onflow/rlp/-/rlp-1.0.4.tgz#9db83571d7212294e79c8416ce269c919ae982ab"
   integrity sha512-/4jSoh9eXPoN9iUCsbI+PAuTRJyYgT+XR4NdZYmxILRwOtIsSd2I9XatA4rrSzk9DJ0h8l9SmYx1y0XLnD+ohQ==
@@ -2159,20 +2155,6 @@
     "@onflow/util-invariant" "^1.0.1"
     "@onflow/util-template" "^1.0.1"
 
-"@onflow/transport-grpc@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@onflow/transport-grpc/-/transport-grpc-1.1.4.tgz#8ebbd28878367a5638a66fd7c12671ee76c03f7e"
-  integrity sha512-Gr6BTRf+4yJGaSwbsBV4/wGvn2x8RQDKZ/rZqcEV2nXUNwT7Y7YZkjAc2chAiZFKHjDiCZ3bvsd8hgD4c6oA0Q==
-  dependencies:
-    "@babel/runtime" "^7.18.6"
-    "@improbable-eng/grpc-web" "^0.14.0"
-    "@improbable-eng/grpc-web-node-http-transport" "^0.14.0"
-    "@onflow/protobuf" "^1.1.0"
-    "@onflow/rlp" "^1.0.3"
-    "@onflow/util-address" "^1.0.3"
-    "@onflow/util-invariant" "^1.0.3"
-    "@onflow/util-template" "^1.0.4"
-
 "@onflow/transport-http@^1.1.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@onflow/transport-http/-/transport-http-1.3.0.tgz#a454e1c2d0f18fb96dd066b4bc8ef3f7d89f7851"
@@ -2208,7 +2190,7 @@
   resolved "https://registry.yarnpkg.com/@onflow/util-address/-/util-address-1.0.1.tgz#211b7f784683f866ffefa6bd2b65ad9f832b3ee4"
   integrity sha512-KanTfsZTBS4iETegtNWDfmQEXd7FapSyTm//N0tdF6hVoTxLI/DNd0Y39adhQasAyrO294q/I72wQUVO+WT7Fg==
 
-"@onflow/util-address@^1.0.2", "@onflow/util-address@^1.0.3":
+"@onflow/util-address@^1.0.2":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@onflow/util-address/-/util-address-1.0.3.tgz#7ffe0ed1c5544a60660ef45033aca78ad093e475"
   integrity sha512-w8DPYSvYm5h0hhZ0hZwiCwu9UgJBtIv2KyhDiH3TZG8srT+9GxtTPX4NzZtAVuxqWTNVlTGePD/Upxusiwnk6g==
@@ -2220,7 +2202,7 @@
   resolved "https://registry.yarnpkg.com/@onflow/util-invariant/-/util-invariant-1.0.1.tgz#b97c5a16ada0383524b3d7442fd004d6605f5bc3"
   integrity sha512-FYLgxASDmD2qVru8G8MX9y3jE8DFie1fk7lWnWndnJvsO94/jmZaql73ytmZme37TQoTWSNfilAgU9T0HcG/gA==
 
-"@onflow/util-invariant@^1.0.2", "@onflow/util-invariant@^1.0.3":
+"@onflow/util-invariant@^1.0.2":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@onflow/util-invariant/-/util-invariant-1.0.3.tgz#5c45e3281982e20021799304fef480fae502fbb1"
   integrity sha512-+Hk93W9JwACLkM5/oOILqI9L55o5QxETBV5Du/2dLgNbjXDElMmQzURFXx6fTmODTLZ6Ri+d1nvb7AxapYFe0Q==
@@ -2252,7 +2234,7 @@
   resolved "https://registry.yarnpkg.com/@onflow/util-template/-/util-template-1.0.2.tgz#9fb563cf629fb1486fd5ff6dc4206c550ed2651e"
   integrity sha512-0tpAolNTozmtSohX5MNY3+3l6A4d4Hm9uORPmQmoKREMRgWTGUy6upVJR9Y298kpS7E18QMaiiwXXvs5xW4KLA==
 
-"@onflow/util-template@^1.0.3", "@onflow/util-template@^1.0.4":
+"@onflow/util-template@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@onflow/util-template/-/util-template-1.0.4.tgz#5affdb46713b5aa4c64d133788a996f02bc56c37"
   integrity sha512-syTJzhFn+CaW/FAqVLJJ3Oq9pTuxS5Wk0+g9AkSKWJ8PCY+FLr7UC2mGr/5pO//L13Elz7cv/djXVxNA1ULQmw==
@@ -2429,20 +2411,12 @@
     "@typescript-eslint/types" "5.30.4"
     eslint-visitor-keys "^3.3.0"
 
-"@urql/core@>=3.0.0", "@urql/core@>=3.1.1", "@urql/core@>=4.0.0", "@urql/core@^4.0.0":
+"@urql/core@>=3.0.0", "@urql/core@>=3.1.1", "@urql/core@^4.0.0":
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/@urql/core/-/core-4.0.6.tgz#1dedef5d3f40e5842e7febe8d9cf31e8c99a4bff"
   integrity sha512-RxlX5nxWZsvS1lPCvOdgdYbIVVfih/DrjPzGZ0ThP1GuVycaxw5t0O7XEXXYHICeXNKj95HJBxW0o/37zg+z6Q==
   dependencies:
     "@0no-co/graphql.web" "^1.0.0"
-    wonka "^6.3.0"
-
-"@urql/exchange-auth@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@urql/exchange-auth/-/exchange-auth-2.1.1.tgz#01e8042dc649e528b986bfa342800c5fcf97e72f"
-  integrity sha512-OxaTv5UEmpEbomxJxqJjAP9/VqlWyQXItX0BoG8W4Jlr73t0QWivKKhQWZnLxdRizMTmDQcLHd3ertWYQEeB3g==
-  dependencies:
-    "@urql/core" ">=4.0.0"
     wonka "^6.3.0"
 
 "@urql/exchange-graphcache@^5.0.8":
@@ -3207,7 +3181,7 @@ dataloader@2.1.0:
   resolved "https://registry.yarnpkg.com/dataloader/-/dataloader-2.1.0.tgz#c69c538235e85e7ac6c6c444bae8ecabf5de9df7"
   integrity sha512-qTcEYLen3r7ojZNgVUaRggOI+KM7jrKxXeSHhogh/TWxYMeONEMqY+hmkobiYQozsGIyg9OYVzO4ZIfoB4I0pQ==
 
-date-fns@^2.16.1, date-fns@^2.29.3:
+date-fns@^2.16.1:
   version "2.29.3"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
   integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
@@ -5129,7 +5103,7 @@ openid-client@5.1.7:
     object-hash "^2.0.1"
     oidc-token-hash "^5.0.1"
 
-openid-client@^5.1.0, openid-client@^5.4.0:
+openid-client@^5.1.0:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/openid-client/-/openid-client-5.4.1.tgz#43210ca82d05872cc7371a44a6a2419eaf3bb84f"
   integrity sha512-z19tZRY1CvpDf9L8nFyv5LW3CWoRDuz8EdmUFyouUrf5FDZitaJ8C+tIHF6WnjA2DPG4Fu2JWkNjexNzLWjh3Q==

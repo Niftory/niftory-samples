@@ -1,4 +1,4 @@
-import { WalletState } from "../../generated/graphql"
+import { WalletState } from "@niftory/sdk"
 
 export const getColorFromWalletState = (state: WalletState) => {
   switch (state) {

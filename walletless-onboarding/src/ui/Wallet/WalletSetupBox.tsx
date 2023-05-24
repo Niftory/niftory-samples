@@ -1,10 +1,10 @@
-import { Box, Button, Spinner, VStack } from "@chakra-ui/react"
+import { Box, Button, Spinner } from "@chakra-ui/react"
 import { useMemo } from "react"
 
 type WalletSetupBoxProps = {
   text: string
   buttonText: string
-  isLoading: boolean 
+  isLoading: boolean
   error: Error
   onClick: () => void
 }
@@ -18,7 +18,7 @@ export const WalletSetupBox = ({
   useMemo(() => error && console.error(error), [error])
 
   if (isLoading) {
-    return <Spinner size='lg' />
+    return <Spinner size="lg" />
   }
 
   if (error) {

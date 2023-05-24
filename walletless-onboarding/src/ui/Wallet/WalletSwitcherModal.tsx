@@ -8,12 +8,11 @@ import {
   VStack,
   ButtonGroup,
 } from "@chakra-ui/react"
-import { useGraphQLQuery } from "graphql/useGraphQLQuery"
 import { RegisterWallet } from "ui/Wallet/RegisterWallet"
-import { AppUserDocument, Wallet, WalletType } from "../../../generated/graphql"
 import { useMemo } from "react"
-import { useFlowUser } from "hooks/userFlowUser"
+
 import { WalletCard } from "ui/Wallet/WalletCard"
+import { Wallet, WalletType, useAppUserQuery } from "@niftory/sdk"
 
 export interface MenuModalItems {
   title: string
@@ -31,12 +30,9 @@ interface MenuModalProps {
 export const WalletSwitcherModal = ({ disclosure }: MenuModalProps) => {
   const { isOpen, onClose } = disclosure
 
-  const {
-    appUser,
-    fetching: fetchingWallets,
-    error,
-    reExecuteQuery,
-  } = useGraphQLQuery({ query: AppUserDocument })
+  const [{ data, fetching: fetchingWallets, error }, reExecuteQuery] = useAppUserQuery()
+
+  const appUser = data?.appUser
 
   const wallets = useMemo(
     () =>
@@ -47,8 +43,6 @@ export const WalletSwitcherModal = ({ disclosure }: MenuModalProps) => {
       }),
     [appUser?.wallets]
   )
-
-  const flowUser = useFlowUser()
 
   return (
     <Modal onClose={onClose} size="xl" isOpen={isOpen} isCentered>

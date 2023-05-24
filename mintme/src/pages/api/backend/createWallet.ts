@@ -18,7 +18,7 @@ const handler: NextApiHandler = async (req, res) => {
     const niftoryClient = await getNiftoryClientForServer()
 
     if (requestMethod === "POST") {
-      const postData = await niftoryClient.createNiftoryWallet()
+      const postData = await niftoryClient.createNiftoryWallet({ userId })
 
       res.status(200).json(postData)
     } else {
