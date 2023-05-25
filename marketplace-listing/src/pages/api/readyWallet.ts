@@ -1,10 +1,10 @@
 import { NextApiHandler } from "next"
-import { getBackendGraphQLClient } from "../../lib/BackendGraphQLClient"
-import { ReadyWalletDocument } from "../../../generated/graphql"
+
 import { getAddressFromCookie } from "../../lib/cookieUtils"
+import { getBackendNiftoryClient } from "../../lib/backendNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
-  const backendGQLClient = await getBackendGraphQLClient()
+  const niftoryClient = await getBackendNiftoryClient()
 
   if (req.method !== "POST") {
     res.status(405).send("Method not allowed, this endpoint only supports POST")
@@ -16,7 +16,7 @@ const handler: NextApiHandler = async (req, res) => {
     res.status(401).send("Must be signed in to ready wallet.")
   }
 
-  const response = await backendGQLClient.request(ReadyWalletDocument, { address })
+  const response = await niftoryClient.readyWallet(address)
   res.status(200).json(response)
 }
 

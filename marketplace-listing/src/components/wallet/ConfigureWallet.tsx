@@ -1,8 +1,8 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 
-import { useFlowAccountConfiguration as useFlowAccountConfiguration } from "../../hooks/useFlowAccountConfiguration"
 import { WalletSetupBox } from "./WalletSetupBox"
+import { useFlowAccountConfiguration } from "@niftory/sdk"
 
 export type ConfigureWalletProps = {
   address: string
@@ -17,7 +17,12 @@ export function ConfigureWallet({ mutateCache }: ConfigureWalletProps) {
     configured,
     configure,
     isLoading: isFlowAccountConfigurationLoading,
-  } = useFlowAccountConfiguration()
+  } = useFlowAccountConfiguration({
+    clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
+    nftAddress: process.env.NEXT_PUBLIC_NFT_ADDRESS,
+    niftoryAddress: process.env.NEXT_PUBLIC_NIFTORY_ADDRESS,
+    registryAddress: process.env.NEXT_PUBLIC_REGISTRY_ADDRESS,
+  })
 
   // Once the wallet is configured, call the ready mutation to tell Niftory it's ready to receive NFTs
   useEffect(() => {

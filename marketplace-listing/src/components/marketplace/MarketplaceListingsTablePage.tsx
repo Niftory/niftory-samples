@@ -1,14 +1,12 @@
 import { Box, Spinner, Tr, Td, Center } from "@chakra-ui/react"
-import { useQuery } from "urql"
 
-import {
-  MarketplaceListing,
-  MarketplaceListingsDocument,
-  MarketplaceListingsQuery,
-  MarketplaceListingsQueryVariables,
-} from "../../../generated/graphql"
 import { Subset } from "../../lib/types"
 import { MarketplaceListingsTableRow } from "./MarketplaceListingsTableRow"
+import {
+  MarketplaceListingsQueryVariables,
+  MarketplaceListing,
+  useMarketplaceListingsQuery,
+} from "@niftory/sdk"
 
 interface CollectionProps {
   variables: MarketplaceListingsQueryVariables
@@ -25,11 +23,7 @@ export const MarketplaceListingsTablePage = ({
   fetchMore,
   isLast,
 }: CollectionProps) => {
-  const [marketplaceListingsResponse] = useQuery<
-    MarketplaceListingsQuery,
-    MarketplaceListingsQueryVariables
-  >({
-    query: MarketplaceListingsDocument,
+  const [marketplaceListingsResponse] = useMarketplaceListingsQuery({
     variables,
     pause: !variables?.filter?.nftModelIds,
     requestPolicy: "cache-and-network",

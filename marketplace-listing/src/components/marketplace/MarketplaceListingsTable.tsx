@@ -17,20 +17,16 @@ import {
 } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { useQuery } from "urql"
 
-import {
-  Currency,
-  MarketplaceListing,
-  MarketplaceListingsQueryVariables,
-  NftModelDocument,
-  NftModelQuery,
-  NftModelQueryVariables,
-} from "../../../generated/graphql"
 import { useMarketplace } from "../../hooks/useMarketplace"
 import { useWalletContext } from "../../hooks/useWalletContext"
 import { Subset } from "../../lib/types"
 import { MarketplaceListingsTablePage } from "./MarketplaceListingsTablePage"
+import {
+  MarketplaceListing,
+  MarketplaceListingsQueryVariables,
+  useNftModelQuery,
+} from "@niftory/sdk"
 
 const ITEMS_PER_PAGE = 10
 
@@ -42,8 +38,7 @@ export const MarketplaceListingsTable = () => {
   const router = useRouter()
   const id: string = router.query["id"]?.toString()
 
-  const [nftModelResponse] = useQuery<NftModelQuery, NftModelQueryVariables>({
-    query: NftModelDocument,
+  const [nftModelResponse] = useNftModelQuery({
     variables: {
       id,
     },

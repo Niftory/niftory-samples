@@ -1,10 +1,10 @@
 import { Box, Center, SimpleGrid, Spinner } from "@chakra-ui/react"
 import * as React from "react"
 
-import { Nft, NftBlockchainState } from "../../../generated/graphql"
 import { Subset } from "../../lib/types"
 import { CallToAction } from "../../ui/CallToAction"
 import { NFTCard } from "./NFTCard"
+import { Nft, NftBlockchainState } from "@niftory/sdk"
 
 interface CollectionProps {
   isLoading: boolean

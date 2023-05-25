@@ -13,9 +13,9 @@ import {
 import router from "next/router"
 import * as React from "react"
 
-import { Nft } from "../../../generated/graphql"
 import { Subset } from "../../lib/types"
 import { ProductCardStats } from "../../ui/Content/ProductCard/ProductCardStats"
+import { Nft } from "@niftory/sdk"
 
 export const NFTCard = (props: { nft: Subset<Nft>; clickUrl: string; price?: string }) => {
   const { nft, clickUrl, price } = props

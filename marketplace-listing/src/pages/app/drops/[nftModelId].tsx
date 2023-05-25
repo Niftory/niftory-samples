@@ -3,18 +3,15 @@ import { useRouter } from "next/router"
 import React from "react"
 import { useQuery } from "urql"
 
-import { NftModelDocument, NftModelQuery } from "../../../../generated/graphql"
 import AppLayout from "../../../components/AppLayout"
 import { NFTModelDetail } from "../../../components/drops/NFTModelDetail"
+import { useNftModelQuery } from "@niftory/sdk"
 
 const NFTModelDetailPage = () => {
   const router = useRouter()
   const nftModelId = router.query["nftModelId"]?.toString()
 
-  const [nftModelResponse] = useQuery<NftModelQuery>({
-    query: NftModelDocument,
-    variables: { id: nftModelId },
-  })
+  const [nftModelResponse] = useNftModelQuery({ variables: { id: nftModelId } })
 
   const nftModel = nftModelResponse?.data?.nftModel
   const metadata = {
@@ -30,7 +27,6 @@ const NFTModelDetailPage = () => {
       },
     ],
   }
-  
 
   const attributes = nftModel?.attributes
 

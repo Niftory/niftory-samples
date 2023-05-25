@@ -1,9 +1,0 @@
-mutation CompleteMarketplaceList($nftId: ID!, $transactionId: String!) {
-  completeMarketplaceList(nftId: $nftId, transactionId: $transactionId) {
-    id
-    state
-    nft {
-      id
-    }
-  }
-}

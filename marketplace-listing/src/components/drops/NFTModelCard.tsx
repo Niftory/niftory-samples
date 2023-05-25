@@ -12,8 +12,8 @@ import {
 import router from "next/router"
 import * as React from "react"
 
-import { NftModel } from "../../../generated/graphql"
 import { ProductCardStats } from "../../ui/Content/ProductCard/ProductCardStats"
+import { NftModel } from "@niftory/sdk"
 
 export const NFTModelCard = (props: { nftModel: NftModel; clickUrl: string }) => {
   const { nftModel, clickUrl } = props

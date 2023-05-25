@@ -3,21 +3,21 @@ import { useRouter } from "next/router"
 import React from "react"
 import { useQuery } from "urql"
 
-import { Nft, NftDocument, NftQuery } from "../../../../generated/graphql"
 import AppLayout from "../../../components/AppLayout"
 import { NFTDetail } from "../../../components/collection/NFTDetail"
 import { Subset } from "../../../lib/types"
 import { LoginSkeleton } from "../../../ui/Skeleton"
+import { Nft, useMarketplaceListingsQuery, useNftQuery } from "@niftory/sdk"
 
 export const NFTDetailPage = () => {
   const router = useRouter()
   const nftId: string = router.query["nftId"]?.toString()
 
-  const [nftResponse, reExecuteQuery] = useQuery<NftQuery>({
-    query: NftDocument,
+  const [nftResponse, reExecuteQuery] = useNftQuery({
     variables: { id: nftId },
     requestPolicy: "cache-and-network",
   })
+
   const nft: Subset<Nft> = nftResponse.data?.nft
 
   if (!nftId || nftResponse.fetching) {

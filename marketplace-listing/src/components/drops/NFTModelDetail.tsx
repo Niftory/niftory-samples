@@ -1,6 +1,5 @@
-import { Button, Heading, Stack, Text, useDisclosure } from "@chakra-ui/react"
+import { Button, Heading, Stack, Text } from "@chakra-ui/react"
 import * as React from "react"
-import * as fcl from "@onflow/fcl"
 import { useCallback, useState } from "react"
 import { useWalletContext } from "../../hooks/useWalletContext"
 
@@ -44,7 +43,7 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
     setCheckoutStatusIndex(4)
     axios
       .post(`/api/nftModel/${id}/claim`)
-      .then(({ data }) => router.push(`/app/collection/${data.transfer.id}`))
+      .then(({ data }) => router.push(`/app/collection/${data.id}`))
       .catch((error) => {
         console.error(error)
       })

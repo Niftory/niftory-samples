@@ -3,14 +3,8 @@ import { useRouter } from "next/router"
 import React from "react"
 import { useQuery } from "urql"
 
-import {
-  MarketplaceListingsDocument,
-  MarketplaceListingsQuery,
-  MarketplaceListingsQueryVariables,
-} from "../../../../generated/graphql"
 import AppLayout from "../../../components/AppLayout"
 import { MarketplaceListingsTable } from "../../../components/marketplace/MarketplaceListingsTable"
-import { LoginSkeleton } from "../../../ui/Skeleton"
 
 export const NFTDetailPage = () => {
   const router = useRouter()

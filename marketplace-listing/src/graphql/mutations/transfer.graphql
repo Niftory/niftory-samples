@@ -1,5 +1,0 @@
-mutation transferNFTToWallet($nftModelId: ID!, $address: String!) {
-  transfer(nftModelId: $nftModelId, address: $address) {
-    id
-  }
-}

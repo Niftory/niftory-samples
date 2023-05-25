@@ -20,7 +20,6 @@ import {
 } from "@chakra-ui/react"
 import { useState } from "react"
 
-import { Currency, Nft } from "../../../generated/graphql"
 import { useMarketplace } from "../../hooks/useMarketplace"
 import { Subset } from "../../lib/types"
 import { Gallery } from "../../ui/Content/Gallery/Gallery"
@@ -28,10 +27,11 @@ import { useWalletContext } from "../../hooks/useWalletContext"
 import { OperationContext } from "urql"
 
 import { Field, Form, Formik } from "formik"
+import { Currency, Nft, UseQueryExecute } from "@niftory/sdk"
 
 interface Props {
   nft: Subset<Nft>
-  reExecuteQuery: (opts?: Partial<OperationContext>) => void
+  reExecuteQuery: UseQueryExecute
 }
 
 export const NFTDetail = (props: Props) => {
