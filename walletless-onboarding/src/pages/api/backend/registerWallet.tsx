@@ -1,14 +1,7 @@
 import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
-import { getClientForServer } from "../../../graphql/getClientForServer"
-import {
-  CreateNiftoryWalletDocument,
-  RegisterWalletDocument,
-  RegisterWalletInput,
-  RegisterWalletMutation,
-  RegisterWalletMutationVariables,
-} from "../../../../generated/graphql"
+import { getBackendNiftoryClient } from "graphql/getBackendNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -21,7 +14,7 @@ const handler: NextApiHandler = async (req, res) => {
     const requestMethod = req.method
     const variables = req.body
 
-    const serverSideBackendClient = await getClientForServer()
+    const client = await getBackendNiftoryClient()
 
     if (!variables?.address) {
       res.status(400).send("Address is required but was undefined")
@@ -29,12 +22,7 @@ const handler: NextApiHandler = async (req, res) => {
     }
 
     if (requestMethod === "POST") {
-      const postData = await serverSideBackendClient.request<
-        RegisterWalletMutation,
-        RegisterWalletMutationVariables
-      >(RegisterWalletDocument, {
-        address: variables?.address,
-      })
+      const postData = await client.registerWallet(variables?.address)
       res.status(200).json(postData)
     } else {
       res.status(405).end("Method not allowed, this endpoint only supports POST")

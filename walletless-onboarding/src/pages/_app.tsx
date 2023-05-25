@@ -4,16 +4,16 @@ import { ChakraProvider } from "@chakra-ui/react"
 import { AppProps as NextAppProps } from "next/app"
 import { AuthProvider } from "../components/AuthProvider"
 import { ComponentWithAuth } from "../components/ComponentWithAuth"
-import { GraphQLClientProvider } from "../components/GraphQLClientProvider"
 import theme from "../lib/chakra-theme"
 import Head from "next/head"
+import { NiftoryClientProvider } from "graphql/niftoryClientProvider"
+import { NiftoryWalletInitializer } from "@components/NiftoryWalletInitializer"
 
 type AppProps<P = {}> = NextAppProps<P> & {
   Component: ComponentWithAuth
 }
 
 const App = ({ Component, pageProps: { session, auth, ...pageProps } }: AppProps): JSX.Element => {
-
   return (
     <>
       <Head>
@@ -21,11 +21,12 @@ const App = ({ Component, pageProps: { session, auth, ...pageProps } }: AppProps
       </Head>
       <SessionProvider session={session} refetchInterval={60 * 60}>
         <AuthProvider requireAuth={Component.requireAuth}>
-          <GraphQLClientProvider>
+          <NiftoryClientProvider>
             <ChakraProvider theme={theme}>
+              <NiftoryWalletInitializer />
               <Component {...pageProps} />
             </ChakraProvider>
-          </GraphQLClientProvider>
+          </NiftoryClientProvider>
         </AuthProvider>
       </SessionProvider>
     </>

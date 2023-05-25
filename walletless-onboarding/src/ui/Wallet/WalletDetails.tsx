@@ -1,22 +1,27 @@
 import React from "react"
-import { SimpleGrid, Spinner, Button, Tooltip, Box, Center, useDisclosure, VStack } from "@chakra-ui/react"
+import {
+  SimpleGrid,
+  Spinner,
+  Button,
+  Tooltip,
+  Box,
+  Center,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react"
 import {
   FiTool as WalletStatusIcon,
   FiPackage as WalletItemsIcon,
   FiAlertCircle as WalletDetailsIcon,
   FiUserCheck as WalletOwnerIcon,
 } from "react-icons/fi"
-import {
-  UserNftsDocument,
-  UserNftsQuery,
-  UserNftsQueryVariables,
-  WalletState,
-} from "../../../generated/graphql"
 import { backendClient } from "../../graphql/backendClient"
 import { WalletGridBox } from "./WalletGridBox"
 import { useRouter } from "next/router"
 import { WalletSwitcherModal } from "./WalletSwitcherModal"
-import { useGraphQLQuery } from "graphql/useGraphQLQuery"
+
+import { WalletState, useNftsQuery } from "@niftory/sdk"
+import { useAuthContext } from "hooks/useAuthContext"
 
 export interface WalletDetailsProps {
   walletAddress: string
@@ -30,9 +35,13 @@ export const WalletDetails = (props: WalletDetailsProps) => {
   const { walletAddress, walletStatus, walletItems, walletOwnerEmail, isLoading = false } = props
   const router = useRouter()
   const disclosure = useDisclosure()
-  const { nfts } = useGraphQLQuery<UserNftsQuery, UserNftsQueryVariables>({
-    query: UserNftsDocument,
+  const { session } = useAuthContext()
+  const [{ data }] = useNftsQuery({
+    variables: { userId: session?.userId as string },
+    pause: !!session.userId,
   })
+
+  const nfts = data?.nfts
 
   return (
     <>
@@ -58,13 +67,12 @@ export const WalletDetails = (props: WalletDetailsProps) => {
               </Box>
             </Tooltip>
             <WalletGridBox description={walletStatus} icon={WalletStatusIcon} title={"Status"} />
-            <Tooltip label="View your nfts" hasArrow placement="top">
-              <Box cursor="pointer">
+            <Tooltip label="Number of NFTs you own" hasArrow placement="top">
+              <Box>
                 <WalletGridBox
-                  description={nfts?.items?.length ?? ""}
+                  description={nfts?.items?.length ?? "0"}
                   icon={WalletItemsIcon}
                   title={"Number of Items"}
-                  onClick={() => router.push("/app/collection")}
                 />
               </Box>
             </Tooltip>
@@ -95,7 +103,6 @@ export const WalletDetails = (props: WalletDetailsProps) => {
                 Retry Wallet Creation
               </Button>
             ) : null}
-
           </VStack>
         </>
       )}

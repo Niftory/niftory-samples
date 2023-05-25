@@ -14,6 +14,7 @@ import { DEFAULT_TITLE } from "../constants/title"
 import posthog from "posthog-js"
 import { useRouter } from "next/router"
 import { NiftoryClientProvider } from "graphql/niftoryClientProvider"
+import { NiftoryWalletInitializer } from "@components/NiftoryWalletInitializer"
 
 type AppProps<P = {}> = NextAppProps<P> & {
   Component: ComponentWithAuth
@@ -61,6 +62,7 @@ const App = ({ Component, pageProps: { session, auth, ...pageProps } }: AppProps
           <GraphQLClientProvider>
             <NiftoryClientProvider>
               <ChakraProvider theme={theme}>
+                <NiftoryWalletInitializer />
                 <Component {...pageProps} />
               </ChakraProvider>
             </NiftoryClientProvider>

@@ -74,21 +74,6 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
     }
   }, [requireAuth, session, router, isLoading, signOut])
 
-  const client = useNiftoryClient()
-
-  const verifyWalletCreation = useCallback(async () => {
-    if (session && !isLoading && client) {
-      const wallet = await client.createNiftoryWallet()
-      if (!wallet) {
-        backendClient("createWallet")
-      }
-    }
-  }, [client, isLoading, session])
-
-  useEffect(() => {
-    verifyWalletCreation()
-  }, [verifyWalletCreation])
-
   return (
     <AuthContext.Provider value={{ session, isLoading, signIn, signOut }}>
       {children}
