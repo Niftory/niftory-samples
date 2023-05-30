@@ -5,7 +5,7 @@ import { WalletProvider } from "../components/wallet/WalletProvider"
 import { ComponentWithWallet } from "../lib/types"
 
 import theme from "../lib/chakra-theme"
-import { GraphQLClientProvider } from "../lib/GraphQLClientProvider"
+import { NiftoryClientProvider } from "../lib/NiftoryClientProvider"
 
 type AppProps<P = {}> = NextAppProps<P> & {
   Component: ComponentWithWallet
@@ -13,11 +13,11 @@ type AppProps<P = {}> = NextAppProps<P> & {
 
 const App = ({ Component, pageProps: { ...pageProps } }: AppProps): JSX.Element => (
   <WalletProvider requireWallet={Component.requireWallet}>
-    <GraphQLClientProvider>
+    <NiftoryClientProvider>
       <ChakraProvider theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>
-    </GraphQLClientProvider>
+    </NiftoryClientProvider>
   </WalletProvider>
 )
 

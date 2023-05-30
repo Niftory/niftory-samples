@@ -1,27 +1,6 @@
 import { NextApiHandler } from "next"
-import { gql } from "graphql-request"
-import { getBackendGraphQLClient } from "../../../../lib/BackendGraphQLClient"
-import { NftModelDocument, TransferNftToWalletDocument } from "../../../../../generated/graphql"
 import { getAddressFromCookie } from "../../../../lib/cookieUtils"
-
-gql`
-  query nftModel($id: ID!, $nftModelId: ID!) {
-    nfts(id: $id) {
-      items {
-        id
-      }
-      cursor
-    }
-  }
-`
-
-gql`
-  mutation transferNFTToUser($nftModelId: ID!, $address: String!) {
-    transfer(nftModelId: $nftModelId, address: $address) {
-      id
-    }
-  }
-`
+import { getBackendNiftoryClient } from "../../../../lib/backendNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "POST") {
@@ -35,23 +14,24 @@ const handler: NextApiHandler = async (req, res) => {
     return
   }
 
-
-  const { nftModelId } = req.query
+  const { nftModelId } = req.query as { nftModelId: string }
 
   if (!nftModelId) {
     res.status(400).send("nftModelId is required")
     return
   }
 
-  const backendGQLClient = await getBackendGraphQLClient()
-  const nftModelResponse = await backendGQLClient.request(NftModelDocument, { id: nftModelId })
+  const niftoryClient = await getBackendNiftoryClient()
+  const nftModel = await niftoryClient.getNftModel(nftModelId)
 
-  if (!nftModelResponse?.nftModel?.attributes?.claimable) {
+  if (!nftModel?.attributes?.claimable) {
     res.status(400).end("NFT is not claimable")
   }
 
-  const transferResponse = await backendGQLClient.request(TransferNftToWalletDocument, 
-    {nftModelId: nftModelId, address})
+  const transferResponse = await niftoryClient.transfer({
+    nftModelId: nftModelId,
+    address,
+  })
 
   res.status(200).json(transferResponse)
 }
