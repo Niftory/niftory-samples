@@ -2,6 +2,7 @@ import { NextApiHandler } from "next"
 import { gql } from "graphql-request"
 import { getBackendGraphQLClient } from "../../../../lib/BackendGraphQLClient"
 import { getAddressFromCookie } from "../../../../lib/cookieUtils"
+import { getBackendNiftoryClient } from "../../../../lib/backendNiftoryClient"
 
 const CheckoutWithDapperWallet = gql`
   mutation CheckoutWithDapperWallet(
@@ -44,22 +45,22 @@ const handler: NextApiHandler = async (req, res) => {
     return
   }
 
-  const { nftModelId } = req.query
+  const { nftModelId } = req.query as { nftModelId: string }
   if (!nftModelId) {
     res.status(400).send("nftModelId is required")
     return
   }
 
-  const backendGQLClient = await getBackendGraphQLClient()
+  const niftoryClient = await getBackendNiftoryClient()
 
-  const checkoutResponse = await backendGQLClient.request(CheckoutWithDapperWallet, {
+  const checkoutResponse = await niftoryClient.checkoutWithDapperWallet({
     nftModelId,
     address,
     price: 10,
     expiry: Number.MAX_SAFE_INTEGER,
   })
 
-  res.status(200).json(checkoutResponse.checkoutWithDapperWallet)
+  res.status(200).json(checkoutResponse)
 }
 
 export default handler

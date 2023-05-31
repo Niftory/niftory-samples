@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@0no-co/graphql.web@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.0.1.tgz#db3da0d2cd41548b50f0583c0d2f4743c767e56b"
+  integrity sha512-6Yaxyv6rOwRkLIvFaL0NrLDgfNqC/Ng9QOPmTmlqW4mORXMEKmh5NYGkIvvt5Yw8fZesnMAqkj8cIqTj8f40cQ==
+
 "@ampproject/remapping@^2.1.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.2.0.tgz#56c133824780de3174aed5ab6834f3026790154d"
@@ -1971,6 +1976,15 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-12.2.0.tgz#9f66664f9122ca555b96a5f2fc6e2af677bf801b"
   integrity sha512-OI14ozFLThEV3ey6jE47zrzSTV/6eIMsvbwozo+XfdWqOPwQ7X00YkRx4GVMKMC0rM44oGS2gmwMKYpe4EblnA==
 
+"@niftory/sdk@^0.0.0-alpha.20":
+  version "0.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@niftory/sdk/-/sdk-0.0.0-alpha.20.tgz#39ada2521fe493c0f73b5e9f942515f1795128ec"
+  integrity sha512-4/vGniHBtxBq4eOnvsGLUOHoGDBHxNM47lHBvbXQckeEdOEGXbWukS/LD6xyD05/SsJEerwcxCNP3adIeB+8DA==
+  dependencies:
+    "@onflow/fcl" "^1.3.2"
+    graphql "^16.6.0"
+    urql "^4.0.1"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -2341,6 +2355,14 @@
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     wonka "^6.0.0"
+
+"@urql/core@^4.0.0":
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/@urql/core/-/core-4.0.7.tgz#8918a956f8e2ffbaeb3aae58190d728813de5841"
+  integrity sha512-UtZ9oSbSFODXzFydgLCXpAQz26KGT1d6uEfcylKphiRWNXSWZi8k7vhJXNceNm/Dn0MiZ+kaaJHKcnGY1jvHRQ==
+  dependencies:
+    "@0no-co/graphql.web" "^1.0.1"
+    wonka "^6.3.2"
 
 "@urql/exchange-retry@^1.0.0":
   version "1.0.0"
@@ -5760,6 +5782,14 @@ urql@^3.0.3:
     "@urql/core" "^3.0.3"
     wonka "^6.0.0"
 
+urql@^4.0.1:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/urql/-/urql-4.0.2.tgz#c67a64fe80a5a66f2916a24e31493e0c91ab2f56"
+  integrity sha512-jMb71UGtoAHI4A0TO15ZUSG8qvUxC5fBTXmUq/DyE3WWcnJkZbnMCBlcZIzMrXK4txAMIHE718jsaUujRkdlkg==
+  dependencies:
+    "@urql/core" "^4.0.0"
+    wonka "^6.3.2"
+
 use-callback-ref@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/use-callback-ref/-/use-callback-ref-1.3.0.tgz#772199899b9c9a50526fedc4993fc7fa1f7e32d5"
@@ -5873,6 +5903,11 @@ wonka@^6.0.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/wonka/-/wonka-6.1.0.tgz#65297ebf7031ae46d4b0c56da93950fb3ae5baaa"
   integrity sha512-VgiMCz7BXOiDbgpVhf5iNhK7hurteY5Jv0fDJewUkY0s4fbxQD2iKqfGxNXNTwp2v3bgT8QVu2l5H7YdkZ5WIA==
+
+wonka@^6.3.2:
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/wonka/-/wonka-6.3.2.tgz#6f32992b332251d7b696b038990f4dc284b3b33d"
+  integrity sha512-2xXbQ1LnwNS7egVm1HPhW2FyKrekolzhpM3mCwXdQr55gO+tAiY76rhb32OL9kKsW8taj++iP7C6hxlVzbnvrw==
 
 word-wrap@^1.2.3:
   version "1.2.3"

@@ -1,7 +1,7 @@
 import { Box, SimpleGrid, Spinner } from "@chakra-ui/react"
 import * as React from "react"
 
-import { Nft, NftBlockchainState } from "../../../generated/graphql"
+import { Nft, NftBlockchainState } from "@niftory/sdk"
 import { Subset } from "../../lib/types"
 import { CallToAction } from "../../ui/CallToAction"
 import { NFTCard } from "./NFTCard"
