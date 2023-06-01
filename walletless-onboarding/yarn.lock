@@ -1983,10 +1983,10 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-12.2.0.tgz#9f66664f9122ca555b96a5f2fc6e2af677bf801b"
   integrity sha512-OI14ozFLThEV3ey6jE47zrzSTV/6eIMsvbwozo+XfdWqOPwQ7X00YkRx4GVMKMC0rM44oGS2gmwMKYpe4EblnA==
 
-"@niftory/sdk@^0.0.0-alpha.17":
-  version "0.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@niftory/sdk/-/sdk-0.0.0-alpha.17.tgz#2fe05b16d625e763a29015f7d6fbecd186b83b28"
-  integrity sha512-TF9II4zFgG1I175eEFmp9JrA11KFKg6V5gl9lMa46hpCS3ojoQOx76+80FYPNT4CKhnqbpDRwX21qa0h7DIdxQ==
+"@niftory/sdk@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@niftory/sdk/-/sdk-0.0.0.tgz#8099ea5ce9dabf5c55f5a099122780be80fbb864"
+  integrity sha512-+K6833B9FnRgtHRdjSuKpWsdYBJ9hA6XAWUdo8Lx3kOJUmQ/uaht5O8GgalMZDGbm9TIe7ihzJozAVBJ3X4fCQ==
   dependencies:
     "@onflow/fcl" "^1.3.2"
     graphql "^16.6.0"
