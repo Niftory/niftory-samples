@@ -4,7 +4,6 @@ import { ChakraProvider } from "@chakra-ui/react"
 import { AppProps as NextAppProps } from "next/app"
 import { AuthProvider } from "../components/AuthProvider"
 import { ComponentWithAuth } from "../components/ComponentWithAuth"
-import { ReactQueryClientProvider } from "../components/ReactQueryClientProvider"
 import { MetaMaskProvider } from "metamask-react"
 import { NiftoryClientProvider } from "../components/NiftoryClientProvider"
 
@@ -16,16 +15,14 @@ const App = ({ Component, pageProps: { session, auth, ...pageProps } }: AppProps
   // Refetch session every hour since niftory tokens expire after 1 hour
   <SessionProvider session={session} refetchInterval={60 * 60}>
     <AuthProvider requireAuth={Component.requireAuth}>
-      <ReactQueryClientProvider>
-        <NiftoryClientProvider>
-          <ChakraProvider>
-            {/* This is for Polygon/Eth blockchains only. This component is a no-op for the Flow blockchain */}
-            <MetaMaskProvider>
-              <Component {...pageProps} />
-            </MetaMaskProvider>
-          </ChakraProvider>
-        </NiftoryClientProvider>
-      </ReactQueryClientProvider>
+      <NiftoryClientProvider>
+        <ChakraProvider>
+          {/* This is for Polygon/Eth blockchains only. This component is a no-op for the Flow blockchain */}
+          <MetaMaskProvider>
+            <Component {...pageProps} />
+          </MetaMaskProvider>
+        </ChakraProvider>
+      </NiftoryClientProvider>
     </AuthProvider>
   </SessionProvider>
 )
