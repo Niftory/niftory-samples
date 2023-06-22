@@ -1,0 +1,9 @@
+mutation CompleteMarketplaceCancel($id: ID!, $transactionId: String!) {
+  completeMarketplaceCancel(id: $id, transactionId: $transactionId) {
+    state
+    id
+    nft {
+      id
+    }
+  }
+}
