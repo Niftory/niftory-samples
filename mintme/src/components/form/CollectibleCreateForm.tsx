@@ -22,6 +22,7 @@ const createNFTModel = async (setId: string, nftModelData: NftModelCreateInput) 
   let toastId
   try {
     toastId = toast.loading("Creating your NFTs...")
+    console.log({ setId: setId, data: nftModelData })
     const nftModel = await backendClient<NftModel>("createNFTModel", {
       setId: setId,
       data: nftModelData,
@@ -104,10 +105,7 @@ export const CollectibleCreateForm = (props: StackProps) => {
       if (!createNFTModelData) {
         let currentSet = userSets?.[0]
         if (!currentSet) {
-          const { createNFTSet: createNFTSetData } = await backendClient<CreateNftSetMutation>(
-            "createNFTSet"
-          )
-          currentSet = createNFTSetData
+          currentSet = await backendClient("createNFTSet")
         }
 
         createNFTModelData = await createNFTModel(currentSet?.id, collectibleData)
