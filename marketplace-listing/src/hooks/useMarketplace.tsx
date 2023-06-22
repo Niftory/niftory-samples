@@ -1,7 +1,6 @@
 import axios from "axios"
 import { gql } from "graphql-request"
 import { useQuery } from "urql"
-
 import * as fcl from "@onflow/fcl"
 import {
   CREATE_MARKETPLACE_LISTING_SCRIPT,

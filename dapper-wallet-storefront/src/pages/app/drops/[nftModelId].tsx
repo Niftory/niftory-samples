@@ -28,6 +28,9 @@ const NFTModelDetailPage = () => {
       },
     ],
   }
+  
+
+  const attributes = nftModel?.attributes
 
   const attributes = nftModel?.attributes
 

@@ -17,7 +17,6 @@ import {
 } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-
 import { useMarketplace } from "../../hooks/useMarketplace"
 import { useWalletContext } from "../../hooks/useWalletContext"
 import { Subset } from "../../lib/types"

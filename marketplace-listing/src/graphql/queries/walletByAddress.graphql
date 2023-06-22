@@ -1,0 +1,8 @@
+query walletByAddress($address: String!) {
+  walletByAddress(address: $address) {
+    id
+    address
+    state
+    verificationCode
+  }
+}
