@@ -6,8 +6,6 @@ import * as fcl from "@onflow/fcl"
 import { signOut as nextAuthSignOut, signIn as nextAuthSignIn } from "next-auth/react"
 import { Session } from "next-auth"
 import { backendClient } from "../graphql/backendClient"
-import { WalletDocument } from "../../generated/graphql"
-import { getClientFromSession } from "../graphql/getClientFromSession"
 
 type AuthComponentProps = {
   children: React.ReactNode
@@ -29,7 +27,6 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
   const { data: session, status } = useSession()
   const sessionLoading = status === "loading"
 
-
   const [isAuthenticating, setIsAuthenticating] = useState(false)
   const isLoading = sessionLoading || isAuthenticating
 
@@ -46,8 +43,7 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
     setIsAuthenticating(false)
   }, [])
 
-  useEffect(() => {
-  }, [session])
+  useEffect(() => {}, [session])
 
   useEffect(() => {
     if (!requireAuth || isLoading) {
@@ -65,18 +61,6 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
       return
     }
   }, [requireAuth, session, router, isLoading, signOut])
-
-  useEffect(() => {
-    if (session && !isLoading) {
-      ; (async () => {
-        const client = await getClientFromSession(session)
-        const { wallet } = await client.request(WalletDocument)
-        if (!wallet) {
-          backendClient("createWallet")
-        }
-      })()
-    }
-  }, [isLoading, session])
 
   return (
     <AuthContext.Provider value={{ session, isLoading, signIn, signOut }}>

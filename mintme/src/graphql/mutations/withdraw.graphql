@@ -1,5 +1,0 @@
-mutation withdraw($receiverAddress: String!, $id: ID!) {
-  withdraw(receiverAddress: $receiverAddress, id: $id) {
-    id
-  }
-}

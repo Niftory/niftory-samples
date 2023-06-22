@@ -1,9 +1,8 @@
 import { Flex, Heading, Modal, ModalContent, ModalOverlay, VStack } from "@chakra-ui/react"
-import { useGraphQLQuery } from "graphql/useGraphQLQuery"
-import { AppUserDocument, Wallet, WalletState, WalletType } from "../../../generated/graphql"
 import { useMemo } from "react"
-import { useFlowUser } from "hooks/userFlowUser"
+
 import { WalletCard } from "ui/Wallet/WalletCard"
+import { Wallet, WalletState, useAppUserQuery } from "@niftory/sdk"
 
 export interface MenuModalItems {
   title: string
@@ -22,7 +21,9 @@ interface MenuModalProps {
 export const WalletSelectModal = ({ disclosure, onWalletSelect }: MenuModalProps) => {
   const { isOpen, onClose } = disclosure
 
-  const { appUser } = useGraphQLQuery({ query: AppUserDocument })
+  const [{ data }] = useAppUserQuery()
+
+  const appUser = data?.appUser
 
   //  Filter out wallets that are not ready and sort to make wallets consistent order
   const wallets = useMemo(
@@ -34,8 +35,6 @@ export const WalletSelectModal = ({ disclosure, onWalletSelect }: MenuModalProps
         }),
     [appUser?.wallets]
   )
-
-  const flowUser = useFlowUser()
 
   return (
     <Modal onClose={onClose} size="xl" isOpen={isOpen} isCentered>

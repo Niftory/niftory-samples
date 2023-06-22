@@ -1,35 +1,25 @@
-import { filter } from "@chakra-ui/system"
 import router from "next/router"
 import Masonry from "react-masonry-css"
-import {
-  UserNftsQuery,
-  UserNftsQueryVariables,
-  UserNftsDocument,
-  Nft,
-  NftModel,
-} from "../../../generated/graphql"
-import { useGraphQLQuery } from "../../graphql/useGraphQLQuery"
+
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { MasonryCard } from "../../ui/Card/MasonryCard"
 import { Empty } from "../../ui/Empty/Empty"
 import { LoginSkeleton } from "../../ui/Skeleton"
+import { useNftsQuery, NftModel, Nft } from "@niftory/sdk"
 
 export const UserNFTCollection = () => {
   const { isLoading } = useAuthContext()
 
-  const {
-    nfts,
-    fetching: fetchingNfts,
-    reExecuteQuery,
-  } = useGraphQLQuery<UserNftsQuery, UserNftsQueryVariables>({
-    query: UserNftsDocument,
+  const [{ data, fetching: fetchingNfts }, reExecuteQuery] = useNftsQuery({
     requestPolicy: "network-only",
     pause: isLoading,
+    variables: {},
   })
 
   if (fetchingNfts) {
     return <LoginSkeleton />
   }
+  const nfts = data?.nfts
 
   if (!fetchingNfts && nfts?.items?.length == 0) {
     return (

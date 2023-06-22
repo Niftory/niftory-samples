@@ -1,9 +1,9 @@
 import { Button } from "@chakra-ui/react"
-import { useFlowUser } from "hooks/userFlowUser"
-import { Wallet, WalletState } from "../../../generated/graphql"
+import { useFlowUser } from "@niftory/sdk"
 import { ConfigureWallet } from "./ConfigureWallet"
 import { VerifyWallet } from "./VerifyWallet"
 import * as fcl from "@onflow/fcl"
+import { Wallet, WalletState } from "@niftory/sdk"
 
 interface Props {
   wallet: Wallet

@@ -42,7 +42,7 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
 
   const signTransaction = useCallback(async (transaction: string) => {
     const response = await axios.post("/api/signTransaction", { transaction })
-    return response.data.signTransactionForDapperWallet
+    return response.data
   }, [])
 
   const handleCheckout = useCallback(async () => {
@@ -116,17 +116,15 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
   }, [id, router, signTransaction])
 
   const handleClaim = useCallback(async () => {
-
     setCheckoutStatusIndex(4)
     axios
       .post(`/api/nftModel/${id}/claim`)
-      .then(({ data }) => router.push(`/app/collection/${data.transfer.id}`))
+      .then(({ data }) => router.push(`/app/collection/${data.id}`))
       .catch((error) => {
         console.error(error)
       })
       .finally(() => setCheckoutStatusIndex(5))
   }, [id, router])
-
 
   return (
     <Stack direction={{ base: "column-reverse", lg: "row" }}>
@@ -148,17 +146,19 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
           <Text color="page.text">{metadata.description}</Text>
           <Text color="page.text">{metadata.amount} Total Available </Text>
         </Stack>
-        {!claimable && <Button
-          isLoading={!currentUser?.addr || checkoutStatusIndex > 0}
-          loadingText={checkoutStatusMessages[checkoutStatusIndex]}
-          onClick={handleCheckout}
-          my="auto"
-          p="8"
-        >
-          <Text>Checkout</Text>
-        </Button>}
+        {!claimable && (
+          <Button
+            isLoading={!currentUser?.addr || checkoutStatusIndex > 0}
+            loadingText={checkoutStatusMessages[checkoutStatusIndex]}
+            onClick={handleCheckout}
+            my="auto"
+            p="8"
+          >
+            <Text>Checkout</Text>
+          </Button>
+        )}
 
-        {claimable &&
+        {claimable && (
           <Button
             isLoading={!currentUser?.addr || checkoutStatusIndex > 0}
             loadingText={checkoutStatusMessages[checkoutStatusIndex]}
@@ -167,7 +167,8 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
             p="8"
           >
             <Text>Claim This NFT</Text>
-          </Button>}
+          </Button>
+        )}
       </Stack>
       <Gallery rootProps={{ overflow: "hidden", flex: "1" }} content={metadata.content} />
     </Stack>

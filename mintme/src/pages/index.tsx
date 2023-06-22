@@ -1,11 +1,7 @@
 import AppLayout from "../components/AppLayout"
-import { useAuthContext } from "../hooks/useAuthContext"
 import { Center, Flex, Heading, Box, VStack, Text } from "@chakra-ui/react"
-import { useRouter } from "next/router"
 import { CollectibleCreateForm } from "../components/form/CollectibleCreateForm"
 import { LoginText } from "../ui/Home/LoginText"
-import { GetNftSetsQuery } from "../../generated/graphql"
-import { useBackendClient } from "../graphql/backendClient"
 import { Showcase } from "ui/Home/Showcase"
 import { HowItWorks } from "ui/Home/HowItWorks"
 

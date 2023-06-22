@@ -2,20 +2,16 @@ import { Box, Center, Spinner } from "@chakra-ui/react"
 import { useQuery } from "urql"
 
 import AppLayout from "../../../components/AppLayout"
-import {
-  NftModelsDocument,
-  NftModelsQuery,
-  NftModelsQueryVariables,
-} from "../../../../generated/graphql"
+
 import { SectionHeader } from "../../../ui/SectionHeader"
 import { useWalletContext } from "../../../hooks/useWalletContext"
 import { NFTModelsGrid } from "../../../components/drops/NFTModelsGrid"
+import { useNftModelsQuery } from "@niftory/sdk"
 
 const MarketplacePage = () => {
   const { currentUser } = useWalletContext()
 
-  const [result] = useQuery<NftModelsQuery, NftModelsQueryVariables>({
-    query: NftModelsDocument,
+  const [result] = useNftModelsQuery({
     variables: {
       appId: process.env.NEXT_PUBLIC_CLIENT_ID,
       filter: { hasMarketplaceListing: true },

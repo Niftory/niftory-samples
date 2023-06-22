@@ -1,14 +1,9 @@
 import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
-import { getClientForServer } from "../../../graphql/getClientForServer"
 import * as jose from "jose"
-import {
-  GetNftSetsDocument,
-  GetNftSetsQuery,
-  GetNftSetsQueryVariables,
-} from "../../../../generated/graphql"
 import posthog from "posthog-js"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -21,7 +16,7 @@ const handler: NextApiHandler = async (req, res) => {
       res.status(401).send("There must be a user signed in to use this API route")
     }
 
-    const serverSideBackendClient = await getClientForServer()
+    const niftoryClient = await getNiftoryClientForServer()
 
     if (requestMethod === "POST") {
       const nftModelId = variables?.id
@@ -29,13 +24,8 @@ const handler: NextApiHandler = async (req, res) => {
         res.status(400).send("There must an nft model id to share")
       }
 
-      const { sets } = await serverSideBackendClient.request<
-        GetNftSetsQuery,
-        GetNftSetsQueryVariables
-      >(GetNftSetsDocument, {
-        filter: {
-          tags: [session.userId as string],
-        },
+      const sets = await niftoryClient.getSets({
+        tags: [session.userId as string],
       })
 
       const modelsId = sets

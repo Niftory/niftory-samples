@@ -1,15 +1,8 @@
 import { useEffect } from "react"
 
 import * as fcl from "@onflow/fcl"
-import { WalletSetupBox } from "./WalletSetupBox"
-import { useFlowUser } from "hooks/userFlowUser"
-import { useGraphQLMutation } from "graphql/useGraphQLMutation"
-import {
-  RegisterWalletDocument,
-  RegisterWalletMutation,
-  RegisterWalletMutationVariables,
-} from "../../../generated/graphql"
 import { Button } from "@chakra-ui/react"
+import { useFlowUser, useRegisterWalletMutation } from "@niftory/sdk"
 
 interface Props {
   onRegister?: () => void
@@ -18,10 +11,7 @@ interface Props {
 export function RegisterWallet({ onRegister }: Props) {
   const flowUser = useFlowUser()
 
-  const { executeMutation: registerWallet } = useGraphQLMutation<
-    RegisterWalletMutation,
-    RegisterWalletMutationVariables
-  >(RegisterWalletDocument)
+  const [_, registerWallet] = useRegisterWalletMutation()
 
   // When the user logs in, register their wallet. This is because we need to register after fcl.login and it doesn't return a promise.
   useEffect(() => {

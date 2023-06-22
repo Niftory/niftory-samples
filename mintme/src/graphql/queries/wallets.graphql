@@ -1,9 +1,0 @@
-query Wallets($appId: ID!) {
-  wallets(appId: $appId) {
-    items {
-      id
-      address
-      state
-    }
-  }
-}

@@ -15,27 +15,25 @@ export const apiRoutesTable = {
   deleteNFTModel: "/api/backend/deleteNFTModel",
 }
 
-export const useBackendClient = <Y extends Record<string, unknown>, X = Object>(
+type ResponseType = Record<string, unknown> | Record<string, unknown>[]
+
+export const useBackendClient = <Y extends ResponseType, X = Object>(
   apiName: keyof typeof apiRoutesTable,
   variables?: X
 ) => {
-  const { data, error } = useSWR<Y>(createSWRKey<X>(apiName, variables), backendFetcher)
-  return {
-    ...data,
-    error,
-  }
+  return useSWR<Y>(createSWRKey<X>(apiName, variables), backendFetcher)
 }
 
 const createSWRKey = <X extends Object>(apiName: keyof typeof apiRoutesTable, variables: X) => {
   return [apiName, variables]
 }
 
-const backendFetcher = <T extends Record<string, unknown>>(
+const backendFetcher = <T extends ResponseType>(
   apiName: keyof typeof apiRoutesTable,
   variables?: Object
 ) => backendClient(apiName, variables).then((data: T) => data)
 
-export async function backendClient<T extends Record<string, unknown>, X = Object>(
+export async function backendClient<T extends ResponseType, X = Object>(
   apiName: keyof typeof apiRoutesTable,
   variables?: X
 ): Promise<T> {

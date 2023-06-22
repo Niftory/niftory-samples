@@ -1,19 +1,12 @@
 import * as fcl from "@onflow/fcl"
 import { useRouter } from "next/router"
-import { useCallback, useEffect } from "react"
-import { useQuery } from "urql"
-
-import {
-  WalletByAddressQuery,
-  WalletByAddressDocument,
-  Wallet,
-  WalletState,
-} from "../../../generated/graphql"
+import { useCallback } from "react"
 import { useWalletContext } from "../../hooks/useWalletContext"
 import { ConfigureWallet } from "./ConfigureWallet"
 import { RegisterWallet } from "./RegisterWallet"
 import { VerifyWallet } from "./VerifyWallet"
 import { WalletSetupBox } from "./WalletSetupBox"
+import { Wallet, WalletState, useWalletByAddressQuery } from "@niftory/sdk"
 
 export type WalletSetupStepProps = {
   setIsLoading: (isLoading: boolean) => void
@@ -30,8 +23,7 @@ export function WalletSetup() {
   const router = useRouter()
   const { currentUser } = useWalletContext()
 
-  const [walletByAddressResponse, reExecuteQuery] = useQuery<WalletByAddressQuery>({
-    query: WalletByAddressDocument,
+  const [walletByAddressResponse, reExecuteQuery] = useWalletByAddressQuery({
     variables: { address: currentUser?.addr },
     pause: !currentUser?.addr,
   })

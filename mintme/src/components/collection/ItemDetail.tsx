@@ -10,27 +10,15 @@ import {
   useDisclosure,
   VStack,
   Link as ChakraLink,
-  Link,
   Image,
 } from "@chakra-ui/react"
 
-import {
-  ContractDocument,
-  ContractQuery,
-  ContractQueryVariables,
-  Nft,
-  NftModel,
-  UserNftsDocument,
-  UserNftsQuery,
-  UserNftsQueryVariables,
-} from "../../../generated/graphql"
 import { Subset } from "../../lib/types"
 import { useRouter } from "next/router"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { InfoPopOver } from "../../ui/PopOver/InfoPopOver"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { backendClient } from "../../graphql/backendClient"
-import { useGraphQLQuery } from "../../graphql/useGraphQLQuery"
 import { MintRequestModal } from "../../ui/Modal/MintRequestModal"
 import { MediaBox } from "../../ui/MediaBox"
 import { BsFileEarmarkCode as ContractIcon } from "react-icons/bs"
@@ -40,6 +28,7 @@ import { useTransfer } from "hooks/useTransfer"
 import toast from "react-hot-toast"
 import posthog from "posthog-js"
 import { TransactionCollapsibleTable } from "ui/TransactionCollapsibleTable"
+import { useContractQuery, useNftsQuery, NftModel, Nft } from "@niftory/sdk/dist"
 
 interface Props {
   nftModel: Subset<NftModel>
@@ -65,7 +54,7 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
     properties:
       Object.keys(nftModel?.metadata ?? {})?.map((item) => ({
         key: item,
-        value: nftModel?.metadata[item],
+        value: nftModel?.metadata?.[item],
       })) ?? [],
     attributes:
       Object.keys(nftModel?.attributes ?? {})?.map((item) => ({
@@ -75,17 +64,13 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
     supply: nftModel?.quantity,
   }
 
-  const {
-    nfts,
-    fetching: fetchingNfts,
-    reExecuteQuery: reExecuteNFtsQuery,
-  } = useGraphQLQuery<UserNftsQuery, UserNftsQueryVariables>({
-    query: UserNftsDocument,
-    pause: !session,
-  })
+  const [nftsResponse, reExecuteNFtsQuery] = useNftsQuery({ pause: !session, variables: {} })
+
+  const nfts = nftsResponse?.data?.nfts
+  const fetchingNfts = nftsResponse.fetching
 
   useEffect(() => {
-    if (token && nftModel.attributes["claimable"]) {
+    if (token && nftModel.attributes?.["claimable"]) {
       posthog.capture("CLAIM_LINK_OPENED", {
         posthogEventDetail: "User opens claim view",
         nftModel,
@@ -141,9 +126,9 @@ export const ItemDetail = ({ nftModel, nft }: Props) => {
   const alreadyClaimed = nfts?.items?.some((item) => item.model.id === nftModel.id)
   const nftsRemaining = nftModel.quantity > nftModel.quantityMinted
 
-  const { contract } = useGraphQLQuery<ContractQuery, ContractQueryVariables>({
-    query: ContractDocument,
-  })
+  const [{ data }] = useContractQuery()
+
+  const { contract } = data ?? {}
 
   const renderButtonText = () => {
     if (!nftsRemaining) {

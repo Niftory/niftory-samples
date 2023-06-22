@@ -1,8 +1,7 @@
 import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
-import { getClientForServer } from "../../../graphql/getClientForServer"
-import { CreateNiftoryWalletDocument } from "../../../../generated/graphql"
+import { getBackendNiftoryClient } from "graphql/getBackendNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -14,16 +13,10 @@ const handler: NextApiHandler = async (req, res) => {
     }
     const requestMethod = req.method
     const userId = session.userId as string
-    const serverSideBackendClient = await getClientForServer()
+    const client = await getBackendNiftoryClient()
 
     if (requestMethod === "POST") {
-      const postData = await serverSideBackendClient.request(CreateNiftoryWalletDocument, {
-        userId,
-      })
-
-      serverSideBackendClient.request(CreateNiftoryWalletDocument, {
-        userId,
-      })
+      const postData = await client.createNiftoryWallet({ userId })
       res.status(200).json(postData)
     } else {
       res.status(405).end("Method not allowed, this endpoint only supports POST")

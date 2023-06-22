@@ -1,9 +1,8 @@
 import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
-import { getClientForServer } from "../../../graphql/getClientForServer"
-import { CreateNftModelDocument } from "../../../../generated/graphql"
 import posthog from "posthog-js"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 const handler: NextApiHandler = async (req, res) => {
   try {
     const session = await unstable_getServerSession(req, res, AUTH_OPTIONS)
@@ -15,15 +14,16 @@ const handler: NextApiHandler = async (req, res) => {
     const requestMethod = req.method
     const variables = req.body
 
-    const serverSideBackendClient = await getClientForServer()
+    const niftoryClient = await getNiftoryClientForServer()
 
     if (requestMethod === "POST") {
-      const postData = await serverSideBackendClient.request(CreateNftModelDocument, variables)
+      const postData = await niftoryClient.createNftModel(variables)
       res.status(200).json(postData)
     } else {
       res.status(405).end("Method not allowed, this endpoint only supports POST")
     }
   } catch (e) {
+    console.error(e)
     res.status(500).json(e)
     posthog.capture("ERROR_CREATENFTMODEL_API", e)
   }

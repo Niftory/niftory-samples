@@ -1,12 +1,6 @@
 import axios from "axios"
 import { gql } from "graphql-request"
 import { useQuery } from "urql"
-import {
-  ContractDocument,
-  ContractQuery,
-  Currency,
-  MarketplaceListing,
-} from "../../generated/graphql"
 import * as fcl from "@onflow/fcl"
 import {
   CREATE_MARKETPLACE_LISTING_SCRIPT,
@@ -17,6 +11,13 @@ import {
   DAPPER_CREATE_FUT_LISTING_SCRIPT,
   DAPPER_PURCHASE_FUT_LISTING_SCRIPT,
 } from "../cadence/scripts"
+import {
+  ContractQuery,
+  ContractDocument,
+  MarketplaceListing,
+  Currency,
+  useContractQuery,
+} from "@niftory/sdk"
 
 gql`
   query contract {
@@ -32,7 +33,7 @@ function prepareCadence(script: string, contractName: string, address: string) {
 }
 
 export function useMarketplace() {
-  const [contractResponse] = useQuery<ContractQuery>({ query: ContractDocument })
+  const [contractResponse] = useContractQuery()
   const { data, fetching: isFetching, error } = contractResponse
   const isFetched = !isFetching && !error
 

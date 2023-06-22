@@ -5,18 +5,23 @@ import { useSession } from "next-auth/react"
 import * as fcl from "@onflow/fcl"
 import { signOut as nextAuthSignOut, signIn as nextAuthSignIn } from "next-auth/react"
 import { Session } from "next-auth"
-import { backendClient } from "../graphql/backendClient"
-import { WalletDocument } from "../../generated/graphql"
-import { getClientFromSession } from "../graphql/getClientFromSession"
 import posthog from "posthog-js"
+import { useNiftoryClient } from "@niftory/sdk"
+import { backendClient } from "graphql/backendClient"
 
 type AuthComponentProps = {
   children: React.ReactNode
   requireAuth: boolean | undefined
 }
 
+type AuthSession = Session & {
+  error?: unknown
+  authToken?: string
+  userId?: string
+}
+
 type AuthContextType = {
-  session: Session
+  session: AuthSession
   isLoading: boolean
   signIn: (callbackUrl?: string) => Promise<void>
   signOut: () => Promise<void>
@@ -68,18 +73,6 @@ export function AuthProvider({ children, requireAuth }: AuthComponentProps) {
       return
     }
   }, [requireAuth, session, router, isLoading, signOut])
-
-  useEffect(() => {
-    if (session && !isLoading) {
-      ;(async () => {
-        const client = await getClientFromSession(session)
-        const { wallet } = await client.request(WalletDocument)
-        if (!wallet) {
-          backendClient("createWallet")
-        }
-      })()
-    }
-  }, [isLoading, session])
 
   return (
     <AuthContext.Provider value={{ session, isLoading, signIn, signOut }}>

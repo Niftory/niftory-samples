@@ -1,34 +1,18 @@
-import { filter } from "@chakra-ui/system"
 import { useRouter } from "next/router"
 import Masonry from "react-masonry-css"
-import {
-  UserNftsQuery,
-  UserNftsQueryVariables,
-  UserNftsDocument,
-  Nft,
-  NftModel,
-  GetNftSetsQuery,
-  NftModelsDocument,
-  NftModelsQuery,
-  NftModelsQueryVariables,
-} from "../../../generated/graphql"
 import { useBackendClient } from "../../graphql/backendClient"
-import { useGraphQLQuery } from "../../graphql/useGraphQLQuery"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { MasonryCard } from "../../ui/Card/MasonryCard"
 import { Empty } from "../../ui/Empty/Empty"
 import { LoginSkeleton } from "../../ui/Skeleton"
+import { NftModel, useNftModelsQuery, NftSet } from "@niftory/sdk"
 
 export const CreatedNFTCollection = () => {
   const { isLoading, session } = useAuthContext()
 
-  const { sets: userSets } = useBackendClient<GetNftSetsQuery>(session ? "getNFTSets" : null)
-  const {
-    nftModels,
-    fetching: fetchingNFTModels,
-    reExecuteQuery,
-  } = useGraphQLQuery<NftModelsQuery, NftModelsQueryVariables>({
-    query: NftModelsDocument,
+  const { data: userSets } = useBackendClient<NftSet[]>(session ? "getNFTSets" : null)
+
+  const [{ data, fetching: fetchingNFTModels }, reExecuteQuery] = useNftModelsQuery({
     variables: {
       filter: { setIds: userSets?.map((set) => set.id) as string[] },
     },
@@ -40,6 +24,8 @@ export const CreatedNFTCollection = () => {
   if (fetchingNFTModels) {
     return <LoginSkeleton />
   }
+
+  const nftModels = data?.nftModels
 
   if (!fetchingNFTModels && nftModels?.items?.length == 0) {
     return (

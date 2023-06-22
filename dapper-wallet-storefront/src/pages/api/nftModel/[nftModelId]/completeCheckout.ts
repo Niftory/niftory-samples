@@ -1,19 +1,6 @@
 import { NextApiHandler } from "next"
-import { gql } from "graphql-request"
-import { getBackendGraphQLClient } from "../../../../lib/BackendGraphQLClient"
 import { getAddressFromCookie } from "../../../../lib/cookieUtils"
-
-const CompleteCheckoutWithDapperWallet = gql`
-  mutation CompleteCheckoutWithDapperWallet($transactionId: String!, $nftDatabaseId: String) {
-    completeCheckoutWithDapperWallet(transactionId: $transactionId, nftDatabaseId: $nftDatabaseId) {
-      id
-      blockchainId
-      serialNumber
-      saleState
-      blockchainState
-    }
-  }
-`
+import { getBackendNiftoryClient } from "../../../../lib/backendNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "POST") {
@@ -43,17 +30,14 @@ const handler: NextApiHandler = async (req, res) => {
       )
   }
 
-  const backendGQLClient = await getBackendGraphQLClient()
+  const niftoryClient = await getBackendNiftoryClient()
 
-  const completeCheckoutResponse = await backendGQLClient.request(
-    CompleteCheckoutWithDapperWallet,
-    {
-      transactionId: input.transactionId,
-      nftDatabaseId: input.nftDatabaseId,
-    }
-  )
+  const completeCheckoutResponse = await niftoryClient.completeCheckoutWithDapperWallet({
+    transactionId: input.transactionId,
+    nftDatabaseId: input.nftDatabaseId,
+  })
 
-  res.status(200).json(completeCheckoutResponse.completeCheckoutWithDapperWallet)
+  res.status(200).json(completeCheckoutResponse)
 }
 
 export default handler

@@ -1,10 +1,20 @@
-import { AspectRatio, Box, Center, HStack, Image, Link, Skeleton, Stack, Text } from '@chakra-ui/react';
-import router from 'next/router';
-import * as React from 'react';
+import {
+  AspectRatio,
+  Box,
+  Center,
+  HStack,
+  Image,
+  Link,
+  Skeleton,
+  Stack,
+  Text,
+} from "@chakra-ui/react"
+import router from "next/router"
+import * as React from "react"
 
-import { Nft } from '../../../generated/graphql';
-import { Subset } from '../../lib/types';
-import { ProductCardStats } from '../../ui/Content/ProductCard/ProductCardStats';
+import { Nft } from "@niftory/sdk"
+import { Subset } from "../../lib/types"
+import { ProductCardStats } from "../../ui/Content/ProductCard/ProductCardStats"
 
 export const NFTCard = (props: { nft: Subset<Nft>; clickUrl: string }) => {
   const { nft, clickUrl } = props

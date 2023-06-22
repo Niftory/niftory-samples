@@ -1,9 +1,8 @@
 import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
-import { getClientForServer } from "../../../graphql/getClientForServer"
-import { GetNftSetsDocument } from "../../../../generated/graphql"
 import posthog from "posthog-js"
+import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 
 const handler: NextApiHandler = async (req, res) => {
   try {
@@ -15,14 +14,10 @@ const handler: NextApiHandler = async (req, res) => {
     }
     const requestMethod = req.method
     const userId = session.userId as string
-    const serverSideBackendClient = await getClientForServer()
 
     if (requestMethod === "POST") {
-      const postData = await serverSideBackendClient.request(GetNftSetsDocument, {
-        filter: {
-          tags: [userId],
-        },
-      })
+      const niftoryClient = await getNiftoryClientForServer()
+      const postData = await niftoryClient.getSets({ tags: [userId as string] })
       res.status(200).json(postData)
     } else {
       res.status(405).end("Method not allowed, this endpoint only supports POST")

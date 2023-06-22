@@ -1,0 +1,15 @@
+schema: generated/schema.graphql
+documents: "./**/*.{ts,tsx}"
+generates:
+  generated/graphql.ts:
+    plugins:
+      - add:
+          content:
+            - "// @ts-nocheck"
+      - typescript
+      - typescript-operations
+      - typescript-react-query:
+          documentVariablePrefix: ReactQuery_
+          fetcher: graphql-request
+      - typescript-graphql-request
+overwrite: true

@@ -42,7 +42,6 @@ const getGraphQLClient = (headers: HeadersInit) => {
         },
       }),
       retryExchange({ maxNumberAttempts: 3 }),
-      fetchExchange,
     ],
   })
 }

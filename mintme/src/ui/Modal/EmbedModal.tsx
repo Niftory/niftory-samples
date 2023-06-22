@@ -6,26 +6,16 @@ import {
   AccordionPanel,
   Box,
   Button,
-  Flex,
   Heading,
-  HStack,
-  Input,
-  InputGroup,
-  InputRightAddon,
   Modal,
   ModalContent,
   ModalOverlay,
-  Select,
-  Text,
   Textarea,
   useClipboard,
   VStack,
 } from "@chakra-ui/react"
-import { Nft, NftModel } from "../../../generated/graphql"
-import { FiLink as LinkIcon } from "react-icons/fi"
-import { CheckIcon, ChevronDownIcon } from "@chakra-ui/icons"
-import { ChangeEvent, useCallback, useEffect, useState } from "react"
-import { backendClient } from "../../graphql/backendClient"
+import { Nft, NftModel } from "@niftory/sdk"
+import { useState } from "react"
 
 interface NftModalProps {
   disclosure: {
