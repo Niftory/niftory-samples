@@ -25,7 +25,9 @@ const handler: NextApiHandler = async (req, res) => {
       }
 
       const sets = await niftoryClient.getSets({
-        tags: [session.userId as string],
+        filter: {
+          tags: [session.userId as string],
+        },
       })
 
       const modelsId = sets

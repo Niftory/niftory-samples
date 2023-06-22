@@ -20,8 +20,10 @@ const handler: NextApiHandler = async (req, res) => {
 
     if (requestMethod === "POST") {
       const postData = await niftoryClient.createSet({
-        title: "Set for User " + userId,
-        tags: [userId],
+        data: {
+          title: "Set for User " + userId,
+          tags: [userId],
+        },
       })
       res.status(200).json(postData)
     } else {

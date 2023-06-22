@@ -41,7 +41,7 @@ import {
   NftBlockchainState,
   NftModel,
   NftModelBlockchainState,
-  UseQueryExecute,
+  UrqlTypes,
   useContractQuery,
 } from "@niftory/sdk"
 
@@ -55,7 +55,7 @@ interface DetailModalProps {
 
   nftModel: NftModel
   nft?: Nft
-  reExecuteQuery?: UseQueryExecute
+  reExecuteQuery?: UrqlTypes.UseQueryExecute
   onShare?: (type: string) => void
   isOwner: boolean
   mintState: NftModelBlockchainState | NftBlockchainState

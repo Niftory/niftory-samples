@@ -7,11 +7,7 @@ import {
   NftQuery,
   NftQueryVariables,
   NftSet,
-  SetsQuery,
-  UseQueryExecute,
-  WithdrawDocument,
-  WithdrawMutation,
-  WithdrawMutationVariables,
+  UrqlTypes,
 } from "@niftory/sdk"
 import { FaEllipsisH as EllipsisIcon } from "react-icons/fa"
 import { TfiReload as ReloadIcon } from "react-icons/tfi"
@@ -39,7 +35,7 @@ import { Wallet, useWithdrawMutation } from "@niftory/sdk"
 interface MasonryCardProps {
   nftModel: NftModel
   nft?: Nft
-  reExecuteQuery?: UseQueryExecute
+  reExecuteQuery?: UrqlTypes.UseQueryExecute
   hidePopUp?: boolean
 }
 

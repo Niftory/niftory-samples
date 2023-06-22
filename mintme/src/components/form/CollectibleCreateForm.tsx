@@ -104,10 +104,7 @@ export const CollectibleCreateForm = (props: StackProps) => {
       if (!createNFTModelData) {
         let currentSet = userSets?.[0]
         if (!currentSet) {
-          const { createNFTSet: createNFTSetData } = await backendClient<CreateNftSetMutation>(
-            "createNFTSet"
-          )
-          currentSet = createNFTSetData
+          currentSet = await backendClient("createNFTSet")
         }
 
         createNFTModelData = await createNFTModel(currentSet?.id, collectibleData)

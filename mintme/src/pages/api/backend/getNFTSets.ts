@@ -17,7 +17,7 @@ const handler: NextApiHandler = async (req, res) => {
 
     if (requestMethod === "POST") {
       const niftoryClient = await getNiftoryClientForServer()
-      const postData = await niftoryClient.getSets({ tags: [userId as string] })
+      const postData = await niftoryClient.getSets({ filter: { tags: [userId as string] } })
       res.status(200).json(postData)
     } else {
       res.status(405).end("Method not allowed, this endpoint only supports POST")
