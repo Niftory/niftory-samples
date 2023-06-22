@@ -22,7 +22,6 @@ const createNFTModel = async (setId: string, nftModelData: NftModelCreateInput) 
   let toastId
   try {
     toastId = toast.loading("Creating your NFTs...")
-    console.log({ setId: setId, data: nftModelData })
     const nftModel = await backendClient<NftModel>("createNFTModel", {
       setId: setId,
       data: nftModelData,
