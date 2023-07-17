@@ -1,5 +1,5 @@
 import { Button, HStack, Spinner, Text } from "@chakra-ui/react"
-import { useRegisterWalletMutation } from "@niftory/sdk"
+import { useRegisterWalletMutation } from "@niftory/sdk/react"
 import { useMetaMask } from "metamask-react"
 import router from "next/router"
 import { WalletSetupBox } from "./WalletSetupBox"

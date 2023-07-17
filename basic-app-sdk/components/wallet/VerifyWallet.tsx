@@ -4,7 +4,12 @@ import { WalletSetupBox } from "./WalletSetupBox"
 
 import { useMetaMask } from "metamask-react"
 import { ethers } from "ethers"
-import { Blockchain, useFlowUser, useVerifyWalletMutation, useWalletQuery } from "@niftory/sdk"
+import {
+  Blockchain,
+  useFlowUser,
+  useVerifyWalletMutation,
+  useWalletQuery,
+} from "@niftory/sdk/react"
 
 interface Props {
   blockchain: Blockchain

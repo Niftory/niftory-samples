@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import * as fcl from "@onflow/fcl"
 import { WalletSetupBox } from "./WalletSetupBox"
 import { useMetaMask } from "metamask-react"
-import { Blockchain, useFlowUser, useRegisterWalletMutation } from "@niftory/sdk"
+import { Blockchain, useFlowUser, useRegisterWalletMutation } from "@niftory/sdk/react"
 
 interface Props {
   blockchain: Blockchain

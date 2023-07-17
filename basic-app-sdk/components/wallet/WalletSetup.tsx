@@ -7,7 +7,13 @@ import { useRouter } from "next/router"
 import { WalletSetupBox } from "./WalletSetupBox"
 import { MetamaskWalletSetupBox } from "./MetamaskWalletSetup"
 import { Spinner } from "@chakra-ui/react"
-import { Blockchain, useContractQuery, useWalletQuery, Wallet, WalletState } from "@niftory/sdk"
+import {
+  Blockchain,
+  useContractQuery,
+  useWalletQuery,
+  Wallet,
+  WalletState,
+} from "@niftory/sdk/react"
 
 export type WalletSetupStepProps = {
   setIsLoading: (isLoading: boolean) => void

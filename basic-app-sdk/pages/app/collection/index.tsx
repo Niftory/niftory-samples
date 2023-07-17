@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import AppLayout from "../../../components/AppLayout"
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth"
 import { useAuthContext } from "../../../hooks/useAuthContext"
-import { useNftsQuery } from "@niftory/sdk"
+import { useNftsQuery } from "@niftory/sdk/react"
 
 const CollectionPage: ComponentWithAuth = () => {
   const router = useRouter()
