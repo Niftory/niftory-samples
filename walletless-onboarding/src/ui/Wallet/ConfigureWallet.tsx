@@ -6,7 +6,7 @@ import {
   useFlowAccountConfiguration,
   useReadyWalletMutation,
   Wallet,
-} from "@niftory/sdk"
+} from "@niftory/sdk/react"
 
 interface Props {
   wallet: Wallet

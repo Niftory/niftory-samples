@@ -6,7 +6,7 @@ import { Logout } from "@components/Logout"
 import { useAuthContext } from "hooks/useAuthContext"
 
 import { FaGoogle } from "react-icons/fa"
-import { useWalletQuery } from "@niftory/sdk"
+import { useWalletQuery } from "@niftory/sdk/react"
 
 const HomePage = () => {
   const { session, signIn, isLoading } = useAuthContext()

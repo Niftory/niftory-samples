@@ -12,7 +12,7 @@ import { RegisterWallet } from "ui/Wallet/RegisterWallet"
 import { useMemo } from "react"
 
 import { WalletCard } from "ui/Wallet/WalletCard"
-import { Wallet, WalletType, useAppUserQuery } from "@niftory/sdk"
+import { Wallet, WalletType, useAppUserQuery } from "@niftory/sdk/react"
 
 export interface MenuModalItems {
   title: string
@@ -37,8 +37,8 @@ export const WalletSwitcherModal = ({ disclosure }: MenuModalProps) => {
   const wallets = useMemo(
     () =>
       appUser?.wallets.sort((a, b) => {
-        if (a.walletType === WalletType.Custodial) return -1
-        if (b.walletType === WalletType.Custodial) return 1
+        if (a.walletType === WalletType.Niftory) return -1
+        if (b.walletType === WalletType.Niftory) return 1
         return a.address > b.address ? 1 : -1
       }),
     [appUser?.wallets]

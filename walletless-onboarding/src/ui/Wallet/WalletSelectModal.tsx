@@ -2,7 +2,7 @@ import { Flex, Heading, Modal, ModalContent, ModalOverlay, VStack } from "@chakr
 import { useMemo } from "react"
 
 import { WalletCard } from "ui/Wallet/WalletCard"
-import { Wallet, WalletState, useAppUserQuery } from "@niftory/sdk"
+import { Wallet, WalletState, useAppUserQuery } from "@niftory/sdk/react"
 
 export interface MenuModalItems {
   title: string

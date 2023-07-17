@@ -3,7 +3,7 @@ import { Box, Flex, Tag, Text } from "@chakra-ui/react"
 import { getColorFromWalletState, getReadableWalletState } from "utils/wallet"
 
 import { WalletSwitcherButton } from "./WalletSwitcherButton"
-import { Wallet, useFlowUser } from "@niftory/sdk"
+import { Wallet, useFlowUser } from "@niftory/sdk/react"
 
 interface Props {
   wallet: Wallet
@@ -40,7 +40,7 @@ export const WalletCard = ({ wallet, onClick }: Props) => {
             />
           )}
           <Text color={""}>{wallet.address} </Text>{" "}
-          {wallet?.walletType === "CUSTODIAL" && (
+          {wallet?.walletType === "NIFTORY" && (
             <Tag bgColor="purple.400" color="white">
               Niftory Wallet
             </Tag>

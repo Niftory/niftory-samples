@@ -3,7 +3,7 @@ import { Button } from "@chakra-ui/react"
 import { ConfigureWallet } from "./ConfigureWallet"
 import { VerifyWallet } from "./VerifyWallet"
 import * as fcl from "@onflow/fcl"
-import { Wallet, WalletState, useFlowUser } from "@niftory/sdk"
+import { Wallet, WalletState, useFlowUser } from "@niftory/sdk/react"
 
 interface Props {
   wallet: Wallet

@@ -1,5 +1,6 @@
 import { useAuthContext } from "hooks/useAuthContext"
-import { EnvironmentName, NiftoryClient, NiftoryProvider } from "@niftory/sdk"
+import { EnvironmentName, NiftoryClient } from "@niftory/sdk"
+import { NiftoryProvider } from "@niftory/sdk/react"
 import { useMemo } from "react"
 
 export const NiftoryClientProvider = ({ children }) => {
