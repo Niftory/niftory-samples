@@ -8,7 +8,7 @@ import {
   RegisterWalletInput,
   RegisterWalletMutation,
   RegisterWalletMutationVariables,
-} from "@niftory/sdk"
+} from "@niftory/sdk/react"
 import posthog from "posthog-js"
 import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 

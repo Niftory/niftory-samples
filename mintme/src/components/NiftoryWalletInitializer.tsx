@@ -1,5 +1,5 @@
 import { useToast } from "@chakra-ui/react"
-import { useNiftoryClient, WalletState } from "@niftory/sdk"
+import { useNiftoryClient, WalletState } from "@niftory/sdk/react"
 import { backOff } from "exponential-backoff"
 import { backendClient } from "graphql/backendClient"
 import { useSession } from "next-auth/react"

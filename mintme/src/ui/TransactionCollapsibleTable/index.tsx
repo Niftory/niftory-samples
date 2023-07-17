@@ -19,7 +19,7 @@ import {
   AccordionProps,
 } from "@chakra-ui/react"
 import { InfoPopOver } from "ui/PopOver/InfoPopOver"
-import { BlockchainTransaction } from "@niftory/sdk"
+import { BlockchainTransaction } from "@niftory/sdk/react"
 
 interface Props extends AccordionProps {
   transactions: BlockchainTransaction[]

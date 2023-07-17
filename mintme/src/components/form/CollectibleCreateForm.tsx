@@ -7,7 +7,7 @@ import {
   NftModel,
   NftModelCreateInput,
   NftSet,
-} from "@niftory/sdk"
+} from "@niftory/sdk/react"
 import { backendClient, useBackendClient } from "../../graphql/backendClient"
 import { Form, Formik } from "formik"
 import React, { useState, useRef, useEffect } from "react"

@@ -6,7 +6,7 @@ import * as fcl from "@onflow/fcl"
 import { signOut as nextAuthSignOut, signIn as nextAuthSignIn } from "next-auth/react"
 import { Session } from "next-auth"
 import posthog from "posthog-js"
-import { useNiftoryClient } from "@niftory/sdk"
+import { useNiftoryClient } from "@niftory/sdk/react"
 import { backendClient } from "graphql/backendClient"
 
 type AuthComponentProps = {

@@ -11,7 +11,7 @@ import {
   NftModelQueryVariables,
   NftQuery,
   NftQueryVariables,
-} from "@niftory/sdk"
+} from "@niftory/sdk/react"
 
 import AppLayout from "../../../components/AppLayout"
 import { ItemDetail } from "../../../components/collection/ItemDetail"

@@ -14,7 +14,7 @@ import {
   useClipboard,
   VStack,
 } from "@chakra-ui/react"
-import { Nft, NftModel } from "@niftory/sdk"
+import { Nft, NftModel } from "@niftory/sdk/react"
 import { useState } from "react"
 
 interface NftModalProps {

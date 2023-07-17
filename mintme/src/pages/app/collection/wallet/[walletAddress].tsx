@@ -7,7 +7,7 @@ import AppLayout from "../../../../components/AppLayout"
 
 import { MasonryCard } from "../../../../ui/Card/MasonryCard"
 import { LoginSkeleton } from "../../../../ui/Skeleton"
-import { Nft, NftModel, useNftsByWalletQuery } from "@niftory/sdk"
+import { Nft, NftModel, useNftsByWalletQuery } from "@niftory/sdk/react"
 
 const WalletCollectionPage = () => {
   const router = useRouter()

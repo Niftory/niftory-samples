@@ -1,6 +1,6 @@
 import { NextApiHandler } from "next"
 import { getClientForServer } from "../../../graphql/getClientForServer"
-import { UploadNftContentDocument } from "@niftory/sdk"
+import { UploadNftContentDocument } from "@niftory/sdk/react"
 import posthog from "posthog-js"
 import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 

@@ -5,7 +5,7 @@ import { useAuthContext } from "../../hooks/useAuthContext"
 import { MasonryCard } from "../../ui/Card/MasonryCard"
 import { Empty } from "../../ui/Empty/Empty"
 import { LoginSkeleton } from "../../ui/Skeleton"
-import { NftModel, useNftModelsQuery, NftSet } from "@niftory/sdk"
+import { NftModel, useNftModelsQuery, NftSet } from "@niftory/sdk/react"
 
 export const CreatedNFTCollection = () => {
   const { isLoading, session } = useAuthContext()

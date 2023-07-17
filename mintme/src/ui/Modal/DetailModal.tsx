@@ -43,7 +43,7 @@ import {
   NftModelBlockchainState,
   UrqlTypes,
   useContractQuery,
-} from "@niftory/sdk"
+} from "@niftory/sdk/react"
 
 type Disclosure = {
   isOpen: boolean

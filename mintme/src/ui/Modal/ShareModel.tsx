@@ -13,7 +13,7 @@ import {
   Text,
   useClipboard,
 } from "@chakra-ui/react"
-import { Nft, NftModel } from "@niftory/sdk"
+import { Nft, NftModel } from "@niftory/sdk/react"
 import { FiLink as LinkIcon } from "react-icons/fi"
 import { CheckIcon } from "@chakra-ui/icons"
 import { ChangeEvent, useCallback, useEffect, useState } from "react"
