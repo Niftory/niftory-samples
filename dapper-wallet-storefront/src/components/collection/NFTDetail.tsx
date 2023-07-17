@@ -1,7 +1,7 @@
 import { Box, Heading, HStack, Spacer, Stack, Tag, Text } from "@chakra-ui/react"
 import * as React from "react"
 
-import { Nft } from "@niftory/sdk"
+import { Nft } from "@niftory/sdk/react"
 import { Subset } from "../../lib/types"
 import { Gallery } from "../../ui/Content/Gallery/Gallery"
 

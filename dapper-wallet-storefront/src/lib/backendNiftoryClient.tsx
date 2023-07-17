@@ -1,4 +1,5 @@
-import { EnvironmentName, NiftoryClient } from "@niftory/sdk"
+import { NiftoryClient, EnvironmentName } from "@niftory/sdk"
+
 let client: NiftoryClient
 
 /**

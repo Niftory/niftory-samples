@@ -1,15 +1,13 @@
 import { Box } from "@chakra-ui/react"
 import React from "react"
 
-import { useNftModelsQuery } from "@niftory/sdk"
+import { useNftModelsQuery } from "@niftory/sdk/react"
 import AppLayout from "../../../components/AppLayout"
 import { NFTModelsGrid } from "../../../components/drops/NFTModelsGrid"
 import { SectionHeader } from "../../../ui/SectionHeader"
 
 export const NFTModelsPage = () => {
-  const [result] = useNftModelsQuery({
-    variables: { appId: process.env.NEXT_PUBLIC_CLIENT_ID },
-  })
+  const [result] = useNftModelsQuery()
 
   const nftModels = result?.data?.nftModels?.items
 

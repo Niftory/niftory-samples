@@ -12,7 +12,7 @@ import {
 import router from "next/router"
 import * as React from "react"
 
-import { Nft } from "@niftory/sdk"
+import { Nft } from "@niftory/sdk/react"
 import { Subset } from "../../lib/types"
 import { ProductCardStats } from "../../ui/Content/ProductCard/ProductCardStats"
 

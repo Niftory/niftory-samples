@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 
 import { WalletSetupBox } from "./WalletSetupBox"
-import { useFlowAccountConfiguration } from "@niftory/sdk"
+import { useFlowAccountConfiguration } from "@niftory/sdk/react"
 
 export type ConfigureWalletProps = {
   address: string
