@@ -6,7 +6,7 @@ import { CollectionGrid } from "../../../components/collection/CollectionGrid"
 import { Subset } from "../../../lib/types"
 import { SectionHeader } from "../../../ui/SectionHeader"
 import { useWalletContext } from "../../../hooks/useWalletContext"
-import { Nft, useNftsByWalletQuery } from "@niftory/sdk"
+import { Nft, useNftsByWalletQuery } from "@niftory/sdk/react"
 
 const CollectionPage = () => {
   const { currentUser } = useWalletContext()

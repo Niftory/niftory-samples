@@ -6,7 +6,7 @@ import {
   MarketplaceListingsQueryVariables,
   MarketplaceListing,
   useMarketplaceListingsQuery,
-} from "@niftory/sdk"
+} from "@niftory/sdk/react"
 
 interface CollectionProps {
   variables: MarketplaceListingsQueryVariables

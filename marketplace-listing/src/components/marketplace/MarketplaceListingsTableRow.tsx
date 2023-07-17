@@ -3,7 +3,7 @@ import * as React from "react"
 
 import { useWalletContext } from "../../hooks/useWalletContext"
 import { Subset } from "../../lib/types"
-import { MarketplaceListing } from "@niftory/sdk"
+import { MarketplaceListing } from "@niftory/sdk/react"
 
 interface Props {
   listing: Subset<MarketplaceListing>

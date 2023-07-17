@@ -27,11 +27,11 @@ import { useWalletContext } from "../../hooks/useWalletContext"
 import { OperationContext } from "urql"
 
 import { Field, Form, Formik } from "formik"
-import { Currency, Nft, UseQueryExecute } from "@niftory/sdk"
+import { Currency, Nft, UrqlTypes } from "@niftory/sdk/react"
 
 interface Props {
   nft: Subset<Nft>
-  reExecuteQuery: UseQueryExecute
+  reExecuteQuery: UrqlTypes.UseQueryExecute
 }
 
 export const NFTDetail = (props: Props) => {

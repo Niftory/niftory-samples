@@ -25,7 +25,7 @@ import {
   MarketplaceListing,
   MarketplaceListingsQueryVariables,
   useNftModelQuery,
-} from "@niftory/sdk"
+} from "@niftory/sdk/react"
 
 const ITEMS_PER_PAGE = 10
 

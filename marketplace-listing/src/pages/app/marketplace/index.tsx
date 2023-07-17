@@ -6,7 +6,7 @@ import AppLayout from "../../../components/AppLayout"
 import { SectionHeader } from "../../../ui/SectionHeader"
 import { useWalletContext } from "../../../hooks/useWalletContext"
 import { NFTModelsGrid } from "../../../components/drops/NFTModelsGrid"
-import { useNftModelsQuery } from "@niftory/sdk"
+import { useNftModelsQuery } from "@niftory/sdk/react"
 
 const MarketplacePage = () => {
   const { currentUser } = useWalletContext()

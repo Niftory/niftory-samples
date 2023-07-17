@@ -15,7 +15,7 @@ import * as React from "react"
 
 import { Subset } from "../../lib/types"
 import { ProductCardStats } from "../../ui/Content/ProductCard/ProductCardStats"
-import { Nft } from "@niftory/sdk"
+import { Nft } from "@niftory/sdk/react"
 
 export const NFTCard = (props: { nft: Subset<Nft>; clickUrl: string; price?: string }) => {
   const { nft, clickUrl, price } = props
