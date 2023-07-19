@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react"
 
 import AppLayout from "../../../components/AppLayout"
-import { Nft, useNftsByWalletQuery } from "@niftory/sdk"
+import { Nft, useNftsByWalletQuery } from "@niftory/sdk/react"
 import { CollectionGrid } from "../../../components/collection/CollectionGrid"
 import { Subset } from "../../../lib/types"
 import { SectionHeader } from "../../../ui/SectionHeader"

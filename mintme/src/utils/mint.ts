@@ -1,4 +1,4 @@
-import { NftBlockchainState, NftModelBlockchainState } from "@niftory/sdk"
+import { NftBlockchainState, NftModelBlockchainState } from "@niftory/sdk/react"
 
 type ReadableState = "Minted" | "Minting" | "Error" | "Unminted"
 

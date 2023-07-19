@@ -4,7 +4,7 @@ import {
   useFlowAccountConfiguration,
   useFlowUser,
   useReadyWalletMutation,
-} from "@niftory/sdk"
+} from "@niftory/sdk/react"
 
 import { useEffect } from "react"
 

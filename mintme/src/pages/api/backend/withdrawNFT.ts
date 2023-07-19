@@ -2,7 +2,7 @@ import { NextApiHandler } from "next"
 import { unstable_getServerSession } from "next-auth"
 import { AUTH_OPTIONS } from "../auth/[...nextauth]"
 import { getClientForServerWithoutCredentials } from "../../../graphql/getClientForServer"
-import { WithdrawDocument } from "@niftory/sdk"
+import { WithdrawDocument } from "@niftory/sdk/react"
 import posthog from "posthog-js"
 import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 

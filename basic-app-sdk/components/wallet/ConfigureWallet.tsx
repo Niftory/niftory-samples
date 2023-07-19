@@ -1,6 +1,10 @@
 import { useEffect } from "react"
 import { WalletSetupBox } from "./WalletSetupBox"
-import { useFlowAccountConfiguration, useFlowUser, useReadyWalletMutation } from "@niftory/sdk"
+import {
+  useFlowAccountConfiguration,
+  useFlowUser,
+  useReadyWalletMutation,
+} from "@niftory/sdk/react"
 
 export function ConfigureWallet() {
   const flowUser = useFlowUser()

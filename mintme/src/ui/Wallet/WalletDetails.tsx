@@ -13,7 +13,7 @@ import { WalletGridBox } from "./WalletGridBox"
 import { useRouter } from "next/router"
 import posthog from "posthog-js"
 import { WalletSwitcherModal } from "ui/Modal/WalletSwitcherModal"
-import { WalletState, useNftsQuery } from "@niftory/sdk"
+import { WalletState, useNftsQuery } from "@niftory/sdk/react"
 
 export interface WalletDetailsProps {
   walletAddress: string

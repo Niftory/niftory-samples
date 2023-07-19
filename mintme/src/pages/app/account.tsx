@@ -6,7 +6,7 @@ import AppLayout from "../../components/AppLayout"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { WalletDetails } from "../../ui/Wallet/WalletDetails"
 
-import { useWalletQuery } from "@niftory/sdk"
+import { useWalletQuery } from "@niftory/sdk/react"
 const AccountPage = () => {
   const { session, isLoading } = useAuthContext()
 

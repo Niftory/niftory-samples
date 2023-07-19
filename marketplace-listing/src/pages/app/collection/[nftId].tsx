@@ -7,7 +7,7 @@ import AppLayout from "../../../components/AppLayout"
 import { NFTDetail } from "../../../components/collection/NFTDetail"
 import { Subset } from "../../../lib/types"
 import { LoginSkeleton } from "../../../ui/Skeleton"
-import { Nft, useMarketplaceListingsQuery, useNftQuery } from "@niftory/sdk"
+import { Nft, useMarketplaceListingsQuery, useNftQuery } from "@niftory/sdk/react"
 
 export const NFTDetailPage = () => {
   const router = useRouter()

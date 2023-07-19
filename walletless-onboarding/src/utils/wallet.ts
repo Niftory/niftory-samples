@@ -1,4 +1,4 @@
-import { WalletState } from "@niftory/sdk"
+import { WalletState } from "@niftory/sdk/react"
 
 export const getColorFromWalletState = (state: WalletState) => {
   switch (state) {

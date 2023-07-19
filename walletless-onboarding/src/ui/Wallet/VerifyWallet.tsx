@@ -2,7 +2,7 @@ import { useCallback } from "react"
 import * as fcl from "@onflow/fcl"
 
 import { Button } from "@chakra-ui/react"
-import { useVerifyWalletMutation } from "@niftory/sdk"
+import { useVerifyWalletMutation } from "@niftory/sdk/react"
 
 export function VerifyWallet({ wallet }) {
   const [_, verifyWallet] = useVerifyWalletMutation()

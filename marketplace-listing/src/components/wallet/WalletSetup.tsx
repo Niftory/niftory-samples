@@ -7,7 +7,7 @@ import { ConfigureWallet } from "./ConfigureWallet"
 import { RegisterWallet } from "./RegisterWallet"
 import { VerifyWallet } from "./VerifyWallet"
 import { WalletSetupBox } from "./WalletSetupBox"
-import { Wallet, WalletState, useWalletByAddressQuery } from "@niftory/sdk"
+import { Wallet, WalletState, useWalletByAddressQuery } from "@niftory/sdk/react"
 
 export type WalletSetupStepProps = {
   setIsLoading: (isLoading: boolean) => void

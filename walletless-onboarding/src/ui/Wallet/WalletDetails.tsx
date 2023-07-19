@@ -20,7 +20,7 @@ import { WalletGridBox } from "./WalletGridBox"
 import { useRouter } from "next/router"
 import { WalletSwitcherModal } from "./WalletSwitcherModal"
 
-import { WalletState, useNftsQuery } from "@niftory/sdk"
+import { WalletState, useNftsQuery } from "@niftory/sdk/react"
 import { useAuthContext } from "hooks/useAuthContext"
 
 export interface WalletDetailsProps {

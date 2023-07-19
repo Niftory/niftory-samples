@@ -4,7 +4,7 @@ import * as React from "react"
 import { Subset } from "../../lib/types"
 import { CallToAction } from "../../ui/CallToAction"
 import { NFTCard } from "./NFTCard"
-import { Nft, NftBlockchainState } from "@niftory/sdk"
+import { Nft, NftBlockchainState } from "@niftory/sdk/react"
 
 interface CollectionProps {
   isLoading: boolean

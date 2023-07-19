@@ -4,7 +4,7 @@ import React from "react"
 import AppLayout from "../../../components/AppLayout"
 import { DropsGrid } from "../../../components/drops/DropsGrid"
 import { SectionHeader } from "../../../ui/SectionHeader"
-import { useNftModelsQuery } from "@niftory/sdk"
+import { useNftModelsQuery } from "@niftory/sdk/react"
 
 export const NFTModelsPage = () => {
   const [result] = useNftModelsQuery({

@@ -2,7 +2,7 @@ import { Box, Skeleton } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import React from "react"
 
-import { useNftModelQuery } from "@niftory/sdk"
+import { useNftModelQuery } from "@niftory/sdk/react"
 import AppLayout from "../../../components/AppLayout"
 import { NFTModelDetail } from "../../../components/drops/NFTModelDetail"
 

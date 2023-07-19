@@ -13,7 +13,7 @@ import router from "next/router"
 import * as React from "react"
 
 import { ProductCardStats } from "../../ui/Content/ProductCard/ProductCardStats"
-import { NftModel } from "@niftory/sdk"
+import { NftModel } from "@niftory/sdk/react"
 
 export const NFTModelCard = (props: { nftModel: NftModel; clickUrl: string }) => {
   const { nftModel, clickUrl } = props

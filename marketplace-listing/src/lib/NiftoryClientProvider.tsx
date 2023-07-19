@@ -1,4 +1,5 @@
-import { EnvironmentName, NiftoryClient, NiftoryProvider } from "@niftory/sdk"
+import { EnvironmentName, NiftoryClient } from "@niftory/sdk"
+import { NiftoryProvider } from "@niftory/sdk/react"
 import { useMemo } from "react"
 import { useWalletContext } from "../hooks/useWalletContext"
 

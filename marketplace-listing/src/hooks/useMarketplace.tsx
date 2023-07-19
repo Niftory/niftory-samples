@@ -17,7 +17,7 @@ import {
   MarketplaceListing,
   Currency,
   useContractQuery,
-} from "@niftory/sdk"
+} from "@niftory/sdk/react"
 
 gql`
   query contract {

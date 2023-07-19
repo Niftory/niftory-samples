@@ -5,7 +5,7 @@ import { useQuery } from "urql"
 
 import AppLayout from "../../../components/AppLayout"
 import { NFTModelDetail } from "../../../components/drops/NFTModelDetail"
-import { useNftModelQuery } from "@niftory/sdk"
+import { useNftModelQuery } from "@niftory/sdk/react"
 
 const NFTModelDetailPage = () => {
   const router = useRouter()

@@ -28,7 +28,7 @@ import { useTransfer } from "hooks/useTransfer"
 import toast from "react-hot-toast"
 import posthog from "posthog-js"
 import { TransactionCollapsibleTable } from "ui/TransactionCollapsibleTable"
-import { useContractQuery, useNftsQuery, NftModel, Nft } from "@niftory/sdk/dist"
+import { useContractQuery, useNftsQuery, NftModel, Nft } from "@niftory/sdk/react"
 
 interface Props {
   nftModel: Subset<NftModel>

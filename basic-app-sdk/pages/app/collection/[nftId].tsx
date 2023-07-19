@@ -1,5 +1,5 @@
 import { Heading, Text, Image } from "@chakra-ui/react"
-import { useNftQuery } from "@niftory/sdk"
+import { useNftQuery } from "@niftory/sdk/react"
 import { useRouter } from "next/router"
 
 import AppLayout from "../../../components/AppLayout"

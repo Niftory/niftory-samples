@@ -6,7 +6,7 @@ import axios from "axios"
 import { useCallback, useState } from "react"
 
 import { useAuthContext } from "../../../hooks/useAuthContext"
-import { useNftModelQuery, useWalletQuery, WalletState } from "@niftory/sdk"
+import { useNftModelQuery, useWalletQuery, WalletState } from "@niftory/sdk/react"
 
 const DropPage: ComponentWithAuth = () => {
   const router = useRouter()

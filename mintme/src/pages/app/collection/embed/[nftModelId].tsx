@@ -2,7 +2,7 @@ import { Box, Image, Flex, Heading, Text } from "@chakra-ui/react"
 import { GetServerSidePropsContext } from "next"
 import Head from "next/head"
 import React from "react"
-import { NftModel, Nft } from "@niftory/sdk"
+import { NftModel, Nft } from "@niftory/sdk/react"
 import { MediaBox } from "../../../../ui/MediaBox"
 import { getNiftoryClientForServer } from "graphql/getNiftoryClient"
 

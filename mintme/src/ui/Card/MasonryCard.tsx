@@ -8,7 +8,7 @@ import {
   NftQueryVariables,
   NftSet,
   UrqlTypes,
-} from "@niftory/sdk"
+} from "@niftory/sdk/react"
 import { FaEllipsisH as EllipsisIcon } from "react-icons/fa"
 import { TfiReload as ReloadIcon } from "react-icons/tfi"
 import { BsCheck2 as CheckIcon } from "react-icons/bs"
@@ -30,7 +30,7 @@ import { getClientFromSession } from "../../graphql/getClientFromSession"
 import { getReadableStateValue } from "utils/mint"
 import toast from "react-hot-toast"
 import { WalletSelectModal } from "ui/Modal/WalletSelectModal"
-import { Wallet, useWithdrawMutation } from "@niftory/sdk"
+import { Wallet, useWithdrawMutation } from "@niftory/sdk/react"
 
 interface MasonryCardProps {
   nftModel: NftModel
@@ -109,7 +109,7 @@ export const MasonryCard = ({ nftModel, reExecuteQuery, hidePopUp, nft }: Masonr
             router.push(`/app/collection?open=${id}`)
           },
         },
-        nft?.wallet?.walletType === "CUSTODIAL" && {
+        nft?.wallet?.walletType === "NIFTORY" && {
           title: `Withdraw`,
           onClick: () => walletSelectDisclosure.onOpen(),
         },

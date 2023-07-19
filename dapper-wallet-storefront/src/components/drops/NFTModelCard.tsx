@@ -12,7 +12,7 @@ import {
 import router from "next/router"
 import * as React from "react"
 
-import { NftModel } from "@niftory/sdk"
+import { NftModel } from "@niftory/sdk/react"
 import { ProductCardStats } from "../../ui/Content/ProductCard/ProductCardStats"
 
 export const NFTModelCard = (props: { nftModel: NftModel; clickUrl: string }) => {

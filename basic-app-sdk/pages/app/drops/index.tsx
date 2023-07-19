@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import AppLayout from "../../../components/AppLayout"
 import { ComponentWithAuth } from "../../../components/ComponentWithAuth"
 import { gql } from "graphql-request"
-import { useNftModelsQuery } from "@niftory/sdk"
+import { useNftModelsQuery } from "@niftory/sdk/react"
 
 const DropsPage: ComponentWithAuth = () => {
   const router = useRouter()
