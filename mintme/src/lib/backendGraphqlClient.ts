@@ -1,4 +1,3 @@
-@@ -1,20 +0,0 @@
 import { GraphQLClient } from "graphql-request"
 
 let client: GraphQLClient
