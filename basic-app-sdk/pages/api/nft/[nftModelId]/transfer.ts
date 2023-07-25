@@ -1,5 +1,4 @@
 import { NextApiHandler } from "next"
-import { gql } from "graphql-request"
 import { getToken } from "next-auth/jwt"
 import { getNiftoryClientForServer } from "../../../../lib/graphql/niftoryClient"
 

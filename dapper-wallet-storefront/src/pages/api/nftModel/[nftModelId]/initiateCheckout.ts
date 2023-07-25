@@ -1,37 +1,6 @@
 import { NextApiHandler } from "next"
-import { gql } from "graphql-request"
-import { getBackendGraphQLClient } from "../../../../lib/BackendGraphQLClient"
 import { getAddressFromCookie } from "../../../../lib/cookieUtils"
 import { getBackendNiftoryClient } from "../../../../lib/backendNiftoryClient"
-
-const CheckoutWithDapperWallet = gql`
-  mutation CheckoutWithDapperWallet(
-    $nftModelId: ID!
-    $address: String!
-    $price: UnsignedFloat
-    $expiry: UnsignedInt
-  ) {
-    checkoutWithDapperWallet(
-      nftModelId: $nftModelId
-      address: $address
-      price: $price
-      expiry: $expiry
-    ) {
-      cadence
-      brand
-      expiry
-      nftId
-      nftDatabaseId
-      nftTypeRef
-      price
-      registryAddress
-      setId
-      templateId
-      signerAddress
-      signerKeyId
-    }
-  }
-`
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "POST") {
