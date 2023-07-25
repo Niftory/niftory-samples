@@ -34,7 +34,6 @@ yarn dev
 
 - Web framework: [Next.js](https://nextjs.org/)
 - Auth framework: [NextAuth](https://next-auth.js.org/)
-- Graph QL Client: [graphql-request](https://github.com/prisma-labs/graphql-request)
 - React state management: [urql](https://formidable.com/open-source/urql/) and [SWR](https://swr.vercel.app/docs/with-nextjs)
 - GraphQL codegen: [graphql-codeg-generator](https://www.graphql-code-generator.com/)
 
