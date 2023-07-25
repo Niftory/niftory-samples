@@ -47,7 +47,7 @@ const HomePage = () => {
                   walletOwnerEmail={wallet?.appUser?.email}
                 />
                 <Logout />
-                <ParentWallet/>
+                <ParentWallet />
               </VStack>
             )}
           </VStack>

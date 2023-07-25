@@ -4,14 +4,17 @@ import { useEffect, useState } from "react"
 const POLL_INTERVAL = 1000 // ms
 const MAX_RETRIES = 10
 
-export const usePollTransactionStatus = (niftoryClient: NiftoryClient, maxRetries = MAX_RETRIES) => {
+export const usePollTransactionStatus = (
+  niftoryClient: NiftoryClient,
+  maxRetries = MAX_RETRIES
+) => {
   const [transaction, setTransaction] = useState<BlockchainTransaction>(null)
   const [attemptNumber, setAttemptNumber] = useState(0)
 
   useEffect(() => {
     const getTransaction = async () => {
       if (!transaction) {
-        return 
+        return
       }
       const _transaction = await niftoryClient.getBlockchainTransaction(transaction)
       setAttemptNumber((prevAttemptNumber) => prevAttemptNumber + 1)
@@ -31,6 +34,10 @@ export const usePollTransactionStatus = (niftoryClient: NiftoryClient, maxRetrie
     return () => clearInterval(pollInterval)
   }, [transaction, niftoryClient, attemptNumber, maxRetries])
 
+  const transactionState =
+    transaction?.state !== BlockchainTransactionState.Sealed && attemptNumber > maxRetries
+      ? "STALED"
+      : transaction?.state
 
-  return setTransaction
+  return { pollTransaction: setTransaction, transactionState }
 }

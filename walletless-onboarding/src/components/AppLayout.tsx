@@ -12,7 +12,6 @@ type Props = {
 export default function AppLayout({ children, showSidebar = false }: Props) {
   const { isOpen, onOpen } = useDisclosure()
 
-
   return (
     <>
       <Flex direction="column" minH="90vh" w="full">

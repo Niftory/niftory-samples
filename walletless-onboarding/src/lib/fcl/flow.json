@@ -86,6 +86,5 @@
     "mainnet": "access.mainnet.nodes.onflow.org:9000",
     "testnet": "access.devnet.nodes.onflow.org:9000"
   },
-  "accounts": {
-  }
+  "accounts": {}
 }
