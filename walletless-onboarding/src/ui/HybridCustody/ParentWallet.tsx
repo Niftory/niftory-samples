@@ -1,7 +1,7 @@
 import React from 'react'
+import * as fcl from "@onflow/fcl"
 import { Button, SimpleGrid, GridItem, Text, Box, Stack } from '@chakra-ui/react';
 
-import * as fcl from "@onflow/fcl"
 import "../../lib/fcl/config"
 import { useFlowUser, useNiftoryClient, useWalletQuery } from '@niftory/sdk/react';
 
@@ -11,6 +11,7 @@ import { useRemoveParentFromChild } from 'hooks/hybridCustody/useRemoveParentFro
 import { useRedeemAccount } from 'hooks/hybridCustody/useRedeemAccount';
 import { useRemoveChildFromParent } from 'hooks/hybridCustody/useRemoveChildFromParent';
 import { useHybridCustodyQueries } from 'hooks/hybridCustody/useHybridCustodyQueries';
+import { useAddAccountMultisign } from 'hooks/hybridCustody/useAddAccountMultiSign';
 
 
 export const ParentWallet = () => {
@@ -26,9 +27,10 @@ export const ParentWallet = () => {
   const { removeParentFromChild } = useRemoveParentFromChild(niftoryClient)
   const { removeChildFromParent } = useRemoveChildFromParent(fcl)
   const { getParentFromChild, getChildrenFromParent, getNfts } = useHybridCustodyQueries(fcl)
+  const { addAccountMultiSign } = useAddAccountMultisign(fcl)
 
   if (walletFetching) {
-    return <Text>loading ...</Text>
+    return 'loading ...'
   }
 
   if (!flowUser?.addr) {
@@ -68,6 +70,11 @@ export const ParentWallet = () => {
           Remove parent from child
         </Button>
 
+        <Button onClick={() => addAccountMultiSign({
+          childAddress: wallet.address,
+        })}>
+          multisig
+        </Button>
         <Button onClick={() => getNfts({parentAddress: flowUser.addr})}>get NFTs</Button>
 
         <Button onClick={fcl.unauthenticate}>logout</Button>
