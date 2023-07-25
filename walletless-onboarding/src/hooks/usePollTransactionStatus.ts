@@ -13,9 +13,9 @@ export const usePollTransactionStatus = (niftoryClient: NiftoryClient, maxRetrie
       if (!transaction) {
         return 
       }
-      const result = await niftoryClient.getBlockchainTransaction(transaction)
+      const _transaction = await niftoryClient.getBlockchainTransaction(transaction)
       setAttemptNumber((prevAttemptNumber) => prevAttemptNumber + 1)
-      console.log(result)
+      setTransaction(_transaction)
     }
 
     const pollInterval = setInterval(getTransaction, POLL_INTERVAL)

@@ -16,7 +16,6 @@ export const useRemoveParentFromChild = (niftoryClient) => {
       }
     })
     pollTransaction(transaction)
-    console.log(transaction)
   }
 
   return { removeParentFromChild }
