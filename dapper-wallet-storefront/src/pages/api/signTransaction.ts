@@ -1,6 +1,4 @@
 import { NextApiHandler } from "next"
-import { gql } from "graphql-request"
-import { getBackendGraphQLClient } from "../../lib/BackendGraphQLClient"
 import { getAddressFromCookie } from "../../lib/cookieUtils"
 import { getBackendNiftoryClient } from "../../lib/backendNiftoryClient"
 
