@@ -59,10 +59,10 @@ export const ParentWallet = () => {
     <SimpleGrid>
       <GridItem>
         <Stack>
-          <Text>parent wallet address {flowUser?.addr}</Text>
+          <Text>Parent wallet address {flowUser?.addr}</Text>
           <SimpleGrid columns={2} spacing={10}>
             <Button onClick={() => setupFilterAndFactoryManager({ address: wallet.address })}>
-              setup filter and factory manager
+              Setup filter and factory manager
             </Button>
             <Text>{setupFilterAndFactoryManagerState}</Text>
           </SimpleGrid>
@@ -89,7 +89,7 @@ export const ParentWallet = () => {
                 })
               }
             >
-              redeem account
+              Redeem account
             </Button>
           </SimpleGrid>
 
@@ -113,7 +113,7 @@ export const ParentWallet = () => {
                 })
               }
             >
-              get parent account
+              Get parent account
             </Button>
 
             <Text>{JSON.stringify(parent, null, 2)}</Text>
@@ -132,7 +132,6 @@ export const ParentWallet = () => {
             <Text>{removeParentFromChildState}</Text>
           </SimpleGrid>
           <SimpleGrid columns={2} spacing={10}>
-            <Box>
               <Button
                 onClick={() =>
                   fetchChildrenFromParent({
@@ -140,9 +139,8 @@ export const ParentWallet = () => {
                   })
                 }
               >
-                get children accounts
+                Get children accounts
               </Button>
-            </Box>
             <Text>{JSON.stringify(children, null, 2)}</Text>
           </SimpleGrid>
           <SimpleGrid columns={2} spacing={10}>
