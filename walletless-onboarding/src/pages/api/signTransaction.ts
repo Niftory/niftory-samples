@@ -24,7 +24,8 @@ const handler: NextApiHandler = async (req, res) => {
 
     const niftoryClient = await getBackendNiftoryClient()
 
-    const checkoutResponse = await niftoryClient.signTransactionForDapperWallet({
+    const checkoutResponse = await niftoryClient.signTransaction({
+      address,
       transaction: input.transaction,
     })
 

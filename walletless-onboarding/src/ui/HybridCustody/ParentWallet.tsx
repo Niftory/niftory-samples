@@ -20,7 +20,7 @@ import { useRemoveParentFromChild } from "hooks/hybridCustody/useRemoveParentFro
 import { useRedeemAccount } from "hooks/hybridCustody/useRedeemAccount"
 import { useRemoveChildFromParent } from "hooks/hybridCustody/useRemoveChildFromParent"
 import { useHybridCustodyQueries } from "hooks/hybridCustody/useHybridCustodyQueries"
-// import { useAddAccountMultisign } from "hooks/hybridCustody/useAddAccountMultiSign"
+import { useAddAccountMultisign } from "hooks/hybridCustody/useAddAccountMultiSign"
 
 export const ParentWallet = () => {
   const flowUser = useFlowUser()
@@ -45,7 +45,7 @@ export const ParentWallet = () => {
   const { fetchParentFromChild, fetchChildrenFromParent, fetchNfts, nfts, parent, children } =
     useHybridCustodyQueries(fcl)
 
-  // const { addAccountMultiSign } = useAddAccountMultisign(fcl)
+  const { addAccountMultiSign } = useAddAccountMultisign(fcl, niftoryClient)
 
   if (walletFetching) {
     return <Text>loading ...</Text>
@@ -93,7 +93,7 @@ export const ParentWallet = () => {
             </Button>
           </SimpleGrid>
 
-          {/* <SimpleGrid columns={2} spacing={10}>
+          <SimpleGrid columns={2} spacing={10}>
             <Button
               onClick={() =>
                 addAccountMultiSign({
@@ -104,7 +104,7 @@ export const ParentWallet = () => {
               multisig
             </Button>
           </SimpleGrid>
-           */}
+          
           <SimpleGrid columns={2} spacing={10}>
             <Button
               onClick={() =>

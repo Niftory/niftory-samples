@@ -2,11 +2,13 @@ import axios from "axios"
 import { useCallback } from "react"
 import ADD_ACCOUNT_MULTI_SIGN from "../../../cadence/transactions/hybrid-custody/add_account_multi_sign.cdc"
 import { resolveCadenceImports } from "utils/resolveCadenceImport"
+import {NiftoryClient} from "@niftory/sdk"
 
-export const useAddAccountMultisign = (fcl) => {
-  const signTransaction = useCallback(async (transaction: string) => {
-    const response = await axios.post("/api/signTransaction", { transaction })
-    return response.data
+export const useAddAccountMultisign = (fcl: any, niftoryClient: NiftoryClient) => {
+  const signTransaction = useCallback(async (transaction: string, address: string) => {
+    return await niftoryClient.signTransaction({transaction, address})
+    // const response = await axios.post("/api/signTransaction", { transaction })
+    // return response.data
   }, [])
 
   const addAccountMultiSign = async ({ childAddress }) => {
@@ -14,7 +16,7 @@ export const useAddAccountMultisign = (fcl) => {
 
     const tx = await fcl.mutate({
       // resolveCadenceImports converts explicit imports for Niftory sign operation
-      cadence: await resolveCadenceImports(ADD_ACCOUNT_MULTI_SIGN),
+      cadence: ADD_ACCOUNT_MULTI_SIGN,
       args: (arg, t) => [arg(childAddress, t.Address), arg(childAddress, t.Address)],
       authorizations: [
         async (account) => ({
@@ -23,10 +25,11 @@ export const useAddAccountMultisign = (fcl) => {
           tempId: `${childAddress}-${signerKeyId}`,
           keyId: signerKeyId,
           signingFunction: async (signable) => {
+            console.log(signable.message)
             return {
               keyId: signerKeyId,
               addr: childAddress,
-              signature: await signTransaction(signable.message),
+              signature: await signTransaction(signable.message, childAddress),
             }
           },
         }),
