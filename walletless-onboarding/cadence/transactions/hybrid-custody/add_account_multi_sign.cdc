@@ -19,7 +19,7 @@ transaction(childAccountFactoryAddress: Address, childAccountFilterAddress: Addr
     let manager: &HybridCustody.Manager
     let childAccountCapability: Capability<&HybridCustody.ChildAccount{HybridCustody.AccountPrivate, HybridCustody.AccountPublic, MetadataViews.Resolver}>
     
-    prepare(parent: AuthAccount, child: AuthAccount) {
+    prepare(child: AuthAccount, parent: AuthAccount) {
     
         // --------------------- Begin HybridCustody setup of child account ---------------------
         //
@@ -84,36 +84,25 @@ transaction(childAccountFactoryAddress: Address, childAccountFilterAddress: Addr
         // --------------------- Begin flowHC setup of parent account ---------------------
         //
         // Set up flowHC.Collection if it doesn't exist
-        if parent.borrow<&flowHC.Collection>(from: flowHC.CollectionStoragePath) == nil {
+        if parent.borrow<&flowHC.Collection>(from: flowHC.COLLECTION_STORAGE_PATH) == nil {
             // Create a new empty collection
             let collection <- flowHC.createEmptyCollection()
             // save it to the account
-            parent.save(<-collection, to: flowHC.CollectionStoragePath)
+            parent.save(<-collection, to: flowHC.COLLECTION_STORAGE_PATH)
         }
         // Check for public capabilities
         if !parent.getCapability<
-                &flowHC.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, flowHC.flowHCCollectionPublic, MetadataViews.ResolverCollection}
+                &flowHC.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}
             >(
-                flowHC.CollectionPublicPath
+                flowHC.COLLECTION_PUBLIC_PATH
             ).check() {
             // create a public capability for the collection
-            parent.unlink(flowHC.CollectionPublicPath)
+            parent.unlink(flowHC.COLLECTION_PUBLIC_PATH)
             parent.link<
-                &flowHC.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, flowHC.flowHCCollectionPublic, MetadataViews.ResolverCollection}
+                &flowHC.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}
             >(
-                flowHC.CollectionPublicPath,
-                target: flowHC.CollectionStoragePath
-            )
-        }
-        // Check for private capabilities
-        if !parent.getCapability<&flowHC.Collection{NonFungibleToken.Provider}>(flowHC.ProviderPrivatePath).check() {
-            // Link the Provider Capability in private storage
-            parent.unlink(flowHC.ProviderPrivatePath)
-            parent.link<
-                &flowHC.Collection{NonFungibleToken.Provider}
-            >(
-                flowHC.ProviderPrivatePath,
-                target: flowHC.CollectionStoragePath
+                flowHC.COLLECTION_PUBLIC_PATH,
+                target: flowHC.COLLECTION_STORAGE_PATH
             )
         }
 
