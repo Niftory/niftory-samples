@@ -68,7 +68,7 @@ export const ParentWallet = () => {
                 })
               }
             >
-              multisig
+              Publish and redeem account multi sign
             </Button>
           </SimpleGrid>
           

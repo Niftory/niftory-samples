@@ -12,8 +12,7 @@ export const useRemoveChildFromParent = (fcl) => {
       args: (arg, t) => [arg(childAddress, t.Address)],
     } as any)
 
-    const result = await fcl.tx(transactionId).onceSealed()
-    console.log(result)
+    await fcl.tx(transactionId).onceSealed()
   }
 
   return { removeChildFromParent }

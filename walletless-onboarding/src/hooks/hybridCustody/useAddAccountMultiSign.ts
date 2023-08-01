@@ -25,7 +25,6 @@ export const useAddAccountMultisign = (fcl: any, niftoryClient: NiftoryClient) =
           tempId: `${childAddress}-${signerKeyId}`,
           keyId: signerKeyId,
           signingFunction: async (signable) => {
-            console.log(signable.message)
             return {
               keyId: signerKeyId,
               addr: childAddress,
