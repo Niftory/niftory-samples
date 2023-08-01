@@ -1,23 +1,24 @@
-import axios from "axios"
 import { useCallback } from "react"
 import ADD_ACCOUNT_MULTI_SIGN from "../../../cadence/transactions/hybrid-custody/add_account_multi_sign.cdc"
-import { resolveCadenceImports } from "utils/resolveCadenceImport"
 import {NiftoryClient} from "@niftory/sdk"
+import { replaceCadencePlaceholders } from "utils/replaceCadencePlaceholders"
 
 export const useAddAccountMultisign = (fcl: any, niftoryClient: NiftoryClient) => {
   const signTransaction = useCallback(async (transaction: string, address: string) => {
     return await niftoryClient.signTransaction({transaction, address})
-    // const response = await axios.post("/api/signTransaction", { transaction })
-    // return response.data
   }, [])
 
   const addAccountMultiSign = async ({ childAddress }) => {
     const signerKeyId = 0
-
+    const { name: nftContractName } = await niftoryClient.getContract()
+    const cadence = replaceCadencePlaceholders(ADD_ACCOUNT_MULTI_SIGN, {CONTRACT_NAME: nftContractName })
     const tx = await fcl.mutate({
       // resolveCadenceImports converts explicit imports for Niftory sign operation
-      cadence: ADD_ACCOUNT_MULTI_SIGN,
-      args: (arg, t) => [arg(childAddress, t.Address), arg(childAddress, t.Address)],
+      cadence,
+      args: (arg, t) => [
+        arg(childAddress, t.Address),
+        arg(childAddress, t.Address),
+      ],
       authorizations: [
         async (account) => ({
           ...account,

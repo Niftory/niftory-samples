@@ -1,6 +1,5 @@
 #allowAccountLinking
 
-import "FungibleToken"
 import "NonFungibleToken"
 import "MetadataViews"
 
@@ -9,10 +8,10 @@ import "CapabilityDelegator"
 import "CapabilityFilter"
 import "HybridCustody"
 
-import "flowHC"
+import "<CONTRACT_NAME>"
 
 /// Links the signing accounts as labeled, with the child's AuthAccount Capability maintained in the parent's 
-/// HybridCustody.Manager. Signing parent is also configured with flowHC.Collection and TicketToken.Vault.
+/// HybridCustody.Manager. Signing parent is also configured with <CONTRACT_NAME>.Collection and TicketToken.Vault.
 ///
 transaction(childAccountFactoryAddress: Address, childAccountFilterAddress: Address) {
     
@@ -81,32 +80,32 @@ transaction(childAccountFactoryAddress: Address, childAccountFilterAddress: Addr
 
         // --------------------- End HybridCustody redeem ---------------------
 
-        // --------------------- Begin flowHC setup of parent account ---------------------
+        // --------------------- Begin <CONTRACT_NAME> setup of parent account ---------------------
         //
-        // Set up flowHC.Collection if it doesn't exist
-        if parent.borrow<&flowHC.Collection>(from: flowHC.COLLECTION_STORAGE_PATH) == nil {
+        // Set up <CONTRACT_NAME>.Collection if it doesn't exist
+        if parent.borrow<&<CONTRACT_NAME>.Collection>(from: <CONTRACT_NAME>.COLLECTION_STORAGE_PATH) == nil {
             // Create a new empty collection
-            let collection <- flowHC.createEmptyCollection()
+            let collection <- <CONTRACT_NAME>.createEmptyCollection()
             // save it to the account
-            parent.save(<-collection, to: flowHC.COLLECTION_STORAGE_PATH)
+            parent.save(<-collection, to: <CONTRACT_NAME>.COLLECTION_STORAGE_PATH)
         }
         // Check for public capabilities
         if !parent.getCapability<
-                &flowHC.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}
+                &<CONTRACT_NAME>.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}
             >(
-                flowHC.COLLECTION_PUBLIC_PATH
+                <CONTRACT_NAME>.COLLECTION_PUBLIC_PATH
             ).check() {
             // create a public capability for the collection
-            parent.unlink(flowHC.COLLECTION_PUBLIC_PATH)
+            parent.unlink(<CONTRACT_NAME>.COLLECTION_PUBLIC_PATH)
             parent.link<
-                &flowHC.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}
+                &<CONTRACT_NAME>.Collection{NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}
             >(
-                flowHC.COLLECTION_PUBLIC_PATH,
-                target: flowHC.COLLECTION_STORAGE_PATH
+                <CONTRACT_NAME>.COLLECTION_PUBLIC_PATH,
+                target: <CONTRACT_NAME>.COLLECTION_STORAGE_PATH
             )
         }
 
-        // --------------------- End flowHC setup of parent account ---------------------
+        // --------------------- End <CONTRACT_NAME> setup of parent account ---------------------
     }
     execute {
         self.manager.addAccount(cap: self.childAccountCapability)
