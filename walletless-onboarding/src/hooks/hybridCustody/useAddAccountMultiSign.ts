@@ -11,7 +11,7 @@ export const useAddAccountMultisign = (fcl: any, niftoryClient: NiftoryClient) =
     const signerKeyId = 0
     const { name: nftContractName } = await niftoryClient.getContract()
     // replace contract name placeholders in multisign transaciton
-    const cadence = ADD_ACCOUNT_MULTI_SIGN.replace(`<CONTRACT_NAME>`, nftContractName)
+    const cadence = ADD_ACCOUNT_MULTI_SIGN.replace(/<CONTRACT_NAME>/g, nftContractName)
     const tx = await fcl.mutate({
       cadence,
       args: (arg, t) => [
