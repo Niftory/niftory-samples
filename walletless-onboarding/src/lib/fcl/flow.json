@@ -1,7 +1,6 @@
 {
   "contracts": {
     "flowHC": {
-      "source": "cadence/contracts/flowHC.cdc",
       "aliases": {
         "testnet": "8cda917c8f8231bf"
       }

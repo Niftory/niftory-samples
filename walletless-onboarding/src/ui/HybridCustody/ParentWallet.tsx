@@ -14,10 +14,8 @@ import {
 import "../../lib/fcl/config"
 import { useFlowUser, useNiftoryClient, useWalletQuery } from "@niftory/sdk/react"
 
-import { useSetupOwnedAccountAndPublishToParent } from "hooks/hybridCustody/useSetupOwnedAccountAndPublishToParent"
 import { useSetupFilterAndFactoryManager } from "hooks/hybridCustody/useSetupFilterAndFactoryManager"
 import { useRemoveParentFromChild } from "hooks/hybridCustody/useRemoveParentFromChild"
-import { useRedeemAccount } from "hooks/hybridCustody/useRedeemAccount"
 import { useRemoveChildFromParent } from "hooks/hybridCustody/useRemoveChildFromParent"
 import { useHybridCustodyQueries } from "hooks/hybridCustody/useHybridCustodyQueries"
 import { useAddAccountMultisign } from "hooks/hybridCustody/useAddAccountMultiSign"
@@ -31,11 +29,6 @@ export const ParentWallet = () => {
 
   const { setupFilterAndFactoryManager, setupFilterAndFactoryManagerState } =
     useSetupFilterAndFactoryManager(niftoryClient)
-
-  const { setupOwnedAccountAndPublishToParent, setupOwnedAccountAndPublishToParentState } =
-    useSetupOwnedAccountAndPublishToParent(niftoryClient)
-
-  const { redeemAccount } = useRedeemAccount(fcl)
 
   const { removeParentFromChild, removeParentFromChildState } =
     useRemoveParentFromChild(niftoryClient)
@@ -65,32 +58,6 @@ export const ParentWallet = () => {
               Setup filter and factory manager
             </Button>
             <Text>{setupFilterAndFactoryManagerState}</Text>
-          </SimpleGrid>
-          <SimpleGrid columns={2} spacing={10}>
-            <Button
-              onClick={() =>
-                setupOwnedAccountAndPublishToParent({
-                  address: wallet.address,
-                  parent: flowUser.addr,
-                  factoryAddress: wallet.address,
-                  filterAddress: wallet.address,
-                })
-              }
-            >
-              Set up child account & publish to parent
-            </Button>
-            <Text>{setupOwnedAccountAndPublishToParentState}</Text>
-          </SimpleGrid>
-          <SimpleGrid columns={2} spacing={10}>
-            <Button
-              onClick={() =>
-                redeemAccount({
-                  childAddress: wallet.address,
-                })
-              }
-            >
-              Redeem account
-            </Button>
           </SimpleGrid>
 
           <SimpleGrid columns={2} spacing={10}>
