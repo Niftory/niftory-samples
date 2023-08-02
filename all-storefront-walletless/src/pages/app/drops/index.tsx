@@ -1,8 +1,8 @@
 import { Center, Spinner } from "@chakra-ui/react"
 import React from "react"
 import { useQuery } from "urql"
+import { NftListingsDocument, NftListingsQuery } from "@niftory/sdk"
 
-import { NftListingsDocument, NftListingsQuery } from "../../../../generated/graphql"
 import AppLayout from "../../../components/AppLayout"
 import { DropsGrid } from "../../../components/drops/DropsGrid"
 import { UpcomingDrop } from "../../../ui/marketing"
@@ -18,7 +18,7 @@ const DropsPage = () => {
 
   return (
     <AppLayout>
-      <SectionHeader text="Get A Drop" />
+      <SectionHeader standardText="Get A Drop" />
       {!nftListings && (
         <Center>
           <Spinner mt="16" color="white" size="lg" />
