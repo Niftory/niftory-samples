@@ -5,7 +5,7 @@ import { NftListingsDocument, NftListingsQuery } from "@niftory/sdk"
 
 import AppLayout from "../../../components/AppLayout"
 import { DropsGrid } from "../../../components/drops/DropsGrid"
-import { UpcomingDrop } from "../../../ui/marketing"
+import { UpcomingDrop } from "../../../components/drops/UpcomingDrop"
 import { SectionHeader } from "../../../ui/SectionHeader"
 
 const DropsPage = () => {
