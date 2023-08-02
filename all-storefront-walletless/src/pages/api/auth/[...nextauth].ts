@@ -52,7 +52,7 @@ export const AUTH_OPTIONS: NextAuthOptions = {
       }
 
       // this isn't initial sign-in, so let's see if the token is still valid
-      if (Date.now() < token.authTokenExpiresAt) {
+      if (Date.now() < (token.authTokenExpiresAt as number)) {
         // token is still valid, no need to refresh it
         return token
       }
