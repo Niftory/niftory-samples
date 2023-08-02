@@ -27,7 +27,6 @@ export const Footer: React.FunctionComponent = () => {
       position="relative"
       zIndex={1}
     >
-
       <Flex
         justifyContent="space-between"
         pt="8"
@@ -65,18 +64,10 @@ export const Footer: React.FunctionComponent = () => {
             <Heading size="md" mb="0.5rem">
               BUILT ON NIFTORY
             </Heading>
-            <ChakraLink
-              fontSize="1rem"
-              href={"https://niftory.com"}
-              target="_blank"
-            >
+            <ChakraLink fontSize="1rem" href={"https://niftory.com"} target="_blank">
               About
             </ChakraLink>
-            <ChakraLink
-              fontSize="1rem"
-              href={"https://docs.niftory.com/"}
-              target="_blank"
-            >
+            <ChakraLink fontSize="1rem" href={"https://docs.niftory.com/"} target="_blank">
               Niftory API Docs
             </ChakraLink>
             <ChakraLink fontSize="1rem" href={"https://admin.niftory.com/"} target="_blank">

@@ -7,6 +7,7 @@ import { useAuthContext } from "hooks/useAuthContext"
 
 import { FaGoogle } from "react-icons/fa"
 import { useWalletQuery } from "@niftory/sdk/react"
+import { ParentWallet } from "ui/HybridCustody/ParentWallet"
 
 const HomePage = () => {
   const { session, signIn, isLoading } = useAuthContext()
@@ -46,6 +47,7 @@ const HomePage = () => {
                   walletOwnerEmail={wallet?.appUser?.email}
                 />
                 <Logout />
+                <ParentWallet />
               </VStack>
             )}
           </VStack>
