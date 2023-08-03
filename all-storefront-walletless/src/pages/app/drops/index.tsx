@@ -18,7 +18,7 @@ const DropsPage = () => {
 
   return (
     <AppLayout>
-      <SectionHeader standardText="Get A Drop" />
+      <SectionHeader standardText="Claim A Drop" />
       {!nftListings && (
         <Center>
           <Spinner mt="16" color="white" size="lg" />
