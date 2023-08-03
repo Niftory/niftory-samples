@@ -1,8 +1,8 @@
 # Walletless Onboarding Starter
 
-This is Niftory's Walletless Onboarding Starter built on Next.js that uses the [Niftory API](https://docs.niftory.com/home/v/api/). Use this app as inspiration to easily bring your users into Web3, without a wallet! 
+This is Niftory's Walletless Onboarding Starter built on Next.js that uses the [Niftory API](https://docs.niftory.com/home/v/api/). Use this app as inspiration to easily bring your users into Web3, without a wallet!
 
-This app auto-generates a custodial wallet that you can use for customers and allows you to attach additional wallets as well. In the future, we'll be adding support for Flow's hybrid custody features. 
+This app auto-generates a custodial wallet that you can use for customers and allows you to attach additional wallets as well. In the future, we'll be adding support for Flow's hybrid custody features.
 
 ## Usage
 
@@ -54,5 +54,3 @@ The browser's [GraphQL client](src/components/GraphQLClientProvider.tsx) then in
 If you want to make requests using the app's credentials instead of the User's credentials for performing admin only tasks then that can be done using the [Serverside GraphQL Client](src/graphql/getClientForServer.ts).
 
 Note - This client should not be used in the frontend, it should either be used in the backend of your app or in the [NextJS API Routes](https://nextjs.org/docs/api-routes/introduction).
-
-

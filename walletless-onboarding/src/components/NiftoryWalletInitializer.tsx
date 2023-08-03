@@ -37,14 +37,18 @@ export const NiftoryWalletInitializer = () => {
 
   const verifyWalletCreation = useCallback(async () => {
     setVerifyingWallet(true)
-    const wallet = await niftoryClient.getWallet()
+    try {
+      const wallet = await niftoryClient.getWallet()
 
-    if (!wallet?.address) {
-      await backendClient("createWallet")
+      if (!wallet?.address) {
+        await backendClient("createWallet")
 
-      // Check if wallet is ready with exponential backoff
-      await verifyWalletStatus()
-      setVerifyingWallet(false)
+        // Check if wallet is ready with exponential backoff
+        await verifyWalletStatus()
+        setVerifyingWallet(false)
+      }
+    } catch {
+      
     }
   }, [niftoryClient, verifyWalletStatus])
 
