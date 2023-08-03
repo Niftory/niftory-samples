@@ -24,7 +24,3 @@ yarn-error.log*
 
 .vercel
 node_modules
-walletless-onboarding/yarn.lock
-walletless-onboarding/.env.example
-dapper-wallet-storefront/yarn.lock
-dapper-wallet-storefront/package.json
