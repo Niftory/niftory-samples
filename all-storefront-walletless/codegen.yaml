@@ -1,0 +1,11 @@
+schema: generated/schema.graphql
+documents: "./src/**/*.graphql"
+generates:
+  generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node
+    config:
+      withHooks: true
+
