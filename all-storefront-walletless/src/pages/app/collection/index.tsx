@@ -1,19 +1,18 @@
 import React from 'react';
 import { useQuery } from 'urql';
 
-import { Nft, UserNftsDocument, UserNftsQuery } from '../../../../generated/graphql';
+import { Nft, NftsDocument, NftsQuery } from '@niftory/sdk'
 import AppLayout from '../../../components/AppLayout';
 import { CollectionGrid } from '../../../components/collection/CollectionGrid';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import { Subset } from '../../../lib/types';
-import { UpcomingDrop } from '../../../ui/marketing/UpcomingDrop';
 import { SectionHeader } from '../../../ui/SectionHeader';
 
 const CollectionPage = () => {
   const { session } = useAuthContext()
   const userId = session?.userId
-  const [userNftsResponse] = useQuery<UserNftsQuery>({
-    query: UserNftsDocument,
+  const [userNftsResponse] = useQuery<NftsQuery>({
+    query: NftsDocument,
     variables: { id: userId },
   })
 
@@ -21,9 +20,8 @@ const CollectionPage = () => {
 
   return (
     <AppLayout>
-      <SectionHeader text="My Collection" />
+      <SectionHeader standardText="My Collection" />
       <CollectionGrid nfts={nfts} isLoading={userNftsResponse.fetching} />
-      <UpcomingDrop />
     </AppLayout>
   )
 }
