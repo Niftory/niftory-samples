@@ -11,7 +11,7 @@ import { BsDiscord } from "react-icons/bs"
 import { useAuthContext } from "hooks/useAuthContext"
 
 
-export const Navbar = ({ onOpen }) => {
+export const Navbar = () => {
   const { session } = useAuthContext()
 
 

@@ -18,7 +18,7 @@ const HomePage = () => {
   const fetching = walletFetching || isLoading
   return (
     <AppLayout>
-      <Center py={{ base: "1rem" }} flexDir="column" position="relative">
+      <Center flexDir="column" position="relative">
         <Box px="1rem">
           <VStack>
             {!session && (
