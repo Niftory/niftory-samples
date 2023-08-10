@@ -14,7 +14,6 @@ import React from "react"
 export const Navbar = () => {
   const { session } = useAuthContext()
 
-
   const menuItems = React.useMemo(() => {
     const items = [
       {
@@ -61,7 +60,7 @@ export const Navbar = () => {
           href="https://discord.gg/QAgDQXUGsU"
           target="_blank"
         >
-          <BsDiscord size="1.5rem" color="header.accent" />
+          <BsDiscord size="1.5rem" color="white" />
         </ChakraLink>
       ),
     })

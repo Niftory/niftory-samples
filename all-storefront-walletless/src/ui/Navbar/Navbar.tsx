@@ -1,4 +1,4 @@
-import { BackgroundProps, Box, Flex, Stack, VisuallyHidden, Divider } from "@chakra-ui/react"
+import { BackgroundProps, Box, Flex, Stack, VisuallyHidden } from "@chakra-ui/react"
 
 import { IMenuItem, NavContent } from "./NavContent"
 
