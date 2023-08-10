@@ -7,6 +7,7 @@ import { useAuthContext } from "hooks/useAuthContext"
 
 import { FaGoogle } from "react-icons/fa"
 import { useWalletQuery } from "@niftory/sdk/react"
+import { Hero } from "ui/Hero"
 
 const HomePage = () => {
   const { session, signIn, isLoading } = useAuthContext()
@@ -17,25 +18,23 @@ const HomePage = () => {
   const fetching = walletFetching || isLoading
   return (
     <AppLayout>
-      
       <Center py={{ base: "1rem" }} flexDir="column" position="relative">
         <Box px="1rem">
           <VStack>
             {!session && (
-              <Box pt="200">
-                <Text p="5" textAlign="center" fontWeight="semibold" fontSize="xl">
-                  Login to get started!
-                </Text>
-                <Button
-                  p="8"
-                  isLoading={isLoading}
-                  onClick={() => signIn()}
-                  colorScheme="red"
-                  leftIcon={<FaGoogle />}
-                >
+              <Hero
+                heading="Login to get started, or check out the Drops page"
+                
+                button={<Button
+                    p="8"
+                    isLoading={isLoading}
+                    onClick={() => signIn()}
+                    colorScheme="red"
+                    leftIcon={<FaGoogle />}
+                  >
                   Sign in with Google
-                </Button>
-              </Box>
+                </Button>}
+              />
             )}
             {session && (
               <VStack>
