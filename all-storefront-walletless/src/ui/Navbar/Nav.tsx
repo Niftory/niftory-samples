@@ -16,10 +16,16 @@ export const Navbar = ({ onOpen }) => {
 
 
   const menuItems = React.useMemo(() => {
-    const items = [{
+    const items = [
+      {
       title: "Drops",
       href: "/app/drops"
-    }] as Array<Object>
+      },
+      {
+        title: "Collection",
+        href: "/apps/collection"
+      }
+  ] as Array<Object>
 
     if (!session) {
       items.push(
