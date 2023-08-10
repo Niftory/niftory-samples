@@ -25,19 +25,20 @@ const theme = extendTheme({
       100: "#A01CF0",
     },
     navbar: {
-      background: "white",
-      text: "black",
+      background: "black",
+      text: "white",
     },
     header: {
-      background: "white",
+      background: "black",
       text: "white",
       accent: "#FE2B2D",
     },
     page: {
-      background: "#eee",
+      background: "black",
       text: "black",
       accent: "white",
       buttons: "#B6A45D",
+      gradientBackground: "linear(95deg, black, gray)",
     },
     footer: {
       background: "gray",
