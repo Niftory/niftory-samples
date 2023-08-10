@@ -1,5 +1,4 @@
 import { Box, SimpleGrid, Spinner } from '@chakra-ui/react';
-import * as React from 'react';
 
 import { Nft } from "@niftory/sdk";
 import { Subset } from '../../lib/types';

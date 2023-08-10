@@ -1,6 +1,4 @@
 import { Box, SimpleGrid } from "@chakra-ui/react"
-import * as React from "react"
-import { ListingState } from "@niftory/sdk"
 
 import { ListingCard } from "./ListingCard"
 

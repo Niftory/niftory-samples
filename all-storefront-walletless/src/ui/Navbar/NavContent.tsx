@@ -1,8 +1,8 @@
 import { Box, HStack, StackProps } from "@chakra-ui/react"
 import Router from "next/router"
-import * as React from "react"
 
 import { NavLinkNormal } from "./NavLinkNormal"
+import React from "react"
 
 const handleClick = (value) => () => {
   Router.push(value)

@@ -1,6 +1,5 @@
 import { AspectRatio, Box, Center, HStack, Image, Link, Skeleton, Stack, Text } from '@chakra-ui/react';
 import router from 'next/router';
-import * as React from 'react';
 
 import { NftListing } from "@niftory/sdk";
 import { PriceTag } from '../../ui/Content/ProductCard/PriceTag';

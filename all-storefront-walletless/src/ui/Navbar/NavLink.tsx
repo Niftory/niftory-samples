@@ -1,6 +1,5 @@
 import { chakra, HTMLChakraProps } from "@chakra-ui/react"
 import Link from "next/link"
-import * as React from "react"
 
 const DesktopNavLink = ({ href = "", ...props }: HTMLChakraProps<"a">) => {
   return (

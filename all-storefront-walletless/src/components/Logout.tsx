@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/react"
-import React from "react"
 import { useAuthContext } from "../hooks/useAuthContext"
+
 export function Logout() {
   const { signOut } = useAuthContext()
 

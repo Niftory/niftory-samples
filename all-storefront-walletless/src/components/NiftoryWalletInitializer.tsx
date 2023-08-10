@@ -1,4 +1,3 @@
-import { useToast } from "@chakra-ui/react"
 import { useNiftoryClient, WalletState } from "@niftory/sdk/react"
 import { backOff } from "exponential-backoff"
 import { backendClient } from "graphql/backendClient"
@@ -7,7 +6,6 @@ import { useCallback, useEffect, useState } from "react"
 
 export const NiftoryWalletInitializer = () => {
   const niftoryClient = useNiftoryClient()
-  const toast = useToast()
 
   const [isVerifyingWallet, setVerifyingWallet] = useState(false)
 

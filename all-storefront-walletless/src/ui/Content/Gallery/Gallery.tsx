@@ -7,9 +7,10 @@ import {
   StackProps,
   useBreakpointValue,
 } from "@chakra-ui/react"
-import * as React from "react"
+
 
 import { Carousel, CarouselSlide, useCarousel } from "./Carousel"
+import React from "react"
 
 interface GalleryProps {
   content: {

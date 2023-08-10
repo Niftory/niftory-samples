@@ -1,5 +1,4 @@
 import { Box } from "@chakra-ui/react"
-import React from "react"
 
 import AppLayout from "../../../components/AppLayout"
 import { DropDetailPage } from "../../../components/drops/DropDetailPage"

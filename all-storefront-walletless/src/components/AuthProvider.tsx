@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react"
 import * as fcl from "@onflow/fcl"
 import { signOut as nextAuthSignOut, signIn as nextAuthSignIn } from "next-auth/react"
 import { Session } from "next-auth"
-import { backendClient } from "../graphql/backendClient"
 
 type AuthComponentProps = {
   children: React.ReactNode

@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
-import React from 'react';
 import { useQuery } from 'urql';
 
-import { Nft, NftDocument, NftQuery } from '../../../../generated/graphql';
+import { Nft, NftDocument, NftQuery } from '@niftory/sdk'
 import AppLayout from '../../../components/AppLayout';
 import { NftDetail } from '../../../components/collection/NftDetail';
 import { Subset } from '../../../lib/types';

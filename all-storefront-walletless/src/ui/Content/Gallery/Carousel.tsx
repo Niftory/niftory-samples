@@ -8,7 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react"
 import { KeenSliderOptions, useKeenSlider } from "keen-slider/react" // using version 6.6.2
-import * as React from "react"
+import React from "react"
 
 export const Carousel = React.forwardRef<HTMLDivElement, FlexProps>(function Carousel(props, ref) {
   return (

@@ -4,11 +4,11 @@ import {
   Heading,
 } from "@chakra-ui/react"
 import Link from "next/link"
-import * as React from "react"
 import { Navbar as NiftoryNavbar } from "./Navbar"
 
 import { BsDiscord } from "react-icons/bs"
 import { useAuthContext } from "hooks/useAuthContext"
+import React from "react"
 
 
 export const Navbar = () => {

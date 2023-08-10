@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery } from 'urql';
 
 import { Nft, NftsDocument, NftsQuery } from '@niftory/sdk'

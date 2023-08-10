@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import React, { useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { useMutation, useQuery } from "urql"
 
 import {

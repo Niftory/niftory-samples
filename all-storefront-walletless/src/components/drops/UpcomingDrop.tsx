@@ -1,5 +1,4 @@
 import { Box, Center, Container, Image, Text } from '@chakra-ui/react';
-import * as React from 'react';
 
 import { SectionHeader } from '../../ui/SectionHeader';
 

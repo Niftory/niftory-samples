@@ -1,6 +1,5 @@
 import { chakra, HTMLChakraProps } from "@chakra-ui/react"
 import { HTMLMotionProps, motion, Variants } from "framer-motion"
-import * as React from "react"
 
 const navListMotion: Variants = {
   init: {
