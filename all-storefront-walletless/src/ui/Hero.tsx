@@ -47,7 +47,7 @@ export const Hero = ({ heading, button, content, imageUrl }: IHeroWithBackground
   }, [button])
 
   return (
-    <Box width="100vw" minH={{ base: "90vh", sm: "100vh" }} position="relative" bgImage={imageUrl}>
+    <Box width="100vw" minH={{ base: "90vh", sm: "100vh" }} position="relative" bg="page.gradientBg" bgImage={imageUrl}>
       <Box
         zIndex={100}
         position="absolute"
@@ -70,7 +70,6 @@ export const Hero = ({ heading, button, content, imageUrl }: IHeroWithBackground
       </Box>
       <Box
         zIndex={1}
-        background="rgba(0,0,0,0.5)"
         top="0"
         left="0"
         width="100%"

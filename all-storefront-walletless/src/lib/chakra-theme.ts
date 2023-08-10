@@ -38,7 +38,7 @@ const theme = extendTheme({
       text: "black",
       accent: "white",
       buttons: "#B6A45D",
-      gradientBackground: "linear(95deg, black, gray)",
+      gradientBg: "linear-gradient(95deg, black, gray)",
     },
     footer: {
       background: "gray",
