@@ -61,7 +61,7 @@ export const Navbar = ({ onOpen }) => {
           href="https://discord.gg/QAgDQXUGsU"
           target="_blank"
         >
-          <BsDiscord size="1.5rem" color="#2D3436" />
+          <BsDiscord size="1.5rem" color="header.accent" />
         </ChakraLink>
       ),
     })
@@ -75,7 +75,7 @@ export const Navbar = ({ onOpen }) => {
         leftComponent={
           <>
             <Link href="/" passHref>
-              <Heading p="4"> All-In-One Sample </Heading>
+              <Heading p="4" textColor="header.text"> All-In-One Sample </Heading>
             </Link>
           </>
         }
