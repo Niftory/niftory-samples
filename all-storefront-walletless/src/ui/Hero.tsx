@@ -1,14 +1,15 @@
 import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
 
-interface IHeroWithBackgroundProps {
+interface HeroProps {
   heading?: React.ReactNode
   content?: React.ReactNode
   button?: React.ReactNode
+  bg?: string
   imageUrl?: string
 }
 
-export const Hero = ({ heading, button, content, imageUrl }: IHeroWithBackgroundProps) => {
+export const Hero = ({ heading, button, content, imageUrl, bg }: HeroProps) => {
   const headingComponent = React.useMemo(() => {
     return typeof heading === "string" ? (
       <Heading
@@ -47,7 +48,7 @@ export const Hero = ({ heading, button, content, imageUrl }: IHeroWithBackground
   }, [button])
 
   return (
-    <Box width="100vw" minH={{ base: "90vh", sm: "100vh" }} position="relative" bg="page.gradientBg" bgImage={imageUrl}>
+    <Box width="100vw" minH={{ base: "90vh", sm: "100vh" }} position="relative" bg={bg} bgImage={imageUrl}>
       <Box
         zIndex={100}
         position="absolute"

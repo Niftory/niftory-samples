@@ -1,5 +1,5 @@
 import AppLayout from "../components/AppLayout"
-import { Center, Box, VStack, Text, Button, } from "@chakra-ui/react"
+import { Center, Box, VStack, Button, } from "@chakra-ui/react"
 import { WalletDetails } from "ui/Wallet/WalletDetails"
 import { Logout } from "@components/Logout"
 
@@ -24,7 +24,7 @@ const HomePage = () => {
             {!session && (
               <Hero
                 heading="Login to get started, or check out the Drops page"
-                
+                bg="page.gradient"
                 button={<Button
                     p="8"
                     isLoading={isLoading}
