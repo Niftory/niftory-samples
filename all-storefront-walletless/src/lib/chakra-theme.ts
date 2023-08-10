@@ -12,14 +12,14 @@ const theme = extendTheme({
     brand: {
       100: "gray.100",
       200: "gray.200",
-      300: "#F5F5F5",
-      400: "#D9D9D9",
+      300: "#F5F5F5", //white gray
+      400: "#D9D9D9", //very light gray
     },
     content: {
-      100: "#DFE6E9",
-      200: "#BCBCBC",
-      300: "#636E72",
-      400: "#2D3436",
+      100: "#DFE6E9", //very light gray
+      200: "#BCBCBC", //light gray
+      300: "#636E72", //dark gray with cyan tint
+      400: "#2D3436", //very dark gray with cyan tint
     },
     purple: {
       100: "#A01CF0",
@@ -31,14 +31,14 @@ const theme = extendTheme({
     header: {
       background: "black",
       text: "white",
-      accent: "#FE2B2D",
+      accent: "#FE2B2D", //red
     },
     page: {
       background: "black",
       text: "black",
       accent: "white",
-      buttons: "#B6A45D",
-      gradientBg: "linear-gradient(95deg, black, gray)",
+      buttons: "#B6A45D", //dull gold
+      gradientBg: "linear-gradient(180deg, black, grey)",
     },
     footer: {
       background: "gray",
