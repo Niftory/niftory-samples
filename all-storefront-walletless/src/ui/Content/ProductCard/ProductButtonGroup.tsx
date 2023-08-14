@@ -1,5 +1,4 @@
 import { ButtonGroup, Icon, IconButton } from "@chakra-ui/react"
-import * as React from "react"
 import { FiCreditCard } from "react-icons/fi"
 
 const options = [

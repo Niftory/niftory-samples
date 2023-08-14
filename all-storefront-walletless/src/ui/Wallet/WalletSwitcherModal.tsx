@@ -64,7 +64,7 @@ export const WalletSwitcherModal = ({ disclosure }: MenuModalProps) => {
               onClick={onClose}
               color="red"
             >
-              Cancel
+              Close
             </Button>
           </ButtonGroup>
         </VStack>

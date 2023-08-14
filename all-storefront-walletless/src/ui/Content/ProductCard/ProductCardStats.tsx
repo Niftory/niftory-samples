@@ -1,5 +1,4 @@
 import { HStack, Icon, StackProps, Text, useColorModeValue } from "@chakra-ui/react"
-import * as React from "react"
 import { HiBadgeCheck, HiStar } from "react-icons/hi"
 
 interface CardStatProps extends StackProps {

@@ -1,6 +1,4 @@
 import { Box, Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react"
-import * as React from "react"
-
 import { NftListing } from "@niftory/sdk"
 import { Subset } from "../../lib/types"
 import { Gallery } from "../../ui/Content/Gallery/Gallery"
@@ -60,18 +58,18 @@ export const DropDetail = (props: Props) => {
                 {product.title}
               </Heading>
             </Stack>
-            <PriceTag
+            (product.price && <PriceTag
               price={product.price}
               currency={product.currency}
               rootProps={{ fontSize: "xl" }}
-            />
+            />)
             <Text color="page.text">{product.description}</Text>
             <Text color="page.text">{product.amount} Total For Sale </Text>
           </Stack>
           <Button disabled={isLoading} size="lg" onClick={() => onStripeClick()}>
             {isLoading && <Spinner color="page.accent"></Spinner>}
-            {!isLoading && !isSignedIn && <Text>Sign in and Buy</Text>}
-            {!isLoading && isSignedIn && <Text>Buy With Credit Card</Text>}
+            {!isLoading && !isSignedIn && <Text>Sign in and Claim</Text>}
+            {!isLoading && isSignedIn && <Text>Claim your Drop!</Text>}
           </Button>
         </Stack>
         <Gallery rootProps={{ overflow: "hidden", flex: "1" }} content={product.content} />
