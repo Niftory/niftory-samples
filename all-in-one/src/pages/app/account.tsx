@@ -23,7 +23,7 @@ const AccountPage = () => {
           <VStack>
             {!session && (
               <Box pt="200">
-                <Text p="5" textAlign="center" fontWeight="semibold" fontSize="xl">
+                <Text p="5" textAlign="center" fontWeight="semibold" fontSize="xl" textColor="white" >
                   Login to get started!
                 </Text>
                 <Button
