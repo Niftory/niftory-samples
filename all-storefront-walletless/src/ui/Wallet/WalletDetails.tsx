@@ -19,7 +19,7 @@ import { backendClient } from "../../graphql/backendClient"
 import { WalletGridBox } from "./WalletGridBox"
 import { useRouter } from "next/router"
 import { WalletSwitcherModal } from "./WalletSwitcherModal"
-
+import { WalletSelectModal } from "./WalletSelectModal"
 import { WalletState, useNftsQuery } from "@niftory/sdk/react"
 import { useAuthContext } from "hooks/useAuthContext"
 
@@ -51,7 +51,10 @@ export const WalletDetails = (props: WalletDetailsProps) => {
         </Center>
       ) : (
         <>
-          <WalletSwitcherModal disclosure={disclosure} />
+          <WalletSwitcherModal
+            disclosure={disclosure}
+            // onWalletSelect={}
+          />
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4" minW={"280px"} p="1rem">
             <Tooltip label="View wallet on flowscan" hasArrow placement="top">
               <Box cursor="pointer">
