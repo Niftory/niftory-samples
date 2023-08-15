@@ -17,12 +17,12 @@ import {
 } from "react-icons/fi"
 import { backendClient } from "../../graphql/backendClient"
 import { WalletGridBox } from "./WalletGridBox"
-import { useRouter } from "next/router"
 import { WalletSwitcherModal } from "./WalletSwitcherModal"
 import { WalletSelectModal } from "./WalletSelectModal"
 import { WalletState, useNftsQuery } from "@niftory/sdk/react"
 import { useAuthContext } from "hooks/useAuthContext"
-
+import { SetPrimaryWalletDocument, SetPrimaryWalletMutation } from "@niftory/sdk"
+import { useSetPrimaryWalletMutation } from "@niftory/sdk/react"
 export interface WalletDetailsProps {
   walletAddress: string
   walletStatus: string
@@ -33,14 +33,14 @@ export interface WalletDetailsProps {
 
 export const WalletDetails = (props: WalletDetailsProps) => {
   const { walletAddress, walletStatus, walletItems, walletOwnerEmail, isLoading = false } = props
-  const router = useRouter()
   const disclosure = useDisclosure()
   const { session } = useAuthContext()
   const [{ data }] = useNftsQuery({
     variables: { userId: session?.userId as string },
     pause: !!session.userId,
   })
-
+  const [_, setPrimaryWallet] = useSetPrimaryWalletMutation()
+  
   const nfts = data?.nfts
 
   return (
@@ -51,9 +51,9 @@ export const WalletDetails = (props: WalletDetailsProps) => {
         </Center>
       ) : (
         <>
-          <WalletSwitcherModal
+          <WalletSelectModal
             disclosure={disclosure}
-            // onWalletSelect={}
+            onWalletSelect={setPrimaryWallet}
           />
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4" minW={"280px"} p="1rem">
             <Tooltip label="View wallet on flowscan" hasArrow placement="top">
