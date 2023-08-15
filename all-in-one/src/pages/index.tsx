@@ -1,21 +1,22 @@
 import AppLayout from "../components/AppLayout"
 import { Center, Box, VStack, Button, } from "@chakra-ui/react"
-import { WalletDetails } from "ui/Wallet/WalletDetails"
-import { Logout } from "@components/Logout"
+import router from "next/router"
 
 import { useAuthContext } from "hooks/useAuthContext"
 
 import { FaGoogle } from "react-icons/fa"
 import { useWalletQuery } from "@niftory/sdk/react"
 import { Hero } from "ui/Hero"
+import React from "react"
 
 const HomePage = () => {
   const { session, signIn, isLoading } = useAuthContext()
-
+  
   const [{ data, fetching: walletFetching }] = useWalletQuery()
-
+  
   const wallet = data?.wallet
   const fetching = walletFetching || isLoading
+
   return (
     <AppLayout>
       <Center flexDir="column" position="relative">
@@ -23,7 +24,7 @@ const HomePage = () => {
           <VStack>
             {!session && (
               <Hero
-                heading="Login to get started, or check out the Drops page"
+                heading="You're logged in! Check out available Drops"
                 bg="page.gradient"
                 button={<Button
                     p="8"
@@ -32,21 +33,23 @@ const HomePage = () => {
                     colorScheme="red"
                     leftIcon={<FaGoogle />}
                   >
-                  Sign in with Google
+                Sign in with Google
                 </Button>}
               />
             )}
             {session && (
-              <VStack>
-                <WalletDetails
-                  isLoading={fetching}
-                  walletAddress={wallet?.address}
-                  walletItems={wallet?.nfts?.length}
-                  walletStatus={wallet?.state?.toString()}
-                  walletOwnerEmail={wallet?.appUser?.email}
-                />
-                <Logout />
-              </VStack>
+              <Hero
+              heading="You're logged in! Check out available Drops"
+              bg="page.gradient"
+              button={<Button
+                  p="8"
+                  isLoading={isLoading}
+                  onClick={() => router.push("/drops")}
+                  colorScheme="yellow"
+                >
+                Drops gallery
+              </Button>}
+            />
             )}
           </VStack>
         </Box>
