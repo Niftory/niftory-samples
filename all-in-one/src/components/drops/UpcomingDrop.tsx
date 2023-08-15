@@ -11,7 +11,7 @@ export const UpcomingDrop = () => {
         </Center>
         <Center pt="4">
           <Text size="xl" color="gray.100">
-            Placeholder text
+            Upcoming Drop
           </Text>
         </Center>
       </Container>

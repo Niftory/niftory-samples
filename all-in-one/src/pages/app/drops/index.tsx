@@ -23,7 +23,7 @@ const DropsPage = () => {
           <Spinner mt="16" color="white" size="lg" />
         </Center>
       )}
-      <DropsGrid nftListings={nftListings} /> <UpcomingDrop />
+      <DropsGrid nftListings={nftListings} />
     </AppLayout>
   )
 }
