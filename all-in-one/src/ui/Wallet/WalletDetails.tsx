@@ -18,11 +18,8 @@ import {
 import { backendClient } from "../../graphql/backendClient"
 import { WalletGridBox } from "./WalletGridBox"
 import { WalletSwitcherModal } from "./WalletSwitcherModal"
-import { WalletSelectModal } from "./WalletSelectModal"
-import { WalletState, useNftsQuery } from "@niftory/sdk/react"
+import { WalletState, useNftsQuery, useSetPrimaryWalletMutation } from "@niftory/sdk/react"
 import { useAuthContext } from "hooks/useAuthContext"
-import { SetPrimaryWalletDocument, SetPrimaryWalletMutation } from "@niftory/sdk"
-import { useSetPrimaryWalletMutation } from "@niftory/sdk/react"
 export interface WalletDetailsProps {
   walletAddress: string
   walletStatus: string
@@ -32,16 +29,9 @@ export interface WalletDetailsProps {
 }
 
 export const WalletDetails = (props: WalletDetailsProps) => {
-  const { walletAddress, walletStatus, walletItems, walletOwnerEmail, isLoading = false } = props
+  const { walletItems, walletAddress, walletStatus, walletOwnerEmail, isLoading = false } = props
   const disclosure = useDisclosure()
-  const { session } = useAuthContext()
-  const [{ data }] = useNftsQuery({
-    variables: { userId: session?.userId as string },
-    pause: !!session.userId,
-  })
   const [_, setPrimaryWallet] = useSetPrimaryWalletMutation()
-  
-  const nfts = data?.nfts
 
   return (
     <>
@@ -61,7 +51,7 @@ export const WalletDetails = (props: WalletDetailsProps) => {
                 <WalletGridBox
                   description={walletAddress}
                   icon={WalletDetailsIcon}
-                  title={"Wallet Address"}
+                  title={"Primary Wallet Address"}
                   onClick={() => {
                     const url = `${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/account/${walletAddress}`
                     window.open(url)
@@ -73,7 +63,7 @@ export const WalletDetails = (props: WalletDetailsProps) => {
             <Tooltip label="Number of NFTs you own" hasArrow placement="top">
               <Box>
                 <WalletGridBox
-                  description={nfts?.items?.length ?? "0"}
+                  description={walletItems ?? "0"}
                   icon={WalletItemsIcon}
                   title={"Number of Items"}
                 />
