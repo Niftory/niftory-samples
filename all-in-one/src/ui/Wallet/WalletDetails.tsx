@@ -51,7 +51,7 @@ export const WalletDetails = (props: WalletDetailsProps) => {
         </Center>
       ) : (
         <>
-          <WalletSelectModal
+          <WalletSwitcherModal
             disclosure={disclosure}
             onWalletSelect={setPrimaryWallet}
           />

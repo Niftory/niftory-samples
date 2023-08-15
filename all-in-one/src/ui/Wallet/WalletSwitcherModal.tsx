@@ -25,9 +25,10 @@ interface MenuModalProps {
     onOpen: () => void
     onClose: () => void
   }
+  onWalletSelect: (walletAddress) => void
 }
 
-export const WalletSwitcherModal = ({ disclosure }: MenuModalProps) => {
+export const WalletSwitcherModal = ({ disclosure, onWalletSelect }: MenuModalProps) => {
   const { isOpen, onClose } = disclosure
 
   const [{ data, fetching: fetchingWallets, error }, reExecuteQuery] = useAppUserQuery()
@@ -49,11 +50,17 @@ export const WalletSwitcherModal = ({ disclosure }: MenuModalProps) => {
       <ModalOverlay />
       <ModalContent overflow="hidden" rounded="2xl" m="1rem" p="2rem">
         <Flex justifyContent="space-between">
-          <Heading fontSize="1.4rem">Wallets</Heading>
+          <Heading fontSize="1.4rem">Select Primary Wallet</Heading>
         </Flex>
         <VStack spacing="0.2rem" mt="1rem">
           {wallets?.map((wallet) => (
-            <WalletCard wallet={wallet as Wallet} key={wallet.address} />
+            <WalletCard
+              wallet={wallet as Wallet} 
+              key={wallet.address}
+              onClick={() => {
+                onWalletSelect(wallet.address)
+              }} 
+            />
           ))}
           <ButtonGroup pt="1rem">
             <RegisterWallet onRegister={() => reExecuteQuery({ requestPolicy: "network-only" })} />
