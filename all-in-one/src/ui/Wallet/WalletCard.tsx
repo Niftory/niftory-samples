@@ -3,7 +3,7 @@ import { Box, Flex, Tag, Text } from "@chakra-ui/react"
 import { getColorFromWalletState, getReadableWalletState } from "utils/wallet"
 
 import { WalletSwitcherButton } from "./WalletSwitcherButton"
-import { Wallet, useFlowUser } from "@niftory/sdk/react"
+import { Wallet, useSetPrimaryWalletMutation } from "@niftory/sdk/react"
 
 interface Props {
   wallet: Wallet
@@ -11,7 +11,20 @@ interface Props {
 }
 
 export const WalletCard = ({ wallet, onClick }: Props) => {
-  const flowUser = useFlowUser()
+  const [_, setPrimaryWallet] = useSetPrimaryWalletMutation()
+  let setWallet: Function
+  if (onClick) {
+    setWallet = onClick
+  }
+  else {
+    setWallet = async () => {
+      setPrimaryWallet({
+        address: wallet.address, 
+        walletId: wallet.id
+      })
+    }
+  }
+  
   return (
     <Flex
       key={wallet.address}
@@ -19,25 +32,28 @@ export const WalletCard = ({ wallet, onClick }: Props) => {
       h="70px"
       alignItems="center"
       justifyContent="space-between"
-      cursor={onClick ? "pointer" : ""}
-      _hover={{ bgColor: onClick ? "gray.100" : "" }}
+      cursor={"pointer"}
+      _hover={{ bgColor: "gray.100"}}
       fontWeight="bold"
       shadow="base"
       rounded="lg"
       borderColor="gray.200"
       p="1rem"
-      onClick={onClick}
+      onClick={() => {
+        setWallet()
+      }}
     >
       <Flex flexDir="column">
         <Flex gap="0.4rem" alignItems="center">
-          {wallet?.address === flowUser?.addr && (
+          {wallet?.address === wallet?.appUser?.primaryWallet.address && (
             <Box
               height="0.7rem"
               width="0.7rem"
               bgColor="green.400"
               rounded="full"
               title="Current Wallet"
-            />
+            >
+            </Box>
           )}
           <Text color={""}>{wallet.address} </Text>{" "}
           {wallet?.walletType === "NIFTORY" && (

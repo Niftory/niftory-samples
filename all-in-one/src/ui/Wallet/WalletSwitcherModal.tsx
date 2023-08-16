@@ -25,11 +25,11 @@ interface MenuModalProps {
     onOpen: () => void
     onClose: () => void
   }
-  onWalletSelect: (walletAddress) => void
+  onWalletSelect?: (walletAddress) => void
 }
 
-export const WalletSwitcherModal = ({ disclosure, onWalletSelect }: MenuModalProps) => {
-  const { isOpen, onClose } = disclosure
+export const WalletSwitcherModal = (props: MenuModalProps) => {
+  const { isOpen, onClose } = props.disclosure
 
   const [{ data, fetching: fetchingWallets, error }, reExecuteQuery] = useAppUserQuery()
 
@@ -57,9 +57,7 @@ export const WalletSwitcherModal = ({ disclosure, onWalletSelect }: MenuModalPro
             <WalletCard
               wallet={wallet as Wallet} 
               key={wallet.address}
-              onClick={() => {
-                onWalletSelect(wallet.address)
-              }} 
+              onClose={onClose}
             />
           ))}
           <ButtonGroup pt="1rem">

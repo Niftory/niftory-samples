@@ -18,8 +18,7 @@ import {
 import { backendClient } from "../../graphql/backendClient"
 import { WalletGridBox } from "./WalletGridBox"
 import { WalletSwitcherModal } from "./WalletSwitcherModal"
-import { WalletState, useNftsQuery, useSetPrimaryWalletMutation } from "@niftory/sdk/react"
-import { useAuthContext } from "hooks/useAuthContext"
+import { WalletState } from "@niftory/sdk/react"
 export interface WalletDetailsProps {
   walletAddress: string
   walletStatus: string
@@ -31,7 +30,6 @@ export interface WalletDetailsProps {
 export const WalletDetails = (props: WalletDetailsProps) => {
   const { walletItems, walletAddress, walletStatus, walletOwnerEmail, isLoading = false } = props
   const disclosure = useDisclosure()
-  const [_, setPrimaryWallet] = useSetPrimaryWalletMutation()
 
   return (
     <>
@@ -43,7 +41,7 @@ export const WalletDetails = (props: WalletDetailsProps) => {
         <>
           <WalletSwitcherModal
             disclosure={disclosure}
-            onWalletSelect={setPrimaryWallet}
+            
           />
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4" minW={"280px"} p="1rem">
             <Tooltip label="View wallet on flowscan" hasArrow placement="top">
@@ -80,7 +78,7 @@ export const WalletDetails = (props: WalletDetailsProps) => {
           <VStack>
             <Button
               backgroundColor="brand.400"
-              onClick={(e) => {
+              onClick={() => {
                 disclosure.onOpen()
               }}
             >
