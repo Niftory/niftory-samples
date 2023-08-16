@@ -57,6 +57,7 @@ export const WalletSwitcherModal = (props: MenuModalProps) => {
             <WalletCard
               wallet={wallet as Wallet} 
               key={wallet.address}
+              primaryWalletAddress={appUser.primaryWallet.address}
             />
           ))}
           <ButtonGroup pt="1rem">
