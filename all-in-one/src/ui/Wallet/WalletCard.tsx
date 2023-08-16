@@ -3,21 +3,24 @@ import { Box, Flex, Tag, Text } from "@chakra-ui/react"
 import { getColorFromWalletState, getReadableWalletState } from "utils/wallet"
 
 import { WalletSwitcherButton } from "./WalletSwitcherButton"
-import { Wallet, useSetPrimaryWalletMutation } from "@niftory/sdk/react"
+import { Wallet, useSetPrimaryWalletMutation, useAppUserQuery } from "@niftory/sdk/react"
 
 interface Props {
   wallet: Wallet
+  primaryWalletAddress: string
   onClick?: () => void
 }
 
-export const WalletCard = ({ wallet, onClick }: Props) => {
+export const WalletCard = ({ wallet, primaryWalletAddress, onClick }: Props) => {
   const [_, setPrimaryWallet] = useSetPrimaryWalletMutation()
-  let setWallet: Function
+  const [{data}] = useAppUserQuery()
+
+  let clickHandler: Function
   if (onClick) {
-    setWallet = onClick
+    clickHandler = onClick
   }
   else {
-    setWallet = async () => {
+    clickHandler = async () => {
       setPrimaryWallet({
         address: wallet.address, 
         walletId: wallet.id
@@ -40,12 +43,12 @@ export const WalletCard = ({ wallet, onClick }: Props) => {
       borderColor="gray.200"
       p="1rem"
       onClick={() => {
-        setWallet()
+        clickHandler()
       }}
     >
       <Flex flexDir="column">
         <Flex gap="0.4rem" alignItems="center">
-          {wallet?.address === wallet?.appUser?.primaryWallet.address && (
+          {wallet?.address == primaryWalletAddress && (
             <Box
               height="0.7rem"
               width="0.7rem"

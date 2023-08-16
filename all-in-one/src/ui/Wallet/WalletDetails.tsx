@@ -28,7 +28,7 @@ export interface WalletDetailsProps {
 }
 
 export const WalletDetails = (props: WalletDetailsProps) => {
-  const { walletItems, walletAddress, walletStatus, walletOwnerEmail, isLoading = false } = props
+  const { walletItems, walletAddress, walletStatus, walletOwnerEmail, isLoading } = props
   const disclosure = useDisclosure()
 
   return (
@@ -58,7 +58,7 @@ export const WalletDetails = (props: WalletDetailsProps) => {
               </Box>
             </Tooltip>
             <WalletGridBox description={walletStatus} icon={WalletStatusIcon} title={"Status"} />
-            <Tooltip label="Number of NFTs you own" hasArrow placement="top">
+            <Tooltip label="Number of NFTs you own in this Wallet" hasArrow placement="top">
               <Box>
                 <WalletGridBox
                   description={walletItems ?? "0"}
