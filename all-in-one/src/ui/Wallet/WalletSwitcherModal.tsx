@@ -57,7 +57,6 @@ export const WalletSwitcherModal = (props: MenuModalProps) => {
             <WalletCard
               wallet={wallet as Wallet} 
               key={wallet.address}
-              onClose={onClose}
             />
           ))}
           <ButtonGroup pt="1rem">
