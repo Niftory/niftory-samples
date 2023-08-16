@@ -24,7 +24,7 @@ const HomePage = () => {
           <VStack>
             {!session && (
               <Hero
-                heading="You're logged in! Check out available Drops"
+                heading="Login to get started and check out available Drops"
                 bg="page.gradient"
                 button={<Button
                     p="8"
