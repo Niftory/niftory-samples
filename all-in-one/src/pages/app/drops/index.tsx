@@ -14,9 +14,9 @@ const DropsPage = () => {
 
   const [{data, fetching: isFetching}] = useNftModelsQuery()
 
-  const nftModels = data?.nftModels.items
+  const collectibles = data?.nftModels.items
   const modelIds = []
-  nftModels?.forEach((currentModel) => {
+  collectibles?.forEach((currentModel) => {
     modelIds.push(currentModel.id)
   })
 
@@ -30,7 +30,7 @@ const DropsPage = () => {
       )}
       {modelIds.length !== 0
         ? (<DropsGrid nftListings={modelIds} />)
-        : (<Box textColor="white" >No drops available yet</Box>)
+        : (<Box textColor="white" >{modelIds}</Box>)
       }
     </AppLayout>
   )
