@@ -7,18 +7,11 @@ import { UpcomingDrop } from "../../../components/drops/UpcomingDrop"
 import { SectionHeader } from "../../../ui/SectionHeader"
 
 const DropsPage = () => {
-  // const [nftListingsQueryResponse] = useQuery<NftListingsQuery>({
-  //   query: NftListingsDocument,
-  //   variables: { maxResults: "100", filter: { state: "active" } },
-  // })
 
   const [{data, fetching: isFetching}] = useNftModelsQuery()
 
-  const collectibles = data?.nftModels.items
-  const modelIds = []
-  collectibles?.forEach((currentModel) => {
-    modelIds.push(currentModel.id)
-  })
+  const nftModelList = data?.nftModels.items
+  const nftModelIds = nftModelList.map((nftModel) => {nftModel.id})
 
   return (
     <AppLayout>
@@ -28,9 +21,9 @@ const DropsPage = () => {
           <Spinner mt="16" color="white" size="lg" />
         </Center>
       )}
-      {modelIds.length !== 0
-        ? (<DropsGrid nftListings={modelIds} />)
-        : (<Box textColor="white" >{modelIds}</Box>)
+      {nftModelIds.length !== 0
+        ? (<DropsGrid modelIds={nftModelIds} />)
+        : (<Box textColor="white" >{"No collectibles available"}</Box>)
       }
     </AppLayout>
   )
