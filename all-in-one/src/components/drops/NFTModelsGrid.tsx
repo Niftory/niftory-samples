@@ -1,5 +1,4 @@
 import { SimpleGrid } from '@chakra-ui/react';
-import * as React from 'react';
 
 import { NFTModelCard } from './NFTModelCard';
 
