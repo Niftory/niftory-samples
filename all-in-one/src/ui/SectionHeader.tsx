@@ -21,7 +21,7 @@ export const SectionHeader = (props: SectionHeaderProps) => {
     >
       {standardText}{" "}
       {highlightedText && (
-        <Box as="mark" color="page.accent" bg="transparent">
+        <Box as="mark" color="page.text" bg="transparent">
           {highlightedText}{" "}
         </Box>
       )}
