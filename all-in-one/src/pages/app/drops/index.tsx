@@ -19,7 +19,7 @@ const DropsPage = () => {
           <Spinner mt="16" color="white" size="lg" />
         </Center>
       )}
-      {nftModelList.length !== 0
+      {nftModelList
         ? (<NFTModelsGrid nftModels={nftModelList} />)
         : (<Box textColor="white" >{"No collectibles available"}</Box>)
       }
