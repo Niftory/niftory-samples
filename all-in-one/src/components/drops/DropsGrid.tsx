@@ -16,7 +16,7 @@ export const DropsGrid = (nftModelIds) => (
         nftModelIds.map((nftModelId) => {
           <ListingCard
             key={nftModelId}
-            nftModelid={nftModelId}
+            nftModelId={nftModelId}
             clickUrl={`drops/${nftModelId}`}
           />
         })
