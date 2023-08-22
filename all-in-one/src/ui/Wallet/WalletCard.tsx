@@ -13,7 +13,6 @@ interface Props {
 
 export const WalletCard = ({ wallet, primaryWalletAddress, onClick }: Props) => {
   const [_, setPrimaryWallet] = useSetPrimaryWalletMutation()
-  const [{data}] = useAppUserQuery()
 
   let clickHandler: Function
   if (onClick) {
