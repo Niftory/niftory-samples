@@ -12,6 +12,7 @@ export const SectionHeader = (props: SectionHeaderProps) => {
 
   return (
     <Heading
+      p="8"
       color="page.text"
       as="h1"
       size="2xl"
