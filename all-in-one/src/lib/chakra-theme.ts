@@ -35,7 +35,7 @@ const theme = extendTheme({
     },
     page: {
       background: "black",
-      text: "black",
+      text: "white",
       accent: "white",
       buttons: "#B6A45D", //dull gold
       gradient: "linear-gradient(180deg, black, grey)",
