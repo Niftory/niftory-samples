@@ -13,7 +13,7 @@ const DropsPage = () => {
 
   return (
     <AppLayout>
-      <SectionHeader ml="16" standardText="List your drops here!"/>
+      <SectionHeader standardText="List your drops here!"/>
       {isFetching && (
         <Center>
           <Spinner mt="16" color="white" size="lg" />
