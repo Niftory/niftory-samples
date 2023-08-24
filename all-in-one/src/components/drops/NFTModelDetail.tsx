@@ -1,10 +1,8 @@
 import { Button, Heading, Stack, Text } from "@chakra-ui/react"
-import * as React from "react"
-import * as fcl from "@onflow/fcl"
 import { useAppUserQuery } from "@niftory/sdk/react"
 import { useCallback, useState } from "react"
 
-import { Gallery } from "../../ui/Content/Gallery/Gallery"
+import { Gallery } from "ui/Content/Gallery/Gallery"
 import axios from "axios"
 import { useRouter } from "next/router"
 
