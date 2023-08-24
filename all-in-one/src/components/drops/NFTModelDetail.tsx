@@ -31,13 +31,9 @@ const checkoutStatusMessages = [
   "Purchase complete! Redirecting...",
 ]
 
-export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps) => {
+export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
   const router = useRouter()
   const [checkoutStatusIndex, setCheckoutStatusIndex] = useState(0)
-  const claimable = attributes?.claimable ?? false
-
-  const [{ data, fetching: isFetching }] = useAppUserQuery()
-  const currentUser = data.appUser
 
   const handleClaim = useCallback(async () => {
     setCheckoutStatusIndex(4)
@@ -70,10 +66,8 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
           <Text color="page.text">{metadata.description}</Text>
           <Text color="page.text">{metadata.amount} Total Available </Text>
         </Stack>
-
-        {claimable && (
           <Button
-            isLoading={isFetching || checkoutStatusIndex > 0}
+            isLoading={checkoutStatusIndex > 0}
             loadingText={checkoutStatusMessages[checkoutStatusIndex]}
             onClick={handleClaim}
             my="auto"
@@ -81,7 +75,6 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
           >
             <Text>Claim This NFT</Text>
           </Button>
-        )}
       </Stack>
       <Gallery rootProps={{ overflow: "hidden", flex: "1" }} content={metadata.content} />
     </Stack>
