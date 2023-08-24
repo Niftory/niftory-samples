@@ -1,5 +1,4 @@
 import { Button, Heading, Stack, Text } from "@chakra-ui/react"
-import { useAppUserQuery } from "@niftory/sdk/react"
 import { useCallback, useState } from "react"
 
 import { Gallery } from "ui/Content/Gallery/Gallery"
@@ -19,7 +18,6 @@ type NFTModelDetailProps = {
       alt: string
     }[]
   }
-  attributes: any
 }
 
 const checkoutStatusMessages = [

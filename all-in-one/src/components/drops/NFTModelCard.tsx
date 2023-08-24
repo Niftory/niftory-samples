@@ -7,10 +7,8 @@ import {
   Link,
   Skeleton,
   Stack,
-  Text,
 } from "@chakra-ui/react"
 import router from "next/router"
-import * as React from "react"
 
 import { NftModel } from "@niftory/sdk/react"
 import { ProductCardStats } from "ui/Content/ProductCard/ProductCardStats"
