@@ -1,6 +1,7 @@
 import { Button, Heading, Stack, Text } from "@chakra-ui/react"
 import * as React from "react"
 import * as fcl from "@onflow/fcl"
+import { useAppUserQuery } from "@niftory/sdk/react"
 import { useCallback, useState } from "react"
 
 import { Gallery } from "../../ui/Content/Gallery/Gallery"
@@ -37,82 +38,8 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
   const [checkoutStatusIndex, setCheckoutStatusIndex] = useState(0)
   const claimable = attributes?.claimable ?? false
 
-  const { currentUser } = useWalletContext()
-
-  const signTransaction = useCallback(async (transaction: string) => {
-    const response = await axios.post("/api/signTransaction", { transaction })
-    return response.data
-  }, [])
-
-  const handleCheckout = useCallback(async () => {
-    try {
-      setCheckoutStatusIndex(1)
-      const initiateCheckoutResponse = await axios.post(`/api/nftModel/${id}/initiateCheckout`)
-      const {
-        cadence,
-        registryAddress,
-        brand,
-        nftId,
-        nftDatabaseId,
-        nftTypeRef,
-        setId,
-        templateId,
-        price,
-        expiry,
-        signerKeyId,
-        signerAddress,
-      } = initiateCheckoutResponse.data
-
-      setCheckoutStatusIndex(2)
-      const tx = await fcl.mutate({
-        cadence,
-        args: (arg, t) => [
-          arg(process.env.NEXT_PUBLIC_MERCHANT_ACCOUNT_ADDRESS, t.Address),
-          arg(registryAddress, t.Address),
-          arg(brand, t.String),
-          arg(nftId, t.Optional(t.UInt64)),
-          arg(nftTypeRef, t.String),
-          arg(setId, t.Optional(t.Int)),
-          arg(templateId, t.Optional(t.Int)),
-          arg(price, t.UFix64),
-          arg(expiry, t.UInt64),
-        ],
-        authorizations: [
-          async (account) => ({
-            ...account,
-            addr: signerAddress,
-            tempId: `${signerAddress}-${signerKeyId}`,
-            keyId: signerKeyId,
-            signingFunction: async (signable) => {
-              return {
-                keyId: signerKeyId,
-                addr: signerAddress,
-                signature: await signTransaction(signable.message),
-              }
-            },
-          }),
-          fcl.authz,
-        ],
-        limit: 9999,
-      })
-
-      setCheckoutStatusIndex(3)
-      await fcl.tx(tx).onceSealed()
-
-      setCheckoutStatusIndex(4)
-      const completeCheckoutResponse = await axios.post(`/api/nftModel/${id}/completeCheckout`, {
-        transactionId: tx,
-        nftDatabaseId,
-      })
-
-      setCheckoutStatusIndex(5)
-      const nft = completeCheckoutResponse.data
-
-      await router.push(`/app/collection/${nft.id}`)
-    } finally {
-      setCheckoutStatusIndex(0)
-    }
-  }, [id, router, signTransaction])
+  const [{ data, fetching: isFetching }] = useAppUserQuery()
+  const currentUser = data.appUser
 
   const handleClaim = useCallback(async () => {
     setCheckoutStatusIndex(4)
@@ -145,21 +72,10 @@ export const NFTModelDetail = ({ id, metadata, attributes }: NFTModelDetailProps
           <Text color="page.text">{metadata.description}</Text>
           <Text color="page.text">{metadata.amount} Total Available </Text>
         </Stack>
-        {!claimable && (
-          <Button
-            isLoading={!currentUser?.addr || checkoutStatusIndex > 0}
-            loadingText={checkoutStatusMessages[checkoutStatusIndex]}
-            onClick={handleCheckout}
-            my="auto"
-            p="8"
-          >
-            <Text>Checkout</Text>
-          </Button>
-        )}
 
         {claimable && (
           <Button
-            isLoading={!currentUser?.addr || checkoutStatusIndex > 0}
+            isLoading={isFetching || checkoutStatusIndex > 0}
             loadingText={checkoutStatusMessages[checkoutStatusIndex]}
             onClick={handleClaim}
             my="auto"
