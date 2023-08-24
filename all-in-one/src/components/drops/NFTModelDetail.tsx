@@ -2,7 +2,6 @@ import { Button, Heading, Stack, Text } from "@chakra-ui/react"
 import * as React from "react"
 import * as fcl from "@onflow/fcl"
 import { useCallback, useState } from "react"
-import { useWalletContext } from "../../hooks/useWalletContext"
 
 import { Gallery } from "../../ui/Content/Gallery/Gallery"
 import axios from "axios"
