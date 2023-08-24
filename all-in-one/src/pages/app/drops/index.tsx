@@ -21,7 +21,7 @@ const DropsPage = () => {
       )}
       {nftModelList
         ? (<NFTModelsGrid nftModels={nftModelList} />)
-        : (<Box textColor="white" >{"No collectibles available"}</Box>)
+        : (<Box ml="12" textColor="white" >{"No collectibles available"}</Box>)
       }
     </AppLayout>
   )
