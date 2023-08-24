@@ -184,6 +184,12 @@ export function useMarketplace() {
 
     cancelMarketplaceListing = (listingId, listingResourceID) =>
       handleCancelListing(cancelMarketplaceListingScript, listingId, listingResourceID)
+
+    console.log(cancelMarketplaceListingScript)
+    console.log(purchaseDapperMarketplaceListingDUCScript)
+    console.log(purchaseDapperMarketplaceListingFUTScript)
+    console.log(createDapperMarketplaceListingDUCScript)
+    console.log(createDapperMarketplaceListingFUTScript)
   }
 
   return {

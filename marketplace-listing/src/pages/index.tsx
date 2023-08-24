@@ -4,9 +4,11 @@ import React from "react"
 
 import AppLayout from "../components/AppLayout"
 import { Hero } from "../ui/Hero"
+import { useMarketplace } from "../hooks/useMarketplace"
 
 const HomePage = () => {
   const router = useRouter()
+  useMarketplace()
 
   return (
     <AppLayout>
