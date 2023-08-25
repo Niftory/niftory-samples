@@ -37,7 +37,7 @@ const HomePage = () => {
               button={<Button
                   p="8"
                   isLoading={isLoading}
-                  onClick={() => router.push("/drops")}
+                  onClick={() => router.push("/app/drops")}
                   colorScheme="yellow"
                 >
                 Drops gallery
