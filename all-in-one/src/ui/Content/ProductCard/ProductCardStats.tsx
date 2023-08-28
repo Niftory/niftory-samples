@@ -2,25 +2,25 @@ import { HStack, Icon, StackProps, Text, useColorModeValue } from "@chakra-ui/re
 import { HiBadgeCheck, HiStar } from "react-icons/hi"
 
 interface CardStatProps extends StackProps {
-  serial?: number
+  quantity?: number
   rarity?: string
 }
 
-export const ProductCardStats = (stats: { rarity?: string; serial?: string }) => {
+export const ProductCardStats = (stats: CardStatProps) => {
   return (
     <HStack
       fontSize="sm"
       color={useColorModeValue("gray.200", "gray.300")}
-      justifyContent={stats.serial && stats.rarity ? "space-between" : "center"}
+      justifyContent={stats.quantity && stats.rarity ? "space-between" : "center"}
     >
       <HStack>
         <Icon as={HiStar} />
         <Text>{stats.rarity}</Text>
       </HStack>
-      {stats.serial && (
+      {stats.quantity && (
         <HStack>
           <Icon as={HiBadgeCheck} />
-          <Text>Serial: {stats.serial}</Text>
+          <Text>Quantity: {stats.quantity}</Text>
         </HStack>
       )}
     </HStack>
