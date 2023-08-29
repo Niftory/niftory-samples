@@ -7,7 +7,7 @@ import { NFTModelDetail } from "components/drops/NFTModelDetail"
 
 const DropDetailPage = () => {
   const router = useRouter()
-  const nftModelId = router.query["nftModelId"]?.toString()
+  const nftModelId = router.query["dropId"]?.toString()
 
   const [nftModelResponse] = useNftModelQuery({
     variables: { id: nftModelId },
