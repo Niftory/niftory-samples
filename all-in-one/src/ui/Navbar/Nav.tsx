@@ -22,7 +22,7 @@ export const Navbar = () => {
       },
       {
         title: "Collection",
-        href: "/apps/collection"
+        href: "/app/collection"
       }
   ] as Array<Object>
 
