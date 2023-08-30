@@ -8,7 +8,6 @@ import { NFTModelDetail } from "components/drops/NFTModelDetail"
 const DropDetailPage = () => {
   const router = useRouter()
   const nftModelId = router.query["dropId"]?.toString()
-
   const [nftModelResponse] = useNftModelQuery({
     variables: { id: nftModelId },
   })
@@ -32,7 +31,7 @@ const DropDetailPage = () => {
     <AppLayout>
       <Skeleton isLoaded={!nftModelResponse.fetching}>
         <Box maxW="7xl" mx="auto" mt="12">
-          <NFTModelDetail id={nftModelId} metadata={metadata} />
+          <NFTModelDetail nftModelId={nftModelId} metadata={metadata} />
         </Box>
       </Skeleton>
     </AppLayout>
