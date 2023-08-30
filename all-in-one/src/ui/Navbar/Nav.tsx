@@ -20,10 +20,6 @@ export const Navbar = () => {
       title: "Drops",
       href: "/app/drops"
       },
-      {
-        title: "Collection",
-        href: "/app/collection"
-      }
   ] as Array<Object>
 
     if (!session) {
@@ -31,10 +27,15 @@ export const Navbar = () => {
         {
           title: "Log In",
           href: "/login"
-        })
+        }
+      )
     }
     else {
       items.push(
+        {
+          title: "Collection",
+          href: "/app/drops",
+        },
         {
           href: "/app/account",
           component: (
