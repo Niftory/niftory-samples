@@ -1,9 +1,10 @@
-import { Box, SimpleGrid, Spinner } from '@chakra-ui/react';
+import { Box, Button, SimpleGrid, Spinner } from '@chakra-ui/react';
 
 import { Nft } from "@niftory/sdk";
-import { Subset } from '../../lib/types';
+import { Subset } from 'lib/types';
 import { NftCard } from './NftCard';
 import { Hero } from 'ui/Hero';
+import router from 'next/router';
 
 interface CollectionProps {
   isLoading: boolean
@@ -23,7 +24,13 @@ export const CollectionGrid = ({ isLoading, nfts }: CollectionProps) => {
       {emptyCollection && (
         <Hero
           heading={`Your collection is empty. Start Collecting!`}
-          button={`Go to Drops`}
+          button={<Button
+            p="8"
+            onClick={() => router.push("/app/drops")}
+            colorScheme="yellow"
+          >
+          Drops gallery
+        </Button>}
         />
       )}
       <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} gap={{ base: "8", lg: "10" }}>
