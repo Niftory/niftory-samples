@@ -2,7 +2,8 @@ import { Button, Heading, Stack, Text } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
 
 import { Gallery } from "ui/Content/Gallery/Gallery"
-import axios from "axios"
+import { useAuthContext } from "hooks/useAuthContext"
+import { useTransferMutation } from "@niftory/sdk/react"
 import { useRouter } from "next/router"
 
 type NFTModelDetailProps = {
@@ -20,29 +21,35 @@ type NFTModelDetailProps = {
   }
 }
 
-const checkoutStatusMessages = [
-  "",
-  "Starting checkout...",
-  "Waiting for transaction approval...",
-  "Waiting for transaction completion...",
-  "Completing checkout...",
-  "Purchase complete! Redirecting...",
-]
 
 export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
   const router = useRouter()
-  const [checkoutStatusIndex, setCheckoutStatusIndex] = useState(0)
+  const { session } = useAuthContext()
+  const [_, transferMutation] = useTransferMutation()
+  const [isClaiming, setIsClaiming] = useState(false)
+
 
   const handleClaim = useCallback(async () => {
-    setCheckoutStatusIndex(4)
-    axios
-      .post(`/api/nftModel/${id}/claim`)
-      .then(({ data }) => router.push(`/app/collection/${data.id}`))
-      .catch((error) => {
-        console.error(error)
-      })
-      .finally(() => setCheckoutStatusIndex(5))
-  }, [id, router])
+    setIsClaiming(true)
+    transferMutation(
+      {
+        nftModelId: id
+    }).then((res) => router.push(`/app/collection/${res.data.transfer.id}`))
+    .catch((error) => console.error(error))
+    .finally(() => setIsClaiming(false))
+  }, [transferMutation, id, router])
+
+  const buttonText = session
+  ? "Claim this NFT"
+  : "Log in to claim"
+
+  const buttonClick = session
+  ? handleClaim
+  : () => router.push("/app/login")
+
+  const buttonColor = session
+  ? "red"
+  : "yellow"
 
   return (
     <Stack direction={{ base: "column-reverse", lg: "row" }}>
@@ -65,13 +72,12 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
           <Text color="page.text">{metadata.amount} Total Available </Text>
         </Stack>
           <Button
-            isLoading={checkoutStatusIndex > 0}
-            loadingText={checkoutStatusMessages[checkoutStatusIndex]}
-            onClick={handleClaim}
+            onClick={buttonClick}
             my="auto"
             p="8"
+            color={buttonColor}
           >
-            <Text>Claim This NFT</Text>
+            <Text>{buttonText}</Text>
           </Button>
       </Stack>
       <Gallery rootProps={{ overflow: "hidden", flex: "1" }} content={metadata.content} />
