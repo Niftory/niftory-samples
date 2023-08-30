@@ -87,7 +87,7 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
           {claimError && (
             <Text>
               There was an error while attempting to claim NFT:
-              <Text color="red">{claimError}</Text>
+              <Text color="red">{claimError.toString()}</Text>
             </Text>
           )}
       </Stack>
