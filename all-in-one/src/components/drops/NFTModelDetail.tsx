@@ -44,7 +44,7 @@ export const NFTModelDetail = ({ nftModelId, metadata }: NFTModelDetailProps) =>
     })
     .finally(() => {
       setIsClaiming(false)
-      router.push(`app/collection/`)
+      router.push(`/app/collection/`)
     })
   }, [nftModelId, userId, router])
 
