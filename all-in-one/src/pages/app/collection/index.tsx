@@ -1,29 +1,23 @@
-import { useQuery } from 'urql';
-
-import { Nft, NftsDocument, NftsQuery } from '@niftory/sdk'
-import AppLayout from '../../../components/AppLayout';
-import { CollectionGrid } from '../../../components/collection/CollectionGrid';
-import { useAuthContext } from '../../../hooks/useAuthContext';
-import { Subset } from '../../../lib/types';
-import { SectionHeader } from '../../../ui/SectionHeader';
+import { Nft } from '@niftory/sdk'
+import AppLayout from 'components/AppLayout';
+import { CollectionGrid } from 'components/collection/CollectionGrid';
+import { Subset } from 'lib/types';
+import { SectionHeader } from 'ui/SectionHeader';
+import { useNftsQuery } from  "@niftory/sdk/react"
+import { useAuthContext } from 'hooks/useAuthContext';
 
 const CollectionPage = () => {
   const { session } = useAuthContext()
-  const userId = session?.userId
-  const [userNftsResponse] = useQuery<NftsQuery>({
-    query: NftsDocument,
-    variables: { id: userId },
-  })
-
-  const nfts: Subset<Nft>[] = userNftsResponse.data?.nfts?.items
+  const userId: string = session?.userId as string
+  const [{ data, fetching: isFetching }] = useNftsQuery({ variables: { userId: userId } })
+  const nfts: Subset<Nft>[] = data?.nfts?.items
 
   return (
     <AppLayout>
       <SectionHeader standardText="My Collection" />
-      <CollectionGrid nfts={nfts} isLoading={userNftsResponse.fetching} />
+      <CollectionGrid nfts={nfts} isLoading={isFetching} />
     </AppLayout>
   )
 }
 
-CollectionPage.requireAuth = true
 export default CollectionPage
