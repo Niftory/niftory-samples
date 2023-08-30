@@ -3,11 +3,12 @@ import { useCallback, useState } from "react"
 
 import { Gallery } from "ui/Content/Gallery/Gallery"
 import { useAuthContext } from "hooks/useAuthContext"
-import { useTransferMutation } from "@niftory/sdk/react"
+import { backendClient } from "graphql/backendClient"
+import { useAppUserQuery } from "@niftory/sdk/react"
 import { useRouter } from "next/router"
 
 type NFTModelDetailProps = {
-  id: string
+  nftModelId: string
   metadata: {
     title: string
     description: string
@@ -22,26 +23,30 @@ type NFTModelDetailProps = {
 }
 
 
-export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
+export const NFTModelDetail = ({ nftModelId, metadata }: NFTModelDetailProps) => {
   const router = useRouter()
   const { session } = useAuthContext()
-  const [_, transferMutation] = useTransferMutation()
+  const [appUser] = useAppUserQuery()
+  const userId = appUser?.data?.appUser?.id
   const [isClaiming, setIsClaiming] = useState(false)
   const [claimError, setClaimError] = useState(null)
 
-  const handleClaim = useCallback(() => {
+  const handleClaim = useCallback(async () => {
     setIsClaiming(true)
     setClaimError(null)
-    transferMutation(
-      {
-        nftModelId: id
-    }).then((res) => router.push(`/app/collection/${res.data.transfer.id}`))
+    backendClient("transferNFTModel", {
+      nftModelId: nftModelId,
+      userId: userId,
+    })
     .catch((error) => {
       console.error(error)
-      setClaimError(error?.response?.data || error)
+      setClaimError(error?.message || error)
     })
-    .finally(() => setIsClaiming(false))
-  }, [transferMutation, id, router])
+    .finally(() => {
+      setIsClaiming(false)
+      router.push(`app/collection/`)
+    })
+  }, [nftModelId, userId, router])
 
   const buttonText = session
   ? "Claim this NFT"
@@ -49,7 +54,7 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
 
   const buttonClick = session
   ? handleClaim
-  : () => router.push("/app/login")
+  : () => router.push("/login")
 
   const buttonColor = session
   ? "yellow"
@@ -85,7 +90,7 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
             <Text>{buttonText}</Text>
           </Button>
           {claimError && (
-            <Text>
+            <Text color="white">
               There was an error while attempting to claim NFT:
               <Text color="red">{claimError.toString()}</Text>
             </Text>
