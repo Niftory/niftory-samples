@@ -27,15 +27,19 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
   const { session } = useAuthContext()
   const [_, transferMutation] = useTransferMutation()
   const [isClaiming, setIsClaiming] = useState(false)
+  const [claimError, setClaimError] = useState(null)
 
-
-  const handleClaim = useCallback(async () => {
+  const handleClaim = useCallback(() => {
     setIsClaiming(true)
+    setClaimError(null)
     transferMutation(
       {
         nftModelId: id
     }).then((res) => router.push(`/app/collection/${res.data.transfer.id}`))
-    .catch((error) => console.error(error))
+    .catch((error) => {
+      console.error(error)
+      setClaimError(error?.response?.data || error)
+    })
     .finally(() => setIsClaiming(false))
   }, [transferMutation, id, router])
 
@@ -48,8 +52,8 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
   : () => router.push("/app/login")
 
   const buttonColor = session
-  ? "red"
-  : "yellow"
+  ? "yellow"
+  : "red"
 
   return (
     <Stack direction={{ base: "column-reverse", lg: "row" }}>
@@ -72,13 +76,20 @@ export const NFTModelDetail = ({ id, metadata }: NFTModelDetailProps) => {
           <Text color="page.text">{metadata.amount} Total Available </Text>
         </Stack>
           <Button
+            isLoading={isClaiming}
             onClick={buttonClick}
             my="auto"
             p="8"
-            color={buttonColor}
+            colorScheme={buttonColor}
           >
             <Text>{buttonText}</Text>
           </Button>
+          {claimError && (
+            <Text>
+              There was an error while attempting to claim NFT:
+              <Text color="red">{claimError}</Text>
+            </Text>
+          )}
       </Stack>
       <Gallery rootProps={{ overflow: "hidden", flex: "1" }} content={metadata.content} />
     </Stack>
