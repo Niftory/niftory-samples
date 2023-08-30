@@ -34,7 +34,7 @@ export const Navbar = () => {
       items.push(
         {
           title: "Collection",
-          href: "/app/drops",
+          href: "/app/collection",
         },
         {
           href: "/app/account",
