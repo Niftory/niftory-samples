@@ -1,4 +1,4 @@
-import { Box, Button, SimpleGrid, Spinner } from '@chakra-ui/react';
+import { Box, Button, Center, SimpleGrid, Spinner } from '@chakra-ui/react';
 
 import { Nft } from "@niftory/sdk";
 import { Subset } from 'lib/types';
@@ -13,14 +13,15 @@ interface CollectionProps {
 
 export const CollectionGrid = ({ isLoading, nfts }: CollectionProps) => {
   if (isLoading) {
-    return <Spinner />
+    return (
+      <Center>
+        <Spinner />
+      </Center>)
   }
-  const emptyNfts = !nfts?.length
-
-  const emptyCollection = emptyNfts ? true : false
+  const emptyCollection = !nfts?.length
 
   return (
-    <Box maxW="7xl" mx="auto" p="8">
+    <Box  mx="auto">
       {emptyCollection && (
         <Hero
           heading={`Your collection is empty. Start Collecting!`}
