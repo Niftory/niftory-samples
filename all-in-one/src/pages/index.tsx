@@ -5,17 +5,10 @@ import router from "next/router"
 import { useAuthContext } from "hooks/useAuthContext"
 
 import { FaGoogle } from "react-icons/fa"
-import { useWalletQuery } from "@niftory/sdk/react"
 import { Hero } from "ui/Hero"
-import React from "react"
 
 const HomePage = () => {
   const { session, signIn, isLoading } = useAuthContext()
-  
-  const [{ data, fetching: walletFetching }] = useWalletQuery()
-  
-  const wallet = data?.wallet
-  const fetching = walletFetching || isLoading
 
   return (
     <AppLayout>
@@ -44,7 +37,7 @@ const HomePage = () => {
               button={<Button
                   p="8"
                   isLoading={isLoading}
-                  onClick={() => router.push("/drops")}
+                  onClick={() => router.push("/app/drops")}
                   colorScheme="yellow"
                 >
                 Drops gallery

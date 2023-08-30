@@ -51,10 +51,6 @@ export const Hero = ({ heading, button, content, imageUrl, bg }: HeroProps) => {
     <Box width="100vw" minH={{ base: "90vh", sm: "100vh" }} position="relative" bg={bg} bgImage={imageUrl}>
       <Box
         zIndex={100}
-        position="absolute"
-        bottom="5%"
-        maxW={{ base: "100%", lg: "50%" }}
-        mx="auto"
         px={{ base: "10", lg: "20" }}
       >
         <Box

@@ -1,15 +1,41 @@
-import { Box } from "@chakra-ui/react"
+import { Box, Skeleton } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 
-import AppLayout from "../../../components/AppLayout"
-import { DropDetailPage } from "../../../components/drops/DropDetailPage"
+import { useNftModelQuery } from "@niftory/sdk/react"
+import AppLayout from "components/AppLayout"
+import { NFTModelDetail } from "components/drops/NFTModelDetail"
 
-const ProductDropPage = () => {
+const DropDetailPage = () => {
+  const router = useRouter()
+  const nftModelId = router.query["dropId"]?.toString()
+  const [nftModelResponse] = useNftModelQuery({
+    variables: { id: nftModelId },
+  })
+
+  const nftModel = nftModelResponse?.data?.nftModel
+  let metadata = {
+    title: nftModel?.title,
+    description: nftModel?.description,
+    amount: nftModel?.quantity,
+    content: [
+      {
+        contentType: nftModel?.content?.files[0]?.contentType,
+        contentUrl: nftModel?.content?.files[0]?.url,
+        thumbnailUrl: nftModel?.content?.poster?.url,
+        alt: nftModel?.title,
+      },
+    ],
+  }
+
   return (
     <AppLayout>
-      <Box bg="page.background" pos="relative" width="100%" height="80px"></Box>
-      <DropDetailPage />
+      <Skeleton isLoaded={!nftModelResponse.fetching}>
+        <Box maxW="7xl" mx="auto" mt="12">
+          <NFTModelDetail nftModelId={nftModelId} metadata={metadata} />
+        </Box>
+      </Skeleton>
     </AppLayout>
   )
 }
 
-export default ProductDropPage
+export default DropDetailPage
