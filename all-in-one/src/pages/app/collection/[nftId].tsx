@@ -7,7 +7,7 @@ import { NftDetail } from '../../../components/collection/NftDetail';
 import { Subset } from '../../../lib/types';
 import { LoginSkeleton } from '../../../ui/Skeleton';
 
-const ProductDropPage = () => {
+const CollectionDetailPage = () => {
   const router = useRouter()
   const nftId: string = router.query["nftId"]?.toString()
 
@@ -24,5 +24,5 @@ const ProductDropPage = () => {
     </AppLayout>
   )
 }
-
-export default ProductDropPage
+CollectionDetailPage.requireAuth = true
+export default CollectionDetailPage
