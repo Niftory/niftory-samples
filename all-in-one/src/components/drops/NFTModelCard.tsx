@@ -19,7 +19,7 @@ export const NFTModelCard = (props: { nftModel: NftModel; clickUrl: string }) =>
   const imageUrl = nftModel?.content?.poster?.url
   const title = nftModel?.title
   const stats = {
-    quantity: nftModel?.quantity,
+    quantity: nftModel?.quantity - nftModel?.quantityMinted,
     rarity: nftModel?.rarity,
   }
 
