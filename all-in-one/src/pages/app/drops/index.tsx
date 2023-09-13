@@ -22,7 +22,7 @@ const DropsPage = () => {
       {!isFetching
       ? nftModelList
         ? (<NFTModelsGrid nftModels={nftModelList} />)
-        : (<Box ml="12" textColor="white" >{"No collectibles available"}</Box>)
+        : (<Box m="12" textColor="white" >{"No collectibles available"}</Box>)
       : null
       }
     </AppLayout>
