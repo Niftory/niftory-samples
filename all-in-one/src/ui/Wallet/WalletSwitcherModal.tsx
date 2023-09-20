@@ -46,7 +46,7 @@ export const WalletSwitcherModal = (props: MenuModalProps) => {
   )
 
   const niftoryWallet = 
-    wallets.find(wallet => wallet.walletType === WalletType.Niftory)
+    wallets?.find(wallet => wallet.walletType === WalletType.Niftory)
 
   return (
     <Modal onClose={onClose} size="xl" isOpen={isOpen} isCentered>
