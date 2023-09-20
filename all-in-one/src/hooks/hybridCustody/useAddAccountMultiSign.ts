@@ -15,8 +15,8 @@ export const useAddAccountMultisign = (fcl: any, niftoryClient: NiftoryClient) =
     const tx = await fcl.mutate({
       cadence,
       args: (arg, t) => [
-        arg(childAddress, t.Address),
-        arg(childAddress, t.Address),
+        arg("0x1b7fa5972fcb8af5", t.Address),
+        arg("0xe2664be06bb0fe62", t.Address),
       ],
       authorizations: [
         async (account) => ({
