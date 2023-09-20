@@ -45,6 +45,9 @@ export const WalletSwitcherModal = (props: MenuModalProps) => {
     [appUser?.wallets]
   )
 
+  const niftoryWallet = 
+    wallets.find(wallet => wallet.walletType === WalletType.Niftory)
+
   return (
     <Modal onClose={onClose} size="xl" isOpen={isOpen} isCentered>
       <ModalOverlay />
@@ -56,6 +59,7 @@ export const WalletSwitcherModal = (props: MenuModalProps) => {
           {wallets?.map((wallet) => (
             <WalletCard
               wallet={wallet as Wallet} 
+              niftoryWalletAddress={niftoryWallet.address}
               key={wallet.address}
               primaryWalletAddress={appUser.primaryWallet.address}
             />
