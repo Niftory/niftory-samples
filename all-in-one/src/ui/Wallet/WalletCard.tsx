@@ -90,7 +90,8 @@ export const WalletCard = ({ wallet, primaryWalletAddress, niftoryWalletAddress,
         </Flex>
       </Flex>
       <WalletSwitcherButton wallet={wallet} />
-      {wallet?.walletType !== WalletType.Niftory && <ParentWalletButton wallet={wallet} childWalletAddress={niftoryWalletAddress} />}
+      {wallet?.walletType !== WalletType.Niftory &&
+      <ParentWalletButton wallet={wallet} childWalletAddress={niftoryWalletAddress} />}
     </Flex>
   )
 }
