@@ -1,4 +1,4 @@
-import GET_PARENT_FROM_CHILD from "../../../cadence/scripts/hybrid-custody/get-parents-from-child.cdc"
+import GET_PARENTS_FROM_CHILD from "../../../cadence/scripts/hybrid-custody/get-parents-from-child.cdc"
 import GET_CHILDREN_FROM_PARENT from "../../../cadence/scripts/hybrid-custody/get-children-from-parent.cdc"
 import GET_ALL_NFT_DISPLAY_VIEWS_FROM_STORAGE from "../../../cadence/scripts/hybrid-custody/get_all_nft_display_views_from_storage.cdc"
 import { useState } from "react"
@@ -10,7 +10,7 @@ export const useHybridCustodyQueries = (fcl) => {
 
   const fetchParentFromChild = async ({ childAddress }) => {
     const _parent = await fcl.query({
-      cadence: GET_PARENT_FROM_CHILD,
+      cadence: GET_PARENTS_FROM_CHILD,
       args: (arg, t) => [arg(childAddress, t.Address)],
     })
     setParent(_parent)
