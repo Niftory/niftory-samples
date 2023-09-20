@@ -79,6 +79,11 @@
         "mainnet": "7ec1f607f0872a9e",
         "testnet": "04f74f0252479aed"
       }
+    },
+    "NiftoryAll": {
+      "aliases": {
+        "testnet": "640ba0b493c96c9f"
+      }
     }
   },
   "networks": {
