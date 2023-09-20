@@ -8,7 +8,7 @@ export const useHybridCustodyQueries = (fcl) => {
   const [children, setChildren] = useState(null)
   const [nfts, setNfts] = useState(null)
 
-  const fetchParentFromChild = async ({ childAddress }) => {
+  const fetchParentsFromChild = async ({ childAddress }) => {
     const _parent = await fcl.query({
       cadence: GET_PARENTS_FROM_CHILD,
       args: (arg, t) => [arg(childAddress, t.Address)],
@@ -32,5 +32,5 @@ export const useHybridCustodyQueries = (fcl) => {
     setNfts(_nfts)
   }
 
-  return { fetchParentFromChild, parent, fetchChildrenFromParent, children, fetchNfts, nfts }
+  return { fetchParentsFromChild, parent, fetchChildrenFromParent, children, fetchNfts, nfts }
 }
