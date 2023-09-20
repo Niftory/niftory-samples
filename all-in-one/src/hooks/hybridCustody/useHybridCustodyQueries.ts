@@ -17,11 +17,15 @@ export const useHybridCustodyQueries = (fcl) => {
   }
 
   const fetchChildrenFromParent = async ({ parentAddress }) => {
-    const _children = await fcl.query({
-      cadence: GET_CHILDREN_FROM_PARENT,
-      args: (arg, t) => [arg(parentAddress, t.Address)],
-    })
-    setChildren(_children)
+    try {
+      const _children = await fcl.query({
+        cadence: GET_CHILDREN_FROM_PARENT,
+        args: (arg, t) => [arg(parentAddress, t.Address)],
+      })
+      setChildren(_children)
+    } catch {
+      setChildren([])
+    }
   }
 
   const fetchNfts = async ({ parentAddress }) => {

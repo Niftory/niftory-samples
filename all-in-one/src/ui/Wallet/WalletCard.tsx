@@ -22,7 +22,7 @@ export const WalletCard = ({ wallet, primaryWalletAddress, niftoryWalletAddress,
   const { fetchChildrenFromParent, children } = useHybridCustodyQueries(fcl)
 
   useEffect(() => {
-    fetchChildrenFromParent({ parentAddress: wallet.address })
+    wallet.address !== niftoryWalletAddress && fetchChildrenFromParent({ parentAddress: wallet.address })
   }, [])
 
   let clickHandler: Function
