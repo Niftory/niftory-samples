@@ -1,8 +1,8 @@
 import { Box, Center, Spinner } from "@chakra-ui/react"
 import { useNftModelsQuery } from "@niftory/sdk/react"
 
-import AppLayout from "../../../components/AppLayout"
-import { SectionHeader } from "../../../ui/SectionHeader"
+import AppLayout from "components/AppLayout"
+import { SectionHeader } from "ui/SectionHeader"
 import { NFTModelsGrid } from "@components/drops/NFTModelsGrid"
 
 const DropsPage = () => {
@@ -22,7 +22,7 @@ const DropsPage = () => {
       {!isFetching
       ? nftModelList
         ? (<NFTModelsGrid nftModels={nftModelList} />)
-        : (<Box ml="12" textColor="white" >{"No collectibles available"}</Box>)
+        : (<Box m="12" textColor="white" >{"No collectibles available"}</Box>)
       : null
       }
     </AppLayout>

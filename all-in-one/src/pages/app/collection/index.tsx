@@ -20,4 +20,5 @@ const CollectionPage = () => {
   )
 }
 
+CollectionPage.requireAuth = true
 export default CollectionPage

@@ -44,14 +44,14 @@ export const WalletDetails = (props: WalletDetailsProps) => {
             
           />
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4" minW={"280px"} p="1rem">
-            <Tooltip label="View wallet on flowscan" hasArrow placement="top">
+            <Tooltip label="View wallet on flowview" hasArrow placement="top">
               <Box cursor="pointer">
                 <WalletGridBox
                   description={walletAddress}
                   icon={WalletDetailsIcon}
                   title={"Primary Wallet Address"}
                   onClick={() => {
-                    const url = `${process.env.NEXT_PUBLIC_FLOW_SCAN_URL}/account/${walletAddress}`
+                    const url = `${process.env.NEXT_PUBLIC_FLOW_VIEW_URL}/${walletAddress}/collection/`
                     window.open(url)
                   }}
                 />

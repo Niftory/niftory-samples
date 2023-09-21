@@ -34,7 +34,7 @@ export const CollectionGrid = ({ isLoading, nfts }: CollectionProps) => {
         </Button>}
         />
       )}
-      <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} gap={{ base: "8", lg: "10" }}>
+      <SimpleGrid pb={24} mx={12} columns={{ base: 1, sm: 2, md: 3, lg: 4 }} gap={{ base: "8", lg: "10" }}>
         {nfts &&
           nfts.map((nft) => (
             <NftCard key={nft.id} nft={nft} clickUrl={`/app/collection/${nft.id}`} />
