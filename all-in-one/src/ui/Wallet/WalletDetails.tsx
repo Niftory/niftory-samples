@@ -51,7 +51,7 @@ export const WalletDetails = (props: WalletDetailsProps) => {
                   icon={WalletDetailsIcon}
                   title={"Primary Wallet Address"}
                   onClick={() => {
-                    const url = `https://testnet.flowview.app/account/${walletAddress}/collection/`
+                    const url = `${process.env.NEXT_PUBLIC_FLOW_VIEW_URL}/${walletAddress}/collection/`
                     window.open(url)
                   }}
                 />
