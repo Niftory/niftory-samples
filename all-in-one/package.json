@@ -29,7 +29,7 @@
     "formik": "^2.2.9",
     "framer-motion": "^6.4.3",
     "google-protobuf": "^3.14.0",
-    "graphql": "^16.6.0",
+    "graphql": "^16.8.1",
     "graphql-request": "^5.0.0",
     "intro.js": "^6.0.0",
     "intro.js-react": "^0.7.0",
