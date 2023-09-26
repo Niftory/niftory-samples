@@ -1,18 +1,29 @@
 import { Box, Flex, Tag, Text } from "@chakra-ui/react"
+import * as fcl from "@onflow/fcl"
 
 import { getColorFromWalletState, getReadableWalletState } from "utils/wallet"
 
 import { WalletSwitcherButton } from "./WalletSwitcherButton"
-import { Wallet, useSetPrimaryWalletMutation, useAppUserQuery } from "@niftory/sdk/react"
+import { Wallet, useSetPrimaryWalletMutation } from "@niftory/sdk/react"
+import { ParentWalletButton } from "ui/HybridCustody/ParentWalletButton"
+import { useHybridCustodyQueries } from "hooks/hybridCustody/useHybridCustodyQueries"
+import { useEffect } from "react"
+import { WalletType } from "@niftory/sdk"
 
 interface Props {
   wallet: Wallet
   primaryWalletAddress: string
+  niftoryWalletAddress: string
   onClick?: () => void
 }
 
-export const WalletCard = ({ wallet, primaryWalletAddress, onClick }: Props) => {
+export const WalletCard = ({ wallet, primaryWalletAddress, niftoryWalletAddress, onClick }: Props) => {
   const [_, setPrimaryWallet] = useSetPrimaryWalletMutation()
+  const { fetchChildrenFromParent, children } = useHybridCustodyQueries(fcl)
+
+  useEffect(() => {
+    wallet.address !== niftoryWalletAddress && fetchChildrenFromParent({ parentAddress: wallet.address })
+  }, [])
 
   let clickHandler: Function
   if (onClick) {
@@ -58,7 +69,7 @@ export const WalletCard = ({ wallet, primaryWalletAddress, onClick }: Props) => 
             </Box>
           )}
           <Text color={""}>{wallet.address} </Text>{" "}
-          {wallet?.walletType === "NIFTORY" && (
+          {wallet?.walletType === WalletType.Niftory && (
             <Tag bgColor="purple.400" color="white">
               Niftory Wallet
             </Tag>
@@ -79,6 +90,8 @@ export const WalletCard = ({ wallet, primaryWalletAddress, onClick }: Props) => 
         </Flex>
       </Flex>
       <WalletSwitcherButton wallet={wallet} />
+      {wallet?.walletType !== WalletType.Niftory &&
+      <ParentWalletButton wallet={wallet} childWalletAddress={niftoryWalletAddress} />}
     </Flex>
   )
 }

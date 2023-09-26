@@ -7,6 +7,7 @@ import { useAuthContext } from "hooks/useAuthContext"
 
 import { FaGoogle } from "react-icons/fa"
 import { useWalletQuery } from "@niftory/sdk/react"
+import { ParentWalletButton } from "ui/HybridCustody/ParentWalletButton"
 
 const AccountPage = () => {
   const { session, signIn, isLoading } = useAuthContext()

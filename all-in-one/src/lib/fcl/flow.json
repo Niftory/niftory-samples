@@ -1,0 +1,95 @@
+{
+  "contracts": {
+    "CapabilityDelegator": {
+      "aliases": {
+        "testnet": "294e44e1ec6993c6"
+      }
+    },
+    "HybridCustody": {
+      "aliases": {
+        "testnet": "294e44e1ec6993c6"
+      }
+    },
+    "CapabilityFactory": {
+      "aliases": {
+        "testnet": "294e44e1ec6993c6"
+      }
+    },
+    "CapabilityFilter": {
+      "aliases": {
+        "testnet": "294e44e1ec6993c6"
+      }
+    },
+    "NFTCollectionPublicFactory": {
+      "aliases": {
+        "testnet": "294e44e1ec6993c6"
+      }
+    },
+    "NFTProviderAndCollectionFactory": {
+      "aliases": {
+        "testnet": "294e44e1ec6993c6"
+      }
+    },
+    "FTAllFactory": {
+      "aliases": {
+        "testnet": "294e44e1ec6993c6"
+      }
+    },
+    "NFTProviderFactory": {
+      "aliases": {
+        "testnet": "294e44e1ec6993c6"
+      }
+    },
+    "FTProviderFactory": {
+      "aliases": {
+        "testnet": "294e44e1ec6993c6"
+      }
+    },
+    "NonFungibleToken": {
+      "aliases": {
+        "testnet": "631e88ae7f1d7c20"
+      }
+    },
+    "FungibleToken": {
+      "aliases": {
+        "mainnet": "f233dcee88fe0abe",
+        "testnet": "9a0766d93b6608b7"
+      }
+    },
+    "FlowToken": {
+      "aliases": {
+        "mainnet": "1654653399040a61",
+        "testnet": "7e60df042a9c0868"
+      }
+    },
+    "MetadataViews": {
+      "aliases": {
+        "mainnet": "1d7e57aa55817448",
+        "testnet": "631e88ae7f1d7c20"
+      }
+    },
+    "ViewResolver": {
+      "aliases": {
+        "mainnet": "1d7e57aa55817448",
+        "testnet": "631e88ae7f1d7c20"
+      }
+    },
+    "NiftoryNonFungibleToken": {
+      "aliases": {
+        "mainnet": "7ec1f607f0872a9e",
+        "testnet": "04f74f0252479aed"
+      }
+    },
+    "NiftoryAll": {
+      "aliases": {
+        "testnet": "640ba0b493c96c9f"
+      }
+    }
+  },
+  "networks": {
+    "emulator": "127.0.0.1:3569",
+    "mainnet": "access.mainnet.nodes.onflow.org:9000",
+    "testnet": "access.devnet.nodes.onflow.org:9000"
+  },
+  "accounts": {}
+}
