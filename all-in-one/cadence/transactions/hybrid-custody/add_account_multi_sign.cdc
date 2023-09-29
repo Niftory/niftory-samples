@@ -1,6 +1,7 @@
 #allowAccountLinking
 
 import "NonFungibleToken"
+import "NiftoryNonFungibleToken"
 import "MetadataViews"
 
 import "CapabilityFactory"
@@ -104,7 +105,14 @@ transaction(childAccountFactoryAddress: Address, childAccountFilterAddress: Addr
                 target: <CONTRACT_NAME>.COLLECTION_STORAGE_PATH
             )
         }
-
+            // create private capability for the collection
+            parent.unlink(<CONTRACT_NAME>.COLLECTION_PRIVATE_PATH)
+            parent.link<
+                &<CONTRACT_NAME>.Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NiftoryNonFungibleToken.CollectionPrivate}
+            >(
+                <CONTRACT_NAME>.COLLECTION_PRIVATE_PATH,
+                target: <CONTRACT_NAME>.COLLECTION_STORAGE_PATH
+            )
         // --------------------- End <CONTRACT_NAME> setup of parent account ---------------------
     }
     execute {
