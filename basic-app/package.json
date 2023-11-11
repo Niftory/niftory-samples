@@ -21,7 +21,7 @@
     "@onflow/fcl": "1.3.2",
     "@urql/exchange-auth": "^0.1.6",
     "@urql/exchange-retry": "^0.3.3",
-    "axios": "^0.27.2",
+    "axios": "^1.6.0",
     "buffer": "6.0.3",
     "ethers": "^5.7.2",
     "framer-motion": "^6.4.3",
